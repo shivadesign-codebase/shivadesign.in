@@ -10,11 +10,11 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { saveBanner } from "@/lib/actions"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
+
 import { ImageIcon, Trash2 } from "lucide-react"
 
 export default function BannersPage() {
-  const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     title: "",
@@ -28,8 +28,7 @@ export default function BannersPage() {
     try {
       setIsSubmitting(true)
       await saveBanner(formData)
-      toast({
-        title: "Banner saved",
+      toast("Banner saved", {
         description: "The banner has been saved successfully.",
       })
       setFormData({
@@ -39,10 +38,8 @@ export default function BannersPage() {
         isActive: true,
       })
     } catch (error) {
-      toast({
-        title: "Error",
+      toast("Error", {
         description: "There was a problem saving the banner. Please try again.",
-        variant: "destructive"
       })
     } finally {
       setIsSubmitting(false)

@@ -10,10 +10,10 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { sendBroadcastEmail } from "@/lib/actions"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
+
 
 export default function BroadcastPage() {
-  const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     subject: "",
@@ -31,8 +31,7 @@ export default function BroadcastPage() {
       form.append("recipients", formData.recipients)
 
       await sendBroadcastEmail(form)
-      toast({
-        title: "Email sent",
+      toast("Email sent", {
         description: "The broadcast email has been sent successfully.",
       })
       setFormData({
@@ -41,10 +40,8 @@ export default function BroadcastPage() {
         recipients: "all",
       })
     } catch (error) {
-      toast({
-        title: "Error",
+      toast('Error', {
         description: "There was a problem sending the email. Please try again.",
-        variant: "destructive",
       })
     } finally {
       setIsSubmitting(false)

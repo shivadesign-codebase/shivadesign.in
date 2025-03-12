@@ -12,11 +12,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { saveProject } from "@/lib/actions"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
+
 import { ImageIcon, Trash2, Edit } from "lucide-react"
 
 export default function ProjectsPage() {
-  const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     title: "",
@@ -31,8 +31,7 @@ export default function ProjectsPage() {
     try {
       setIsSubmitting(true)
       await saveProject(formData)
-      toast({
-        title: "Project saved",
+      toast("Project saved", {
         description: "The project has been saved successfully.",
       })
       setFormData({
@@ -43,10 +42,8 @@ export default function ProjectsPage() {
         isActive: true,
       })
     } catch (error) {
-      toast({
-        title: "Error",
+      toast("Error", {
         description: "There was a problem saving the project. Please try again.",
-        variant: "destructive",
       })
     } finally {
       setIsSubmitting(false)

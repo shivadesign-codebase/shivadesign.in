@@ -10,11 +10,11 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { saveDocument } from "@/lib/actions"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
+
 import { FileText, File, FileImage, Search, Eye, Trash2 } from "lucide-react"
 
 export default function DocumentsPage() {
-  const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -26,18 +26,14 @@ export default function DocumentsPage() {
       const formData = new FormData(e.target as HTMLFormElement);
       await saveDocument(formData);
 
-      toast({
-        title: "Document uploaded",
+      toast("Document uploaded", {
         description: "The document has been uploaded successfully.",
-        variant: "success",
       });
 
       (e.target as HTMLFormElement).reset()
     } catch (error) {
-      toast({
-        title: "Error",
+      toast("Error", {
         description: "There was a problem uploading the document. Please try again.",
-        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);

@@ -10,10 +10,9 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import { sendContactForm } from "@/lib/actions"
-import { useToast } from "@/hooks/use-toast"
+import { toast } from "sonner"
 
 export default function ContactForm() {
-  const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     name: "",
@@ -42,10 +41,8 @@ export default function ContactForm() {
     e.preventDefault()
 
     if (!formData.consent) {
-      toast({
-        title: "Consent required",
+      toast("Consent required", {
         description: "Please agree to our terms before submitting the form.",
-        variant: "destructive",
       })
       return
     }
@@ -53,8 +50,7 @@ export default function ContactForm() {
     try {
       setIsSubmitting(true)
       await sendContactForm(formData)
-      toast({
-        title: "Message sent",
+      toast("Message sent", {
         description: "We'll get back to you as soon as possible.",
       })
       setFormData({
@@ -67,10 +63,8 @@ export default function ContactForm() {
         consent: false,
       })
     } catch (error) {
-      toast({
-        title: "Error",
+      toast('Error', {
         description: "There was a problem sending your message. Please try again.",
-        variant: "destructive",
       })
     } finally {
       setIsSubmitting(false)
