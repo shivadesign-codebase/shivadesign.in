@@ -53,7 +53,7 @@ export default function Home() {
 
   const projects = [
     {
-      title: "Commercial Complex",
+      title: "Commercial Complex ",
       category: "Commercial",
       description: "Modern commercial building with innovative structural solutions.",
       image: "/placeholder.svg?height=300&width=400",
