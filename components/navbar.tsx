@@ -3,14 +3,16 @@
 import Link from "next/link"
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { ModeToggle } from "@/components/mode-toggle"
 import { usePathname } from "next/navigation"
+import { useTheme } from "next-themes"
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
+  const { setTheme } = useTheme()
 
   useEffect(() => {
+    setTheme("light")
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
     }
