@@ -1,7 +1,6 @@
 import type { ReactNode } from "react"
 import Link from "next/link"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import { ChevronRight } from "lucide-react"
 
 interface ServiceCardProps {
@@ -14,37 +13,15 @@ interface ServiceCardProps {
 
 export default function ServiceCard({ title, description, icon, link, features = [] }: ServiceCardProps) {
   return (
-    <Card className="service-card h-full flex flex-col">
-      <CardHeader>
-        <div className="mb-2 w-12 h-12 flex items-center justify-center rounded-lg bg-primary/10 text-primary">
-          {icon}
-        </div>
-        <CardTitle className="text-xl">{title}</CardTitle>
-      </CardHeader>
-      <CardContent className="flex-grow">
-        <p className="text-muted-foreground mb-4">{description}</p>
-        {features.length > 0 && (
-          <ul className="space-y-1">
-            {features.map((feature, index) => (
-              <li key={index} className="flex items-start gap-2">
-                <div className="rounded-full bg-primary/10 p-1 mt-0.5">
-                  <ChevronRight className="h-3 w-3 text-primary" />
-                </div>
-                <span className="text-sm">{feature}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+    <Card className="h-full flex flex-col bg-[#2a3142] border-none text-white">
+      <CardContent className="flex flex-col h-full pt-6">
+        <div className="mb-4 text-[#5d9cec]">{icon}</div>
+        <h3 className="text-xl font-semibold mb-3">{title}</h3>
+        <p className="text-gray-300 mb-auto">{description}</p>
+        <Link href={link} className="text-[#5d9cec] flex items-center mt-6 hover:underline group">
+          Learn More <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+        </Link>
       </CardContent>
-      <CardFooter>
-        <Button asChild variant="outline" className="w-full">
-          <Link href={link}>
-            Learn More
-            <ChevronRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
-      </CardFooter>
     </Card>
   )
 }
-

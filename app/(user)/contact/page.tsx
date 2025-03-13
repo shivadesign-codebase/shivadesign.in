@@ -2,6 +2,7 @@ import ContactForm from "@/components/contact-form"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPin, Phone, Mail, Clock } from "lucide-react"
 import ScrollAnimations from "@/components/scroll-animations"
+import Link from "next/link"
 
 export default function ContactPage() {
   return (
@@ -54,7 +55,7 @@ export default function ContactPage() {
                         <Phone className="h-3 w-3 mr-1" />
                         Call Now
                       </button>
-                      <button className="px-3 py-1 bg-green-500 text-white rounded-md text-sm flex items-center">
+                      <Link href="https://wa.me/919794086149" target="_blank" className="px-3 py-1 bg-green-500 text-white rounded-md text-sm flex items-center">
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="12"
@@ -70,7 +71,7 @@ export default function ContactPage() {
                           <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                         </svg>
                         WhatsApp
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

@@ -27,10 +27,10 @@ export default function Navbar() {
     >
       <div className="container flex items-center justify-between h-16 px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold">Shiva Design Associates</span>
+          <span className={`text-xl font-bold ${isScrolled ? "text-[#1F2937]" : "text-white"}`}>Shiva Design Associates</span>
         </Link>
         <nav className="hidden md:flex items-center gap-6">
-          <Link
+          {/* <Link
             href="/"
             className={`text-sm font-medium transition-colors ${isActive("/") ? "text-primary" : "text-foreground/70 hover:text-foreground"}`}
           >
@@ -49,7 +49,7 @@ export default function Navbar() {
             Documents
           </Link>
           <Link
-            href="/testimonials"
+            href="#testimonial-section"
             className={`text-sm font-medium transition-colors ${isActive("/testimonials") ? "text-primary" : "text-foreground/70 hover:text-foreground"}`}
           >
             Testimonials
@@ -59,11 +59,11 @@ export default function Navbar() {
             className={`text-sm font-medium transition-colors ${isActive("/contact") ? "text-primary" : "text-foreground/70 hover:text-foreground"}`}
           >
             Contact
-          </Link>
+          </Link> */}
         </nav>
         <div className="flex items-center gap-2">
-          <ModeToggle />
-          <Button asChild variant="default" size="sm" className="hidden md:flex">
+          {/* <ModeToggle /> */}
+          <Button asChild variant="default" size="sm" className="hidden md:flex bg-[#1F2937]/70 text-white">
             <Link href="/contact">Contact Us</Link>
           </Button>
         </div>

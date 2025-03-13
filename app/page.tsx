@@ -1,56 +1,13 @@
 import HeroSection from "@/components/hero-section"
-import ServiceCard from "@/components/service-card"
 import ProjectCard from "@/components/project-card"
 import TestimonialCarousel from "@/components/testimonial-carousel"
 import ScrollAnimations from "@/components/scroll-animations"
 import ScrollToTop from "@/components/scroll-to-top"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { FileText, CuboidIcon as Cube, MapPin } from "lucide-react"
+import ServicesSection from "@/components/home/servises-section"
 
 export default function Home() {
-  const services = [
-    {
-      title: "AutoCAD Drafting",
-      description:
-        "Precision drafting services using the latest AutoCAD technology to create detailed technical drawings for your construction and engineering projects.",
-      icon: <FileText className="h-6 w-6" />,
-      link: "/services/autocad-drafting",
-      features: [
-        "Architectural floor plans and layouts",
-        "Structural detailing and drawings",
-        "Mechanical and electrical systems",
-        "As-built documentation",
-      ],
-    },
-    {
-      title: "3D & 2D Elevation",
-      description:
-        "Stunning architectural elevations and 3D models that bring your projects to life, helping you visualize the final outcome before construction begins.",
-      icon: <Cube className="h-6 w-6" />,
-      link: "/services/3d-elevation",
-      features: [
-        "Photorealistic 3D exterior renderings",
-        "Interior 3D visualizations",
-        "2D facade and elevation drawings",
-        "Virtual walkthroughs and animations",
-      ],
-    },
-    {
-      title: "Site Inspection",
-      description:
-        "Comprehensive on-site assessments to ensure quality, compliance with building regulations, and adherence to project specifications throughout construction.",
-      icon: <MapPin className="h-6 w-6" />,
-      link: "/services/site-inspection",
-      features: [
-        "Pre-construction site analysis",
-        "Regular construction progress reports",
-        "Quality assurance and compliance checks",
-        "Detailed inspection documentation with photos",
-      ],
-    },
-  ]
-
   const projects = [
     {
       title: "Commercial Complex ",
@@ -108,26 +65,7 @@ export default function Home() {
   return (
     <>
       <HeroSection />
-
-      <section id="services" className="py-16 md:py-24 bg-background">
-        <div className="container px-4 md:px-6">
-          <ScrollAnimations className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Our Engineering Services</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Professional civil engineering solutions tailored to meet your project requirements
-            </p>
-          </ScrollAnimations>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {services.map((service, index) => (
-              <ScrollAnimations key={index} className="h-full">
-                <ServiceCard {...service} />
-              </ScrollAnimations>
-            ))}
-          </div>
-        </div>
-      </section>
-
+      <ServicesSection />
       <section className="py-16 md:py-24 bg-muted/30">
         <div className="container px-4 md:px-6">
           <ScrollAnimations className="text-center mb-12">
@@ -153,7 +91,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 md:py-24 bg-background">
+      <section className="py-16 md:py-24 bg-background" id="testimonial-section">
         <div className="container px-4 md:px-6">
           <ScrollAnimations className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Client Testimonials</h2>
