@@ -12,23 +12,23 @@ export default function Footer() {
               Professional civil engineering solutions tailored to meet your project requirements.
             </p>
             <div className="flex space-x-4">
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://facebook.shivadesign.in" className="text-muted-foreground hover:text-primary">
                 <Facebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://twitter.shivadesign.in" className="text-muted-foreground hover:text-primary">
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://instagram.shivadesign.in" className="text-muted-foreground hover:text-primary">
                 <Instagram className="h-5 w-5" />
                 <span className="sr-only">Instagram</span>
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://linkedin.shivadesign.in" className="text-muted-foreground hover:text-primary">
                 <Linkedin className="h-5 w-5" />
                 <span className="sr-only">LinkedIn</span>
               </Link>
-              <Link href="#" className="text-muted-foreground hover:text-primary">
+              <Link href="https://youtube.shivadesign.in" className="text-muted-foreground hover:text-primary">
                 <Youtube className="h-5 w-5" />
                 <span className="sr-only">YouTube</span>
               </Link>
@@ -67,11 +67,10 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
             <address className="not-italic text-muted-foreground">
-              <p>123 Civil Engineering Complex,</p>
-              <p>Sector 45, Gurugram,</p>
-              <p>Haryana 122003, India</p>
-              <p className="mt-2">Office: +91 124 567 8900</p>
-              <p>Email: info@shivaconsultant.com</p>
+              <p>Ward No. 7 Shiv Nagar Maharajganj,</p>
+              <p>Uttar Pradesh 273303, India</p>
+              <p className="mt-2">Office: +91 979 408 6149</p>
+              <p>Email: shivaconsultant97@gmail.com</p>
             </address>
           </div>
         </div>

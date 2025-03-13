@@ -37,11 +37,9 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold">Office Address</h3>
                     <address className="not-italic text-muted-foreground">
-                      123 Civil Engineering Complex,
+                      Ward No. 7 Shiv Nagar Maharajganj,
                       <br />
-                      Sector 45, Gurugram,
-                      <br />
-                      Haryana 122003, India
+                      Uttar Pradesh 273303, India
                     </address>
                   </div>
                 </div>
@@ -50,7 +48,7 @@ export default function ContactPage() {
                   <Phone className="h-5 w-5 text-primary mt-0.5" />
                   <div>
                     <h3 className="font-semibold">Call Us</h3>
-                    <p className="text-muted-foreground">Office: +91 124 567 8900</p>
+                    <p className="text-muted-foreground">Office: +91 979 408 6149</p>
                     <div className="flex gap-2 mt-2">
                       <button className="px-3 py-1 bg-green-600 text-white rounded-md text-sm flex items-center">
                         <Phone className="h-3 w-3 mr-1" />
@@ -81,7 +79,7 @@ export default function ContactPage() {
                   <Mail className="h-5 w-5 text-primary mt-0.5" />
                   <div>
                     <h3 className="font-semibold">Email Us</h3>
-                    <p className="text-muted-foreground">info@shivaconsultant.com</p>
+                    <p className="text-muted-foreground">shivaconsultant97@gmail.com</p>
                     <p className="text-muted-foreground">support@shivaconsultant.com</p>
                   </div>
                 </div>
@@ -106,9 +104,18 @@ export default function ContactPage() {
               </CardHeader>
               <CardContent>
                 <div className="aspect-video bg-muted rounded-md flex items-center justify-center">
-                  <p className="text-muted-foreground">
+                  <iframe
+                    width="680"
+                    height="450"
+                    className="border-0 rounded-md"
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3550.6494003484286!2d83.56537427548963!3d27.135850776514836!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3996a9003152fe0f%3A0x7afc74d98f20c7f7!2sShiva%20Design%20Associates!5e0!3m2!1sen!2sin!4v1741847757097!5m2!1sen!2sin">
+                  </iframe>
+                  {/* <p className="text-muted-foreground">
                     Interactive map with directions available when viewed on the actual website.
-                  </p>
+                  </p> */}
                 </div>
               </CardContent>
             </Card>
