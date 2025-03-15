@@ -1,5 +1,6 @@
 "use server"
 
+import { ProjectFormValues } from "@/types/project"
 import { revalidatePath } from "next/cache"
 
 interface ContactFormData {
@@ -37,26 +38,11 @@ export async function saveBanner(data: BannerData) {
   return { success: true }
 }
 
-interface ProjectData {
-  title: string
-  category: string
-  description: string
-  image: string
-  isActive: boolean
-}
-
-export async function saveProject(data: ProjectData) {
+export async function saveProject(data: ProjectFormValues) {
   console.log("Project data:", data)
   await new Promise((resolve) => setTimeout(resolve, 1000))
   revalidatePath("/")
   return { success: true }
-}
-
-interface DocumentData {
-  title: string
-  client: string
-  file: File
-  password?: string
 }
 
 export async function saveDocument(formData: FormData) {

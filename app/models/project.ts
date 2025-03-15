@@ -6,6 +6,7 @@ export interface IProject extends Document {
   type: string;
   description: string;
   image?: string;
+  isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -34,6 +35,10 @@ const projectSchema = new Schema<IProject>(
       type: String,
       default: null,
     },
+    isActive: {
+      type: Boolean,
+      default: true,
+    }
   },
   { timestamps: true }
 );
