@@ -3,19 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  CuboidIcon,
-  CheckCircle,
-  ArrowRight,
-  Building,
-  Building2,
-  Home,
-  Factory,
-  Layers,
-  Eye,
-  PenTool,
-  Lightbulb,
-} from "lucide-react"
+import { CuboidIcon, CheckCircle, ArrowRight, Building, Building2, Home, Factory, Layers, Eye, PenTool, Lightbulb } from "lucide-react"
 
 export default function ThreeDElevationPage() {
   return (
