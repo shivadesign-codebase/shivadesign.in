@@ -1,35 +1,21 @@
-import type React from "react"
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import {
-  FileText,
-  LayoutDashboard,
-  ImageIcon,
-  FolderKanban,
-  MessageSquare,
-  Mail,
-  Users,
-  Settings,
-  LogOut,
-} from "lucide-react"
+import { FileText, LayoutDashboard, ImageIcon, FolderKanban, MessageSquare, Mail, Users, Settings, LogOut, ArrowLeft } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Admin Dashboard - Shiva Consultant",
   description: "Admin dashboard for Shiva Consultant website",
 }
 
-export default function AdminLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function AdminLayout({ children, }: Readonly<{ children: React.ReactNode }>) {
   return (
     <div className="min-h-screen bg-muted/30 dark:bg-background">
-      <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
+      <header className="sticky top-0 flex h-16 items-center z-50 gap-4 border-b bg-background px-4 md:px-6">
         <Link href="/admin" className="flex items-center gap-2 font-semibold">
           Admin Dashboard
         </Link>
+
         <div className="ml-auto flex items-center gap-4">
           <Button
             variant="ghost"
@@ -93,6 +79,12 @@ export default function AdminLayout({
               <Button variant="ghost" className="w-full justify-start">
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
+              </Button>
+            </Link>
+            <Link href="/">
+              <Button variant="ghost" className="w-full justify-start">
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                HOME
               </Button>
             </Link>
           </nav>

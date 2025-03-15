@@ -130,7 +130,7 @@ export default function Home() {
               <Button asChild variant="secondary" size="lg">
                 <Link href="/contact">Contact Us</Link>
               </Button>
-              <Button asChild variant="outline" size="lg">
+              <Button asChild variant="outline" size="lg" className="text-primary hover:text-white hover:bg-primary/90">
                 <Link href="/services">Explore Services</Link>
               </Button>
             </div>
