@@ -23,7 +23,7 @@ export default function ThreeDElevationPage() {
       {/* Hero Section with 3D Model Showcase */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute inset-0 bg-[url('/placeholder.svg?height=800&width=1600')] bg-no-repeat bg-cover bg-center" />
+          <div className="absolute inset-0 bg-[url('/assets/cad.jpg?height=800&width=1600')] bg-no-repeat bg-cover bg-center" />
         </div>
         <div className="container relative z-10 px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -49,7 +49,7 @@ export default function ThreeDElevationPage() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative w-full h-full">
                   <Image
-                    src="/placeholder.svg?height=800&width=800"
+                    src="/assets/cad.jpg?height=800&width=800"
                     alt="3D Building Rendering"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -94,7 +94,7 @@ export default function ThreeDElevationPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="relative h-[400px] rounded-lg overflow-hidden">
                   <Image
-                    src="/placeholder.svg?height=800&width=600"
+                    src="/assets/cad.jpg?height=800&width=600"
                     alt="3D Exterior Rendering"
                     fill
                     className="object-cover"
@@ -171,7 +171,7 @@ export default function ThreeDElevationPage() {
                 </div>
                 <div className="relative h-[400px] rounded-lg overflow-hidden">
                   <Image
-                    src="/placeholder.svg?height=800&width=600"
+                    src="/assets/cad.jpg?height=800&width=600"
                     alt="2D Elevation Drawing"
                     fill
                     className="object-cover"
@@ -206,49 +206,49 @@ export default function ThreeDElevationPage() {
                 title: "Luxury Residential Complex",
                 category: "Residential",
                 description: "3D exterior and interior visualizations for a high-end residential development.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
                 icon: <Home className="h-5 w-5" />,
               },
               {
                 title: "Corporate Headquarters",
                 category: "Commercial",
                 description: "Complete 3D modeling and rendering for a modern office building.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
                 icon: <Building className="h-5 w-5" />,
               },
               {
                 title: "Shopping Mall",
                 category: "Retail",
                 description: "Exterior elevations and interior visualizations for a shopping center.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
                 icon: <Building2 className="h-5 w-5" />,
               },
               {
                 title: "Industrial Complex",
                 category: "Industrial",
                 description: "3D renderings and technical elevations for a manufacturing facility.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
                 icon: <Factory className="h-5 w-5" />,
               },
               {
                 title: "Residential Villa",
                 category: "Residential",
                 description: "Detailed 3D visualizations and 2D elevations for a luxury villa.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
                 icon: <Home className="h-5 w-5" />,
               },
               {
                 title: "Hotel & Resort",
                 category: "Hospitality",
                 description: "Comprehensive 3D modeling and animations for a beachfront resort.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
                 icon: <Building className="h-5 w-5" />,
               },
             ].map((project, index) => (
               <div key={index} className="group relative overflow-hidden rounded-lg">
                 <div className="relative h-64 overflow-hidden">
                   <Image
-                    src={project.image || "/placeholder.svg"}
+                    src={project.image || "/assets/cad.jpg"}
                     alt={project.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -322,7 +322,7 @@ export default function ThreeDElevationPage() {
                   <div className="w-12 h-12 rounded-lg bg-[#5d9cec]/10 flex items-center justify-center mb-4 text-[#5d9cec]">
                     {process.icon}
                   </div>
-                  <h3 className="text-xl font-medium mb-2">{process.title}</h3>
+                  <h3 className="text-xl font-medium mb-2 text-white">{process.title}</h3>
                   <p className="text-gray-300 relative z-10">{process.description}</p>
                 </CardContent>
               </Card>
@@ -339,7 +339,7 @@ export default function ThreeDElevationPage() {
               <div className="absolute -inset-4 bg-[#5d9cec]/10 rounded-lg blur-xl"></div>
               <div className="relative bg-[#2a3142] p-6 rounded-lg border border-gray-700">
                 <Image
-                  src="/placeholder.svg?height=600&width=800"
+                  src="/assets/cad.jpg?height=600&width=800"
                   alt="3D Visualization Benefits"
                   width={800}
                   height={600}
@@ -378,7 +378,7 @@ export default function ThreeDElevationPage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button className="bg-white text-[#5d9cec] hover:bg-white/90">View Our Portfolio</Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button variant="outline" className="border-white text-[#2a3142] hover:text-white hover:bg-white/10">
                 Request a Quote
               </Button>
             </div>

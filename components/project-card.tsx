@@ -23,7 +23,7 @@ export default function ProjectCard({
     <div className="project-card rounded-lg overflow-hidden">
       <Link href={link}>
         <div className="relative aspect-[4/3]">
-          <Image src={image || "/placeholder.svg"} alt={title} fill className="object-cover" />
+          <Image src={image || "/assets/cad.jpg"} alt={title} fill className="object-cover" />
           <div className="absolute top-4 left-4">
             <Badge variant={badgeColor}>{category}</Badge>
           </div>

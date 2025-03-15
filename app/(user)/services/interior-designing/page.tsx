@@ -3,20 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import {
-  CheckCircle,
-  ArrowRight,
-  Sofa,
-  Lightbulb,
-  Palette,
-  Home,
-  Building,
-  Sparkles,
-  Layers,
-  Users,
-  Ruler,
-  Compass,
-} from "lucide-react"
+import { CheckCircle, ArrowRight, Sofa, Lightbulb, Palette, Home, Building, Sparkles, Layers, Users, Ruler, Compass } from "lucide-react"
 
 export default function InteriorDesignPage() {
   return (
@@ -24,7 +11,7 @@ export default function InteriorDesignPage() {
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute inset-0 bg-[url('/placeholder.svg?height=800&width=1600')] bg-no-repeat bg-cover bg-center" />
+          <div className="absolute inset-0 bg-[url('/assets/cad.jpg?height=800&width=1600')] bg-no-repeat bg-cover bg-center" />
         </div>
         <div className="container relative z-10 px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -41,7 +28,7 @@ export default function InteriorDesignPage() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button className="bg-[#5d9cec] hover:bg-[#4a89dc] text-white">Book a Consultation</Button>
-                <Button variant="outline" className="border-[#5d9cec] text-[#5d9cec] hover:bg-[#5d9cec]/10">
+                <Button variant="outline" className="border-[#5d9cec] text-[#5d9cec] hover:text-[#5d9cec] hover:bg-[#5d9cec]/10">
                   View Portfolio
                 </Button>
               </div>
@@ -50,7 +37,7 @@ export default function InteriorDesignPage() {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="relative w-full h-full">
                   <Image
-                    src="/placeholder.svg?height=800&width=800"
+                    src="/assets/interior-design.jpg?height=800&width=800"
                     alt="Interior Design"
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
@@ -129,7 +116,7 @@ export default function InteriorDesignPage() {
                   <div className="w-12 h-12 rounded-lg bg-[#5d9cec]/10 flex items-center justify-center mb-4 text-[#5d9cec]">
                     {service.icon}
                   </div>
-                  <h3 className="text-xl font-medium mb-2">{service.title}</h3>
+                  <h3 className="text-xl font-medium mb-2 text-white">{service.title}</h3>
                   <p className="text-gray-300">{service.description}</p>
                 </CardContent>
               </Card>
@@ -176,7 +163,7 @@ export default function InteriorDesignPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="relative h-[400px] rounded-lg overflow-hidden">
                     <Image
-                      src={`/placeholder.svg?height=800&width=600&text=${style.charAt(0).toUpperCase() + style.slice(1)}`}
+                      src={`/assets/cad.jpg?height=800&width=600&text=${style.charAt(0).toUpperCase() + style.slice(1)}`}
                       alt={`${style} Interior Design`}
                       fill
                       className="object-cover"
@@ -311,7 +298,7 @@ export default function InteriorDesignPage() {
                   <div className="w-12 h-12 rounded-lg bg-[#5d9cec]/10 flex items-center justify-center mb-4 text-[#5d9cec]">
                     {process.icon}
                   </div>
-                  <h3 className="text-xl font-medium mb-2">{process.title}</h3>
+                  <h3 className="text-xl font-medium mb-2 text-white">{process.title}</h3>
                   <p className="text-gray-300 relative z-10">{process.description}</p>
                 </CardContent>
               </Card>
@@ -336,47 +323,47 @@ export default function InteriorDesignPage() {
                 title: "Modern Apartment",
                 category: "Residential",
                 description: "Complete interior redesign of a 2,000 sq ft urban apartment with open concept living.",
-                image: "/placeholder.svg?height=400&width=600&text=Modern+Apartment",
+                image: "/assets/cad.jpg?height=400&width=600&text=Modern+Apartment",
               },
               {
                 title: "Executive Office",
                 category: "Commercial",
                 description:
                   "Sophisticated office design for a financial services firm emphasizing professionalism and comfort.",
-                image: "/placeholder.svg?height=400&width=600&text=Executive+Office",
+                image: "/assets/cad.jpg?height=400&width=600&text=Executive+Office",
               },
               {
                 title: "Minimalist Villa",
                 category: "Residential",
                 description:
                   "Clean, uncluttered design for a luxury villa focusing on essential elements and natural materials.",
-                image: "/placeholder.svg?height=400&width=600&text=Minimalist+Villa",
+                image: "/assets/cad.jpg?height=400&width=600&text=Minimalist+Villa",
               },
               {
                 title: "Boutique Hotel Lobby",
                 category: "Hospitality",
                 description: "Striking lobby design creating a memorable first impression for hotel guests.",
-                image: "/placeholder.svg?height=400&width=600&text=Hotel+Lobby",
+                image: "/assets/cad.jpg?height=400&width=600&text=Hotel+Lobby",
               },
               {
                 title: "Traditional Family Home",
                 category: "Residential",
                 description:
                   "Elegant interior design for a family residence with classic elements and modern functionality.",
-                image: "/placeholder.svg?height=400&width=600&text=Family+Home",
+                image: "/assets/cad.jpg?height=400&width=600&text=Family+Home",
               },
               {
                 title: "Restaurant Redesign",
                 category: "Commercial",
                 description:
                   "Complete interior transformation of a fine dining establishment enhancing ambiance and guest experience.",
-                image: "/placeholder.svg?height=400&width=600&text=Restaurant",
+                image: "/assets/cad.jpg?height=400&width=600&text=Restaurant",
               },
             ].map((project, index) => (
               <div key={index} className="group relative overflow-hidden rounded-lg">
                 <div className="relative h-64 overflow-hidden">
                   <Image
-                    src={project.image || "/placeholder.svg"}
+                    src={project.image || "/assets/cad.jpg"}
                     alt={project.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -428,21 +415,21 @@ export default function InteriorDesignPage() {
                 role: "Homeowner",
                 quote:
                   "The interior design team transformed our house into a home that perfectly reflects our style and meets our family's needs. Their attention to detail and ability to work within our budget was impressive.",
-                image: "/placeholder.svg?height=100&width=100",
+                image: "/assets/cad.jpg?height=100&width=100",
               },
               {
                 name: "Rajesh Mehta",
                 role: "CEO, TechStart Inc.",
                 quote:
                   "Our office redesign has significantly improved employee satisfaction and productivity. The designers understood our company culture and created a space that fosters collaboration while maintaining professionalism.",
-                image: "/placeholder.svg?height=100&width=100",
+                image: "/assets/cad.jpg?height=100&width=100",
               },
               {
                 name: "Ananya Patel",
                 role: "Restaurant Owner",
                 quote:
                   "The interior design for our restaurant has been a key factor in our success. Our customers frequently comment on the ambiance, and the functional layout has improved our service efficiency.",
-                image: "/placeholder.svg?height=100&width=100",
+                image: "/assets/cad.jpg?height=100&width=100",
               },
             ].map((testimonial, index) => (
               <Card
@@ -475,14 +462,14 @@ export default function InteriorDesignPage() {
                   <div className="flex items-center mt-auto">
                     <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
                       <Image
-                        src={testimonial.image || "/placeholder.svg"}
+                        src={testimonial.image || "/assets/cad.jpg"}
                         alt={testimonial.name}
                         fill
                         className="object-cover"
                       />
                     </div>
                     <div>
-                      <h4 className="font-medium">{testimonial.name}</h4>
+                      <h4 className="font-medium text-white">{testimonial.name}</h4>
                       <p className="text-sm text-gray-400">{testimonial.role}</p>
                     </div>
                   </div>
@@ -502,7 +489,7 @@ export default function InteriorDesignPage() {
               <div className="relative grid grid-cols-2 gap-4">
                 <div className="relative h-48 rounded-lg overflow-hidden">
                   <Image
-                    src="/placeholder.svg?height=400&width=300&text=Interior+1"
+                    src="/assets/cad.jpg?height=400&width=300&text=Interior+1"
                     alt="Interior Design"
                     fill
                     className="object-cover"
@@ -510,7 +497,7 @@ export default function InteriorDesignPage() {
                 </div>
                 <div className="relative h-48 rounded-lg overflow-hidden mt-8">
                   <Image
-                    src="/placeholder.svg?height=400&width=300&text=Interior+2"
+                    src="/assets/cad.jpg?height=400&width=300&text=Interior+2"
                     alt="Interior Design"
                     fill
                     className="object-cover"
@@ -518,7 +505,7 @@ export default function InteriorDesignPage() {
                 </div>
                 <div className="relative h-48 rounded-lg overflow-hidden">
                   <Image
-                    src="/placeholder.svg?height=400&width=300&text=Interior+3"
+                    src="/assets/cad.jpg?height=400&width=300&text=Interior+3"
                     alt="Interior Design"
                     fill
                     className="object-cover"
@@ -526,7 +513,7 @@ export default function InteriorDesignPage() {
                 </div>
                 <div className="relative h-48 rounded-lg overflow-hidden mt-8">
                   <Image
-                    src="/placeholder.svg?height=400&width=300&text=Interior+4"
+                    src="/assets/cad.jpg?height=400&width=300&text=Interior+4"
                     alt="Interior Design"
                     fill
                     className="object-cover"
@@ -566,8 +553,10 @@ export default function InteriorDesignPage() {
               journey.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-white text-[#5d9cec] hover:bg-white/90">Book a Consultation</Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10">
+              <Button className="bg-white text-[#5d9cec] hover:bg-white/90">
+                <Link href='/contact'>Book a Consultation</Link>
+              </Button>
+              <Button variant="outline" className="border-white bg-transparent text-white hover:text-white hover:bg-white/10">
                 View Our Portfolio
               </Button>
             </div>

@@ -29,7 +29,7 @@ export default function Navbar() {
     >
       <div className="container flex items-center justify-between h-16 px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className={`text-xl font-bold ${isScrolled || isContactPage ? "text-[#1F2937]" : "text-white"}`}>Shiva Design Associates</span>
+          <span className={`text-xl font-bold ${isScrolled || isContactPage ? "text-[#5d9cec]" : "text-white"}`}>Shiva Design Associates</span>
         </Link>
         <div className="flex items-center gap-2">
           {/* <ModeToggle /> */}

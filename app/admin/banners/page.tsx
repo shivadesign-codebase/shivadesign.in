@@ -60,14 +60,14 @@ export default function BannersPage() {
       id: 1,
       title: "Civil Engineering Excellence",
       subtitle: "Professional solutions for your construction needs",
-      image: "/placeholder.svg?height=200&width=400",
+      image: "/assets/cad.jpg?height=200&width=400",
       isActive: true,
     },
     {
       id: 2,
       title: "Innovative Structural Design",
       subtitle: "Building the future with precision and expertise",
-      image: "/placeholder.svg?height=200&width=400",
+      image: "/assets/cad.jpg?height=200&width=400",
       isActive: false,
     },
   ]

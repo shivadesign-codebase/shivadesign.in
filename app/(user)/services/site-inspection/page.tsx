@@ -3,18 +3,7 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import {
-  ShieldCheck,
-  CheckCircle,
-  ClipboardCheck,
-  FileCheck,
-  HardHat,
-  Building,
-  ArrowRight,
-  AlertTriangle,
-  Ruler,
-  Microscope,
-} from "lucide-react"
+import { ShieldCheck, CheckCircle, ClipboardCheck, FileCheck, HardHat, Building, ArrowRight, AlertTriangle, Ruler, Microscope } from "lucide-react"
 
 export default function SiteInspectionPage() {
   return (
@@ -22,7 +11,7 @@ export default function SiteInspectionPage() {
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute inset-0 bg-[url('/placeholder.svg?height=800&width=1600')] bg-no-repeat bg-cover bg-center" />
+          <div className="absolute inset-0 bg-[url('/assets/cad.jpg?height=800&width=1600')] bg-no-repeat bg-cover bg-center" />
         </div>
         <div className="container relative z-10 px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -45,7 +34,7 @@ export default function SiteInspectionPage() {
               </div>
             </div>
             <div className="relative h-[400px] rounded-lg overflow-hidden shadow-2xl border border-gray-700">
-              <Image src="/placeholder.svg?height=800&width=800" alt="Site Inspection" fill className="object-cover" />
+              <Image src="/assets/site-inspection.jpg?height=800&width=800" alt="Site Inspection" fill className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] to-transparent opacity-70"></div>
               <div className="absolute bottom-6 left-6 right-6 p-4 bg-[#2a3142]/80 backdrop-blur-sm rounded-lg border border-gray-700">
                 <div className="flex items-center gap-3">
@@ -264,25 +253,25 @@ export default function SiteInspectionPage() {
                 title: "High-Rise Residential Tower",
                 description:
                   "Regular quality inspections throughout the construction of a 30-story residential building, identifying and resolving over 120 potential issues.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
               },
               {
                 title: "Commercial Complex",
                 description:
                   "Comprehensive inspection services for a multi-building commercial development, ensuring compliance with complex regulatory requirements.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
               },
               {
                 title: "Infrastructure Project",
                 description:
                   "Specialized inspections for a major bridge construction, focusing on structural integrity and safety compliance.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
               },
             ].map((project, index) => (
               <div key={index} className="group relative overflow-hidden rounded-lg">
                 <div className="relative h-64 overflow-hidden">
                   <Image
-                    src={project.image || "/placeholder.svg"}
+                    src={project.image || "/assets/cad.jpg"}
                     alt={project.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"

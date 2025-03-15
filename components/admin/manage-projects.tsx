@@ -69,7 +69,7 @@ export default function ManageProjects({ projects }: ManageProjectsProps) {
                     <div className="w-full md:w-1/4 rounded-md overflow-hidden">
                       {project.image ? (
                         <Image
-                          src={project.image || "/placeholder.svg"}
+                          src={project.image || "/assets/cad.jpg"}
                           alt={project.title}
                           width={300}
                           height={300}

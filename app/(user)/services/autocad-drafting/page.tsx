@@ -2,7 +2,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { FileText, CheckCircle, Users, Workflow, ArrowRight } from "lucide-react"
+import { FileText, CheckCircle, Users, Workflow, ArrowRight, NotebookPen, DraftingCompass, Unplug } from "lucide-react"
 
 export default function AutoCADDraftingPage() {
   return (
@@ -10,7 +10,7 @@ export default function AutoCADDraftingPage() {
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
-          <div className="absolute inset-0 bg-[url('/placeholder.svg?height=800&width=1600')] bg-no-repeat bg-cover bg-center" />
+          <div className="absolute inset-0 bg-[url('/assets/cad-bg.jpg?height=800&width=1600')] bg-no-repeat bg-cover bg-center" />
         </div>
         <div className="container relative z-10 px-4 md:px-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -26,14 +26,16 @@ export default function AutoCADDraftingPage() {
                 for your construction and engineering projects.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button className="bg-[#5d9cec] hover:bg-[#4a89dc] text-white">Request a Quote</Button>
-                <Button variant="outline" className="border-[#5d9cec] text-[#5d9cec] hover:bg-[#5d9cec]/10">
+                <Button className="bg-[#5d9cec] hover:bg-[#4a89dc] text-white">
+                  <Link href='/contact'>Request a Quote</Link>
+                </Button>
+                <Button variant="outline" className="border-[#5d9cec] text-[#5d9cec] hover:text-[#5d9cec] hover:bg-[#5d9cec]/10">
                   View Sample Drawings
                 </Button>
               </div>
             </div>
             <div className="relative h-[400px] rounded-lg overflow-hidden shadow-2xl border border-gray-700">
-              <Image src="/placeholder.svg?height=800&width=800" alt="AutoCAD Drafting" fill className="object-cover" />
+              <Image src="/assets/cad.jpg?height=800&width=800" alt="AutoCAD Drafting" fill className="object-cover" />
               <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] to-transparent opacity-70"></div>
               <div className="absolute bottom-6 left-6 right-6 p-4 bg-[#2a3142]/80 backdrop-blur-sm rounded-lg border border-gray-700">
                 <div className="flex items-center gap-3">
@@ -65,17 +67,17 @@ export default function AutoCADDraftingPage() {
               {
                 title: "Architectural Plans",
                 description: "Detailed floor plans, elevations, sections, and construction details for buildings.",
-                icon: <FileText className="h-6 w-6" />,
+                icon: <NotebookPen className="h-6 w-6" />,
               },
               {
                 title: "Structural Drawings",
                 description: "Foundation plans, framing layouts, connection details, and reinforcement drawings.",
-                icon: <FileText className="h-6 w-6" />,
+                icon: <DraftingCompass className="h-6 w-6" />,
               },
               {
                 title: "MEP Systems",
                 description: "Mechanical, electrical, and plumbing system layouts and detailed drawings.",
-                icon: <FileText className="h-6 w-6" />,
+                icon: <Unplug className="h-6 w-6" />,
               },
               {
                 title: "As-Built Documentation",
@@ -85,10 +87,10 @@ export default function AutoCADDraftingPage() {
             ].map((feature, index) => (
               <Card key={index} className="bg-[#1e2430] border-gray-700 hover:border-[#5d9cec] transition-colors">
                 <CardContent className="p-6">
-                  <div className="w-12 h-12 rounded-lg bg-[#5d9cec]/10 flex items-center justify-center mb-4">
+                  <div className="w-12 h-12 rounded-lg bg-[#5d9cec]/10 text-white flex items-center justify-center mb-4">
                     {feature.icon}
                   </div>
-                  <h3 className="text-xl font-medium mb-2">{feature.title}</h3>
+                  <h3 className="text-xl font-medium mb-2 text-white">{feature.title}</h3>
                   <p className="text-gray-300">{feature.description}</p>
                 </CardContent>
               </Card>
@@ -177,23 +179,23 @@ export default function AutoCADDraftingPage() {
                 title: "Commercial Complex",
                 description:
                   "Complete set of architectural and structural drawings for a 10-story commercial building.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
               },
               {
                 title: "Residential Development",
                 description: "Detailed floor plans and elevations for a luxury residential community with 25 units.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
               },
               {
                 title: "Industrial Facility",
                 description: "MEP system layouts and structural details for a manufacturing plant expansion.",
-                image: "/placeholder.svg?height=400&width=600",
+                image: "/assets/cad.jpg?height=400&width=600",
               },
             ].map((project, index) => (
               <div key={index} className="group relative overflow-hidden rounded-lg">
                 <div className="relative h-64 overflow-hidden">
                   <Image
-                    src={project.image || "/placeholder.svg"}
+                    src={project.image || "/assets/cad.jpg"}
                     alt={project.title}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
@@ -265,9 +267,11 @@ export default function AutoCADDraftingPage() {
               Contact us today to discuss your drafting requirements and get a customized quote for your project.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button className="bg-white text-[#5d9cec] hover:bg-white/90">Request a Quote</Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10">
-                Contact Our Team
+              <Button className="bg-white text-[#5d9cec] hover:bg-white/90">
+                <Link href='/contact'>Request a Quote</Link>
+              </Button>
+              <Button variant="outline" className="border-white text-white bg-white/10">
+                <Link href='/contact'>Contact Our Team</Link>
               </Button>
             </div>
           </div>

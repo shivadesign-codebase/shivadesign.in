@@ -136,7 +136,7 @@ export default function EditProjectDialog({ project, isOpen, onClose }: EditProj
               ) : (
                 <div className="mb-4">
                   <Image
-                    src={imagePreview || "/placeholder.svg"}
+                    src={imagePreview || "/assets/cad.jpg"}
                     alt="Project preview"
                     width={300}
                     height={200}

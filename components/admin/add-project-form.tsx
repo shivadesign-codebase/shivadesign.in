@@ -130,7 +130,7 @@ export default function AddProjectForm() {
               ) : (
                 <div className="mb-4">
                   <Image
-                    src={imagePreview || "/placeholder.svg"}
+                    src={imagePreview || "/assets/cad.jpg"}
                     alt="Project preview"
                     width={300}
                     height={200}

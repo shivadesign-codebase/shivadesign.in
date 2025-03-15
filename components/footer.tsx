@@ -12,6 +12,10 @@ export default function Footer() {
               Professional civil engineering solutions tailored to meet your project requirements.
             </p>
             <div className="flex space-x-4">
+              <Link href="https://instagram.shivadesign.in" className="text-muted-foreground hover:text-primary">
+                <Instagram className="h-5 w-5" />
+                <span className="sr-only">Instagram</span>
+              </Link>
               <Link href="https://facebook.shivadesign.in" className="text-muted-foreground hover:text-primary">
                 <Facebook className="h-5 w-5" />
                 <span className="sr-only">Facebook</span>
@@ -19,10 +23,6 @@ export default function Footer() {
               <Link href="https://twitter.shivadesign.in" className="text-muted-foreground hover:text-primary">
                 <Twitter className="h-5 w-5" />
                 <span className="sr-only">Twitter</span>
-              </Link>
-              <Link href="https://instagram.shivadesign.in" className="text-muted-foreground hover:text-primary">
-                <Instagram className="h-5 w-5" />
-                <span className="sr-only">Instagram</span>
               </Link>
               <Link href="https://linkedin.shivadesign.in" className="text-muted-foreground hover:text-primary">
                 <Linkedin className="h-5 w-5" />
@@ -50,11 +50,6 @@ export default function Footer() {
               <li>
                 <Link href="/projects" className="text-muted-foreground hover:text-primary">
                   Projects
-                </Link>
-              </li>
-              <li>
-                <Link href="/documents" className="text-muted-foreground hover:text-primary">
-                  Documents
                 </Link>
               </li>
               <li>
