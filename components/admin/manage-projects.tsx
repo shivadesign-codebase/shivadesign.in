@@ -13,7 +13,7 @@ import { IProject } from "@/types/project"
 import InfiniteScroll from "react-infinite-scroll-component"
 import { Skeleton } from "../ui/skeleton"
 
-function ProjectsLoading() {
+export function ProjectsLoading() {
   return (
     <div className="space-y-4">
       <Skeleton className="h-8 w-64" />

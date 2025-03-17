@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import getProjectsAction from './actions/get-paginated-projects';
+import getProjectsAction from './Actions/get-paginated-projects';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!process.env.NEXT_PUBLIC_SITE_URL) {
