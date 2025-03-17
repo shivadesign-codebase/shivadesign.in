@@ -96,7 +96,7 @@ export default function FounderProfile() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
                   <div>
                     <h3 className="text-2xl md:text-3xl font-bold">ER. Harsh Verma</h3>
-                    <p className="text-primary font-medium">Diploma Civil Engineering, ITM Maharajganj</p>
+                    <p className="text-primary font-medium">Civil Engineering, ITM Maharajganj</p>
                   </div>
                   <div className="flex gap-2 mt-4 md:mt-0">
                     <Button
@@ -141,7 +141,7 @@ export default function FounderProfile() {
                     </div>
                     <div>
                       <h4 className="font-medium">Education</h4>
-                      <p className="text-sm text-muted-foreground">Diploma in Civil Engineering, ITM Maharajganj</p>
+                      <p className="text-sm text-muted-foreground">Civil Engineering, ITM Maharajganj</p>
                     </div>
                   </div>
 

@@ -100,7 +100,7 @@ export default function AboutPage() {
 
                     <ul className="space-y-2">
                       <li className="flex items-center gap-2">
-                        <Badge variant="outline">Diploma</Badge>
+                        {/* <Badge variant="outline"></Badge> */}
                         <span>Civil Engineering, ITM Maharajganj</span>
                       </li>
                     </ul>
