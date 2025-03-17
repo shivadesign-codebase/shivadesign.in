@@ -33,7 +33,7 @@ export default function ThreeDElevationPage() {
                 the final outcome before construction begins.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Button className="bg-[#5d9cec] hover:bg-[#4a89dc] text-white">View Portfolio</Button>
+                <Button className="bg-[#5d9cec] hover:bg-[#4a89dc] text-white"><Link href={'/projects'}>View Portfolio</Link></Button>
                 <Button variant="outline" className="border-[#5d9cec] text-[#5d9cec] hover:bg-[#5d9cec]/10">
                   Request a Demo
                 </Button>

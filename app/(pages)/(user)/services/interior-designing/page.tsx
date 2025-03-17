@@ -35,7 +35,7 @@ export default function InteriorDesignPage() {
               <div className="flex flex-wrap gap-4">
                 <Button className="bg-[#5d9cec] hover:bg-[#4a89dc] text-white">Book a Consultation</Button>
                 <Button variant="outline" className="border-[#5d9cec] text-[#5d9cec] hover:text-[#5d9cec] hover:bg-[#5d9cec]/10">
-                  View Portfolio
+                  <Link href={'/projects'}>View Portfolio</Link>
                 </Button>
               </div>
             </div>
@@ -563,7 +563,7 @@ export default function InteriorDesignPage() {
                 <Link href='/contact'>Book a Consultation</Link>
               </Button>
               <Button variant="outline" className="border-white bg-transparent text-white hover:text-white hover:bg-white/10">
-                View Our Portfolio
+                <Link href={'/projects'}>View Portfolio</Link>
               </Button>
             </div>
           </div>
