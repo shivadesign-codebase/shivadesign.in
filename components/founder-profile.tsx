@@ -99,13 +99,18 @@ export default function FounderProfile() {
                     <p className="text-primary font-medium">Diploma Civil Engineering, ITM Maharajganj</p>
                   </div>
                   <div className="flex gap-2 mt-4 md:mt-0">
-                    <Button variant="outline" size="sm" className="rounded-full">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="rounded-full"
+                    >
                       <Mail className="h-4 w-4 mr-2" />
-                      Contact
+                      <Link href='mailto:shivaconsultant97@gmail.com' target="_blank">Contact</Link>
+
                     </Button>
                     <Button variant="outline" size="sm" className="rounded-full">
                       <Calendar className="h-4 w-4 mr-2" />
-                      Schedule
+                      <Link href='/contact'>Schedule</Link>
                     </Button>
                   </div>
                 </div>
