@@ -57,8 +57,17 @@ export default function EditProjectDialog({ project, isOpen, onClose }: EditProj
   const onSubmit = async (data: ProjectFormValues) => {
     try {
       setIsSubmitting(true)
-      // Implement update project functionality
-      console.log("Updating project with data:", data)
+      const response = await fetch(`/api/admin/project?id=${project._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to update project")
+      }
 
       toast("Project updated", {
         description: "The project has been updated successfully.",
@@ -147,15 +156,15 @@ export default function EditProjectDialog({ project, isOpen, onClose }: EditProj
 
               <CldUploadButton
                 onSuccess={handleImageUpload}
-                uploadPreset="mmmgkp-news"
+                uploadPreset="shivadesign"
                 options={{
                   maxFiles: 1,
                   resourceType: "image",
                 }}
               >
-                <Button type="button" variant="outline" size="sm">
+                <div>
                   {imagePreview ? "Change Image" : "Upload Image"}
-                </Button>
+                </div>
               </CldUploadButton>
             </div>
           </div>

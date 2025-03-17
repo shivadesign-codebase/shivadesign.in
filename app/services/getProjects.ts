@@ -15,7 +15,7 @@ export const getProjects = async ({
   await connect_db();
 
   try {
-    const query = primary_tag && primary_tag !== 'timeline' ? { primary_tag } : {};
+    const query = primary_tag ? { primary_tag } : {};
     const skip = (page - 1) * limit;
 
     const projects = await Project.find(query).sort({ createdAt: -1 }).limit(limit).skip(skip).exec();

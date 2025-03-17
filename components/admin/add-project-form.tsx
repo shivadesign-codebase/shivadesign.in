@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { ImageIcon } from "lucide-react"
-import { saveProject } from "@/lib/actions"
 import { toast } from "sonner"
 import type { ProjectFormValues } from "@/types/project"
 
@@ -53,7 +52,18 @@ export default function AddProjectForm() {
   const onSubmit = async (data: ProjectFormValues) => {
     try {
       setIsSubmitting(true)
-      await saveProject(data)
+      const response = await fetch("/api/admin/project", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to save project")
+      }
+
       toast("Project saved", {
         description: "The project has been saved successfully.",
       })
@@ -147,6 +157,7 @@ export default function AddProjectForm() {
                   resourceType: "image",
                 }}
               >
+                <div className="cursor-pointer">Upload Image</div>
               </CldUploadButton>
             </div>
             {errors.image && <p className="text-sm text-red-500">{errors.image.message}</p>}

@@ -19,7 +19,6 @@ const projectSchema = new Schema<IProject>(
     },
     category: {
       type: String,
-      enum: ["Interior Design", "3D Elevation", "AutoCAD 2D Design", "Site Inspection"],
       required: true,
     },
     type: {

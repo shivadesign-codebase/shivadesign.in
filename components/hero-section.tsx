@@ -38,7 +38,7 @@ export default function HeroSection() {
       {/* Centered Content with Glassmorphism Effect */}
       <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4">
         <h1 className="text-4xl md:text-6xl font-bold drop-shadow-lg">Shiva Design Associates</h1>
-        <h2 className="text-2xl md:text-4xl font-medium mt-4 drop-shadow-md">Civil Engineering Services</h2>
+        <h2 className="text-2xl md:text-4xl font-medium mt-4 drop-shadow-md">You Dream It, We Built It</h2>
         <div className="flex flex-col sm:flex-row gap-4 mt-8">
           <Button asChild size="lg">
             <p onClick={scrollToServices} className="cursor-pointer">Our Services</p>

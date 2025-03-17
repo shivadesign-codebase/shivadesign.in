@@ -1,6 +1,5 @@
 "use server"
 
-import { ProjectFormValues } from "@/types/project"
 import { revalidatePath } from "next/cache"
 
 interface ContactFormData {
@@ -38,13 +37,6 @@ export async function saveBanner(data: BannerData) {
   return { success: true }
 }
 
-export async function saveProject(data: ProjectFormValues) {
-  console.log("Project data:", data)
-  await new Promise((resolve) => setTimeout(resolve, 1000))
-  revalidatePath("/")
-  return { success: true }
-}
-
 export async function saveDocument(formData: FormData) {
   const title = formData.get("title") as string
   const client = formData.get("client") as string
@@ -66,4 +58,3 @@ export async function sendBroadcastEmail(formData: FormData) {
   await new Promise((resolve) => setTimeout(resolve, 1000))
   return { success: true }
 }
-
