@@ -9,7 +9,7 @@ import Footer from "@/components/footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Shiva Consultant - Civil Engineering Services",
+  title: "Shiva Design Associates - Civil Engineering Services",
   description: "Professional civil engineering solutions tailored to meet your project requirements",
 }
 
