@@ -6,6 +6,7 @@ import ScrollToTop from "@/components/scroll-to-top"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import ServicesSection from "@/components/home/servises-section"
+import FounderProfile from "@/components/founder-profile"
 
 export default function Home() {
   const projects = [
@@ -66,6 +67,9 @@ export default function Home() {
     <>
       <HeroSection />
       <ServicesSection />
+
+      {/* Add the Founder Profile section here */}
+      <FounderProfile />
       <section className="py-16 md:py-24 bg-muted/30">
         <div className="container px-4 md:px-6">
           <ScrollAnimations className="text-center mb-12">

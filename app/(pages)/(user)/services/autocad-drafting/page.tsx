@@ -247,10 +247,10 @@ export default function AutoCADDraftingPage() {
               <div className="relative bg-[#2a3142] p-6 rounded-lg border border-gray-700">
                 <div className="grid grid-cols-2 gap-4">
                   {[
-                    { label: "Projects Completed", value: "500+" },
-                    { label: "Client Satisfaction", value: "98%" },
-                    { label: "Years of Experience", value: "15+" },
-                    { label: "Industry Sectors", value: "12" },
+                    { label: "Projects Completed", value: "75+" },
+                    { label: "Cities Served", value: "10+" },
+                    { label: "Years of Experience", value: "5+" },
+                    { label: "Client Retention Rate", value: "95%" },
                   ].map((stat, index) => (
                     <div key={index} className="text-center p-4 bg-[#1e2430] rounded-lg">
                       <p className="text-3xl font-bold text-[#5d9cec]">{stat.value}</p>
@@ -277,7 +277,7 @@ export default function AutoCADDraftingPage() {
                 <Link href='/contact'>Request a Quote</Link>
               </Button>
               <Button variant="outline" className="border-white text-white bg-white/10">
-                <Link href='/contact'>Contact Our Team</Link>
+                <Link target="_blank" href="https://wa.me/919794086149">Contact Our Team</Link>
               </Button>
             </div>
           </div>

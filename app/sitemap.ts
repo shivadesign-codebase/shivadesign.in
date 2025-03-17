@@ -39,6 +39,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   });
 
   const staticPages = [
+    "about",
     "contact",
     "projects",
     "services/autocad-drafting",
