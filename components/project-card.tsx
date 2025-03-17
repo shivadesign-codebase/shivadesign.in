@@ -6,7 +6,7 @@ interface ProjectCardProps {
   title: string
   category: string
   description: string
-  image: string
+  image?: string
   link: string
   badgeColor?: "default" | "secondary" | "destructive" | "outline"
 }
@@ -21,7 +21,7 @@ export default function ProjectCard({
 }: ProjectCardProps) {
   return (
     <div className="project-card rounded-lg overflow-hidden">
-      <Link href={link}>
+      <Link href={link ? link : "#"}>
         <div className="relative aspect-[4/3]">
           <Image src={image || "/assets/cad.jpg"} alt={title} fill className="object-cover" />
           <div className="absolute top-4 left-4">
