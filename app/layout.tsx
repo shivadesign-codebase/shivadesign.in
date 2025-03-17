@@ -9,8 +9,8 @@ import Footer from "@/components/footer"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Shiva Design Associates - Civil Engineering Services",
-  description: "Professional civil engineering solutions tailored to meet your project requirements",
+  title: "Shiva Design Associates | Civil, Interior & 2D Drawing Services in Maharajganj",
+  description: "Shiva Design Associates in Maharajganj specializes in civil engineering, interior design, architectural planning, 2D drawings, construction consulting, and project management. Delivering quality and customized design solutions for residential, commercial, and industrial projects.",
 }
 
 export default function RootLayout({
