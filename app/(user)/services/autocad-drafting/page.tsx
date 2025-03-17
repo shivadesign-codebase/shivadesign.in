@@ -1,8 +1,14 @@
+import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { FileText, CheckCircle, Users, Workflow, ArrowRight, NotebookPen, DraftingCompass, Unplug } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "AutoCAD Drafting & Vastu-Compliant Plans in Maharajganj | Shiva Design Associates",
+  description: "Accurate AutoCAD drafting services in Maharajganj with Vastu-compliant 2D drawings, floor plans, and architectural drafts. Trusted by homeowners and builders for precision and quality.",
+}
 
 export default function AutoCADDraftingPage() {
   return (

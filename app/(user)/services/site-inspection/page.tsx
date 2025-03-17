@@ -1,9 +1,15 @@
 import Image from "next/image"
 import Link from "next/link"
+import { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { ShieldCheck, CheckCircle, ClipboardCheck, FileCheck, HardHat, Building, ArrowRight, AlertTriangle, Ruler, Microscope } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Site Inspection & Vastu Compliance in Maharajganj | Shiva Design Associates",
+  description: "Professional site inspection services in Maharajganj with focus on construction quality and Vastu compliance. Ensure your project aligns with structural and Vastu standards.",
+}
 
 export default function SiteInspectionPage() {
   return (

@@ -1,9 +1,15 @@
+import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CuboidIcon, CheckCircle, ArrowRight, Building, Building2, Home, Factory, Layers, Eye, PenTool, Lightbulb } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "3D Elevation Design with Vastu in Maharajganj | Shiva Design Associates",
+  description: "Get realistic 3D elevation designs in Maharajganj that align with Vastu principles. Shiva Design Associates delivers stunning visualizations for residential and commercial spaces.",
+}
 
 export default function ThreeDElevationPage() {
   return (

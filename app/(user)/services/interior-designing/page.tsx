@@ -1,9 +1,15 @@
 import Image from "next/image"
 import Link from "next/link"
+import { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CheckCircle, ArrowRight, Sofa, Lightbulb, Palette, Home, Building, Sparkles, Layers, Users, Ruler, Compass } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Interior Designing with Vastu in Maharajganj | Shiva Design Associates",
+  description: "Transform your space with Vastu-compliant interior designing services in Maharajganj. Shiva Design Associates offers elegant and balanced interiors for homes and offices.",
+}
 
 export default function InteriorDesignPage() {
   return (
