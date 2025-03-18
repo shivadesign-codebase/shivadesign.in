@@ -66,10 +66,12 @@ export default function Home() {
   return (
     <>
       <HeroSection />
+
       <ServicesSection />
 
       {/* Add the Founder Profile section here */}
       <FounderProfile />
+
       <section className="py-16 md:py-24 bg-muted/30">
         <div className="container px-4 md:px-6">
           <ScrollAnimations className="text-center mb-12">

@@ -21,18 +21,17 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  const isContactPage = pathname.includes('contact')
+  const isNotHomePage = pathname !== '/'
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-30 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-md shadow-md" : "bg-transparent"}`}
-    >
+    <header className={`fixed top-0 left-0 right-0 z-30 transition-all duration-300 ${isScrolled ? "bg-background/90 backdrop-blur-md shadow-md" : "bg-transparent"}`}>
       <div className="container flex items-center justify-between h-16 px-4 md:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className={`text-xl font-bold ${isScrolled || isContactPage ? "text-[#5d9cec]" : "text-white"}`}>Shiva Design Associates</span>
+          <span className={`text-xl font-bold ${isScrolled || isNotHomePage ? "text-[#5d9cec]" : "text-white"}`}>Shiva Design Associates</span>
         </Link>
         <div className="flex items-center gap-2">
           {/* <ModeToggle /> */}
+
           <Button asChild variant="default" size="sm" className="hidden md:flex bg-[#1F2937]/70 text-white">
             <Link href="/contact">Contact Us</Link>
           </Button>
