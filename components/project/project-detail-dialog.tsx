@@ -9,7 +9,7 @@ interface ProjectDetailDialogProps {
   onClose: () => void
 }
 
-export default async function ProjectDetailDialog({ project, isOpen, onClose }: ProjectDetailDialogProps) {
+export default function ProjectDetailDialog({ project, isOpen, onClose }: ProjectDetailDialogProps) {
   if (!project) return null
 
   return (
