@@ -52,7 +52,6 @@ export default function ProjectsPage() {
   const fetchInitialProjects = async () => {
     setInitialLoading(true)
     try {
-      // In a real app, you would fetch from an API
       const res = await fetch('/api/projects?limit=100')
       const data = await res.json()
       setAllProjects(data.projects)
@@ -77,9 +76,9 @@ export default function ProjectsPage() {
       const startIndex = (page - 1) * ITEMS_PER_PAGE
       const endIndex = page * ITEMS_PER_PAGE
 
-      // In a real app with API:
-      const res = await fetch(`/api/projects?page=${page}&limit=${ITEMS_PER_PAGE}`)
-      const data = await res.json()
+      // TODO:
+      // const res = await fetch(`/api/projects?page=${page}&limit=${ITEMS_PER_PAGE}`)
+      // const data = await res.json()
       const newProjects = getFilteredProjects().slice(startIndex, endIndex)
 
       if (newProjects.length === 0) {
