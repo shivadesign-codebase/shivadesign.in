@@ -96,7 +96,7 @@ export default function FounderProfile() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
                   <div>
                     <h3 className="text-2xl md:text-3xl font-bold">ER. Harsh Verma</h3>
-                    <p className="text-primary font-medium">Civil Engineering, ITM Maharajganj</p>
+                    <p className="text-primary font-medium">Civil Engineer</p>
                   </div>
                   <div className="flex gap-2 mt-4 md:mt-0">
                     <Button
@@ -132,16 +132,6 @@ export default function FounderProfile() {
                       <p className="text-sm text-muted-foreground">
                         Structural Design, Vastu Compliance, Project Management
                       </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-full">
-                      <FileText className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Publications</h4>
-                      <p className="text-sm text-muted-foreground">12+ Research Papers on Structural Innovation</p>
                     </div>
                   </div>
 

@@ -1,7 +1,3 @@
-"use client"
-
-import { useState } from "react"
-import Image from "next/image"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, User, Tag, X } from "lucide-react"
@@ -13,9 +9,7 @@ interface ProjectDetailDialogProps {
   onClose: () => void
 }
 
-export default function ProjectDetailDialog({ project, isOpen, onClose }: ProjectDetailDialogProps) {
-  const [imageLoaded, setImageLoaded] = useState(false)
-
+export default async function ProjectDetailDialog({ project, isOpen, onClose }: ProjectDetailDialogProps) {
   if (!project) return null
 
   return (
@@ -33,19 +27,10 @@ export default function ProjectDetailDialog({ project, isOpen, onClose }: Projec
 
         <div className="grid grid-cols-1 md:grid-cols-2 h-full">
           <div className="relative bg-black flex items-center justify-center min-h-[300px]">
-            {!imageLoaded && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-10 h-10 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            )}
-            <Image
-              src={project.image || "/placeholder.svg?height=600&width=800"}
-              alt={project.title}
-              width={800}
-              height={600}
-              className={`object-contain max-h-[80vh] transition-opacity duration-300 ${imageLoaded ? "opacity-100" : "opacity-0"}`}
-              onLoad={() => setImageLoaded(true)}
-            />
+            <div
+              className={"absolute inset-0 bg-contain bg-no-repeat bg-center transition-opacity duration-300 opacity-100"}
+              style={{ backgroundImage: `url(${project.image || "/placeholder.svg?height=600&width=800"})` }}
+            ></div>
           </div>
 
           <div className="p-6 overflow-y-auto max-h-[80vh]">

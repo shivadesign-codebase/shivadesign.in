@@ -7,34 +7,13 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import ServicesSection from "@/components/home/servises-section"
 import FounderProfile from "@/components/founder-profile"
+import TrustedClientsSection from "@/components/home/trusted-client-section"
+import getProjectsAction from "./Actions/get-paginated-projects"
+import { IProject } from "./models/project"
 
-export default function Home() {
-  const projects = [
-    {
-      title: "Commercial Complex ",
-      category: "Commercial",
-      description: "Modern commercial building with innovative structural solutions.",
-      image: "/assets/cad.jpg?height=300&width=400",
-      link: "/projects/commercial-complex",
-      badgeColor: "default" as "default",
-    },
-    {
-      title: "Residential Tower",
-      category: "Residential",
-      description: "High-rise residential building with earthquake-resistant design.",
-      image: "/assets/cad.jpg?height=300&width=400",
-      link: "/projects/residential-tower",
-      badgeColor: "secondary" as "secondary",
-    },
-    {
-      title: "Highway Bridge",
-      category: "Infrastructure",
-      description: "Modern suspension bridge with innovative engineering solutions.",
-      image: "/assets/cad.jpg?height=300&width=400",
-      link: "/projects/highway-bridge",
-      badgeColor: "outline" as "outline",
-    },
-  ]
+export default async function Home() {
+  const projects = await getProjectsAction({ limit: 3 })
+  const parsedProjects: IProject[] = JSON.parse(projects)
 
   const testimonials = [
     {
@@ -72,6 +51,7 @@ export default function Home() {
       {/* Add the Founder Profile section here */}
       <FounderProfile />
 
+      {/* Projects */}
       <section className="py-16 md:py-24 bg-muted/30">
         <div className="container px-4 md:px-6">
           <ScrollAnimations className="text-center mb-12">
@@ -82,7 +62,7 @@ export default function Home() {
           </ScrollAnimations>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {projects.map((project, index) => (
+            {parsedProjects.map((project, index) => (
               <ScrollAnimations key={index}>
                 <ProjectCard {...project} />
               </ScrollAnimations>
@@ -97,6 +77,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Testimonials */}
       <section className="py-16 md:py-24 bg-background" id="testimonial-section">
         <div className="container px-4 md:px-6">
           <ScrollAnimations className="text-center mb-12">
@@ -109,41 +90,9 @@ export default function Home() {
           <ScrollAnimations>
             <TestimonialCarousel testimonials={testimonials} />
           </ScrollAnimations>
-
-          <div className="mt-16 text-center">
-            <h3 className="text-xl font-semibold mb-8">Trusted by Leading Organizations</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="flex items-center justify-center">
-                  <div className="bg-muted h-16 w-full max-w-[200px] rounded flex items-center justify-center text-muted-foreground">
-                    Client Logo
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
+        <TrustedClientsSection />
       </section>
-
-      <section className="py-16 md:py-24 bg-primary text-primary-foreground">
-        <div className="container px-4 md:px-6 text-center">
-          <ScrollAnimations>
-            <h2 className="text-3xl font-bold mb-4">Ready to Start Your Project?</h2>
-            <p className="max-w-2xl mx-auto mb-8">
-              Contact Shiva Consultant today for a consultation and bring your construction vision to life.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button asChild variant="secondary" size="lg">
-                <Link href="/contact">Contact Us</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="text-primary hover:text-white hover:bg-primary/90">
-                <Link href="/services">Explore Services</Link>
-              </Button>
-            </div>
-          </ScrollAnimations>
-        </div>
-      </section>
-
       <ScrollToTop />
     </>
   )

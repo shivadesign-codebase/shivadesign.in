@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState } from "react"
 import type { ReactNode } from "react"
 import Link from "next/link"
@@ -47,11 +46,11 @@ export default function ServiceCard({
               onClick={handleLearnMore}
               className="text-[#5d9cec] flex items-center mt-6 hover:underline group text-left"
             >
-              Learn More <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+              Learn More About {title} <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
           ) : (
             <Link href={link} className="text-[#5d9cec] flex items-center mt-6 hover:underline group">
-              Learn More <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+              Learn More About {title} <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           )}
         </CardContent>
@@ -69,4 +68,3 @@ export default function ServiceCard({
     </>
   )
 }
-
