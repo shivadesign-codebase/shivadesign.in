@@ -47,7 +47,7 @@ export default function AboutPage() {
 
                     <div className="flex items-center gap-3">
                       <Phone className="h-5 w-5 text-primary" />
-                      <span>+91 98765 43210</span>
+                      <span>+91 97940 86149</span>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -93,24 +93,6 @@ export default function AboutPage() {
                   <CardContent className="p-4">
                     <div className="flex items-start gap-3 mb-4">
                       <div className="bg-primary/10 p-2 rounded-full">
-                        <Award className="h-5 w-5 text-primary" />
-                      </div>
-                      <h3 className="font-semibold">Education & Certifications</h3>
-                    </div>
-
-                    <ul className="space-y-2">
-                      <li className="flex items-center gap-2">
-                        {/* <Badge variant="outline"></Badge> */}
-                        <span>Civil Engineering, ITM Maharajganj</span>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3 mb-4">
-                      <div className="bg-primary/10 p-2 rounded-full">
                         <BookOpen className="h-5 w-5 text-primary" />
                       </div>
                       <h3 className="font-semibold">Areas of Expertise</h3>
@@ -131,6 +113,9 @@ export default function AboutPage() {
                       </li>
                       <li className="flex items-center gap-2">
                         <Badge>Construction Management</Badge>
+                      </li>
+                      <li className="flex items-center gap-2">
+                        <Badge>Design According To Vastu</Badge>
                       </li>
                     </ul>
                   </CardContent>

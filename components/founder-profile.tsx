@@ -7,7 +7,7 @@ import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Mail, Phone, Calendar, Award, BookOpen, FileText, ArrowRight } from "lucide-react"
+import { Mail, Phone, Calendar, Award, FileText, ArrowRight } from "lucide-react"
 
 export default function FounderProfile() {
   const [isHovered, setIsHovered] = useState(false)
@@ -132,16 +132,6 @@ export default function FounderProfile() {
                       <p className="text-sm text-muted-foreground">
                         Structural Design, Vastu Compliance, Project Management
                       </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-full">
-                      <BookOpen className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Education</h4>
-                      <p className="text-sm text-muted-foreground">Civil Engineering, ITM Maharajganj</p>
                     </div>
                   </div>
 
