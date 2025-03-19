@@ -5,12 +5,7 @@ import { useEffect, useRef } from "react"
 const logos = [
   "Pramila Homeo Clinic",
   "City Montessori School",
-  "PJ Jewellers",
-  "DN School GKP",
-  "Skyline Builders",
-  "Urban Edge Realty",
-  "Lotus Infrastructure",
-  "Green Valley Homes",
+  "JN Hospital"
 ]
 
 function TrustedClientsSection() {
@@ -22,7 +17,7 @@ function TrustedClientsSection() {
 
     const scroll = () => {
       if (scrollContainer) {
-        scrollAmount += 1
+        scrollAmount += 2
         if (scrollAmount >= scrollContainer.scrollWidth / 2) {
           scrollAmount = 0
         }
@@ -30,7 +25,7 @@ function TrustedClientsSection() {
       }
     }
 
-    const interval = setInterval(scroll, 50)
+    const interval = setInterval(scroll, 10)
     return () => clearInterval(interval)
   }, [])
 
