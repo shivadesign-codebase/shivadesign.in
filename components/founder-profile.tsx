@@ -130,7 +130,7 @@ export default function FounderProfile() {
                     <div>
                       <h4 className="font-medium">Expertise</h4>
                       <p className="text-sm text-muted-foreground">
-                        Structural Design, Vastu Compliance, Project Management
+                        Structural Design, Vastu Compliance, Elevation Design, Interior Design, Project Management
                       </p>
                     </div>
                   </div>
