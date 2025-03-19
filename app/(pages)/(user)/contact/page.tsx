@@ -81,7 +81,6 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-semibold">Email Us</h3>
                     <p className="text-muted-foreground">shivaconsultant97@gmail.com</p>
-                    <p className="text-muted-foreground">support@shivaconsultant.com</p>
                   </div>
                 </div>
 
@@ -89,9 +88,7 @@ export default function ContactPage() {
                   <Clock className="h-5 w-5 text-primary mt-0.5" />
                   <div>
                     <h3 className="font-semibold">Business Hours</h3>
-                    <p className="text-muted-foreground">Monday - Friday: 9:00 AM - 6:00 PM</p>
-                    <p className="text-muted-foreground">Saturday: 10:00 AM - 2:00 PM</p>
-                    <p className="text-muted-foreground">Sunday: Closed</p>
+                    <p className="text-muted-foreground">Daily: 10:00 AM - 8:00 PM</p>
                   </div>
                 </div>
               </CardContent>
