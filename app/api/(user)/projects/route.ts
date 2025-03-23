@@ -1,4 +1,5 @@
 export const dynamic = 'force-static';
+export const revalidate = 60 * 60 *24;
 
 import Project from "@/app/models/project";
 import { NextResponse } from "next/server";
