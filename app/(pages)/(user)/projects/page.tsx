@@ -2,10 +2,10 @@
 
 import type React from "react"
 
-import { useState, useEffect, useRef, useCallback, useMemo } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { toast } from "sonner"
 import Fuse from "fuse.js"
-import { Search, Loader2 } from "lucide-react"
+import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import ScrollToTop from "@/components/scroll-to-top"
@@ -20,18 +20,12 @@ export default function ProjectsPage() {
   const [allProjects, setAllProjects] = useState<IProject[]>([])
   const [displayedProjects, setDisplayedProjects] = useState<IProject[]>([])
   const [initialLoading, setInitialLoading] = useState(true)
-  const [loadingMore, setLoadingMore] = useState(false)
-  const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
   const [activeCategory, setActiveCategory] = useState("All")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const observerRef = useRef<IntersectionObserver | null>(null)
-  const loadMoreRef = useRef<HTMLDivElement>(null)
-
-  const ITEMS_PER_PAGE = 9
+  const ITEMS_PER_PAGE = 999
 
   // Initialize Fuse for fuzzy search
   const fuse = useMemo(() => {
@@ -52,45 +46,15 @@ export default function ProjectsPage() {
   const fetchInitialProjects = async () => {
     setInitialLoading(true)
     try {
-      const res = await fetch(`/api/projects?limit=${ITEMS_PER_PAGE}`)
+      const res = await fetch(`/api/projects`)
       const data = await res.json()
       setAllProjects(data.projects)
-      setPage(2);
-      // Set initial displayed projects
       setDisplayedProjects(data.projects)
     } catch (error) {
       console.error("Failed to fetch projects:", error)
       toast("Error", { description: "Failed to load projects." })
     } finally {
       setInitialLoading(false)
-    }
-  }
-
-  // Load more projects
-  const loadMoreProjects = async () => {
-    setLoadingMore(true)
-    try {
-      const res = await fetch(`/api/projects?page=${page}&limit=${ITEMS_PER_PAGE}`)
-      const data = await res.json()
-      const newProjects = data.projects || [];
-
-      if (newProjects.length === 0) {
-        setHasMore(false)
-      } else {
-        setDisplayedProjects((prev) => {
-          // Create a Set of existing IDs to prevent duplicates
-          const existingIds = new Set(prev.map((p) => p._id))
-          // Only add projects that aren't already displayed
-          const uniqueNewProjects = newProjects.filter((p: IProject) => !existingIds.has(p._id))
-          return [...prev, ...uniqueNewProjects]
-        })
-        setPage((prev) => prev + 1)
-      }
-    } catch (error) {
-      console.error("Failed to load more projects:", error)
-      toast("Error", { description: "Failed to load more projects." })
-    } finally {
-      setLoadingMore(false)
     }
   }
 
@@ -116,27 +80,21 @@ export default function ProjectsPage() {
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category)
     setSearchQuery("") // Clear search when changing category
-    setPage(1)
-    setHasMore(true)
 
     // Reset displayed projects when changing category
     setTimeout(() => {
       const filtered = category === "All" ? allProjects : allProjects.filter((project) => project.category === category)
 
       setDisplayedProjects(filtered.slice(0, ITEMS_PER_PAGE))
-      setPage(2)
     }, 0)
   }
 
   // Handle search
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    setPage(1)
 
     const filtered = getFilteredProjects()
     setDisplayedProjects(filtered.slice(0, ITEMS_PER_PAGE))
-    setPage(2)
-    setHasMore(filtered.length > ITEMS_PER_PAGE)
   }
 
   // Open project detail dialog
@@ -148,22 +106,7 @@ export default function ProjectsPage() {
   // Fetch initial data
   useEffect(() => {
     fetchInitialProjects()
-
-    // Cleanup
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect()
-      }
-    }
   }, [])
-
-  // Update displayed projects when filters change
-  useEffect(() => {
-    if (!initialLoading && !loadingMore) {
-      const filtered = getFilteredProjects()
-      setHasMore(filtered.length > displayedProjects.length)
-    }
-  }, [activeCategory, searchQuery, getFilteredProjects, initialLoading, loadingMore, displayedProjects.length])
 
   // SEO metadata
   const pageTitle = "Our Projects | Shiva Design Associates"
@@ -263,27 +206,9 @@ export default function ProjectsPage() {
           )}
         </div>
 
-        {/* Load More Indicator */}
-        {!initialLoading && hasMore && (
-          <div ref={loadMoreRef} className="flex justify-center items-center py-8 mt-4">
-            {loadingMore ? (
-              <div className="flex flex-col items-center">
-                <Loader2 className="h-8 w-8 animate-spin text-primary mb-2" />
-                <p className="text-muted-foreground">Loading more projects...</p>
-              </div>
-            ) : (
-              <div className="h-8" />
-            )}
-          </div>
-        )}
-
-        {!initialLoading && !hasMore && displayedProjects.length > 0 && (
-          <div className="text-center py-8 text-muted-foreground">
-            <p>You've reached the end of our project showcase.</p>
-          </div>
-        )}
-
-        <Button className="cursor-pointer mx-auto block" onClick={loadMoreProjects}>Load More</Button>
+        <div className="text-center py-8 text-muted-foreground">
+          <p>You've reached the end of our project showcase.</p>
+        </div>
 
         {/* Project Detail Dialog */}
         <ProjectDetailDialog project={selectedProject} isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />

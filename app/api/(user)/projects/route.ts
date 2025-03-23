@@ -1,14 +1,14 @@
-import { getProjects } from "@/app/services/getProjects";
-import { NextRequest, NextResponse } from "next/server";
+export const dynamic = 'force-static';
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "10");
-  const primary_tag = searchParams.get("primary_tag") || undefined;
+import Project from "@/app/models/project";
+import { NextResponse } from "next/server";
+import connect_db from "@/config/db";
 
+export async function GET() {
   try {
-    const projects = await getProjects({ page, limit, primary_tag });
+    await connect_db();
+
+    const projects = await Project.find({ isActive: true }).sort({ createdAt: -1 }).exec();
     return NextResponse.json({ projects });
   } catch (error) {
     console.error("Error fetching projects:", error);
