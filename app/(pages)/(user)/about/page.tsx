@@ -1,10 +1,10 @@
+import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
-import { Metadata } from "next"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Mail, Phone, Calendar, Award, BookOpen, Building, Users, History, MapPin } from "lucide-react"
+import { Mail, Phone, Calendar, BookOpen, MapPin } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "About ER. Harsh Verma | Shiva Design Associates | Civil Engineer | Maharajganj",
@@ -136,54 +136,29 @@ export default function AboutPage() {
                 wisdom with modern technology, as evidenced by his expertise in Vastu-compliant structural designs.
               </p>
 
-              <h2>Notable Achievements</h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-                <div className="flex flex-col items-center p-4 bg-secondary/20 rounded-lg">
-                  <Building className="h-8 w-8 text-primary mb-2" />
-                  <span className="text-3xl font-bold">75+</span>
-                  <span className="text-sm text-center">Projects Completed</span>
-                </div>
-
-                <div className="flex flex-col items-center p-4 bg-secondary/20 rounded-lg">
-                  <Users className="h-8 w-8 text-primary mb-2" />
-                  <span className="text-3xl font-bold">500+</span>
-                  <span className="text-sm text-center">Satisfied Clients</span>
-                </div>
-
-                <div className="flex flex-col items-center p-4 bg-secondary/20 rounded-lg">
-                  <History className="h-8 w-8 text-primary mb-2" />
-                  <span className="text-3xl font-bold">5+</span>
-                  <span className="text-sm text-center">Years Experience</span>
-                </div>
-              </div>
-
-              <p>
-                Throughout his career, ER. Verma has received multiple recognitions for his contributions to the field
-                of civil engineering, including the Excellence in Civil Engineering Award in 2019. He has published over
-                12 research papers on structural innovations and regularly speaks at industry conferences.
-              </p>
-
-              <h2>Publications & Research</h2>
-
+              <h2 className="font-bold text-xl mt-4">Notable Projects</h2>
               <ul className="space-y-4 my-6">
                 <li className="border-b pb-3">
                   <h4 className="font-medium">
-                    Innovative Approaches to Earthquake-Resistant Structures in Urban India
+                    City Montessori School
                   </h4>
-                  <p className="text-sm text-muted-foreground">Journal of Structural Engineering, 2018</p>
+                  <p className="text-sm text-muted-foreground">Maharajganj</p>
                 </li>
 
                 <li className="border-b pb-3">
-                  <h4 className="font-medium">Integration of Vastu Principles in Modern Structural Design</h4>
-                  <p className="text-sm text-muted-foreground">International Conference on Civil Engineering, 2016</p>
+                  <h4 className="font-medium">Pramila Homeo Clinic</h4>
+                  <p className="text-sm text-muted-foreground">Gorakhpur</p>
                 </li>
 
                 <li className="border-b pb-3">
-                  <h4 className="font-medium">Sustainable Materials in High-Rise Construction: A Case Study</h4>
-                  <p className="text-sm text-muted-foreground">Green Building Council of India, 2015</p>
+                  <h4 className="font-medium">JN Hospital</h4>
+                  <p className="text-sm text-muted-foreground">Maharajganj</p>
                 </li>
               </ul>
+
+              <p>
+                ER. Verma has successfully completed notable projects in various cities, including interior design, Vastu-compliant architecture, 2D and 3D site inspections, and government approvals. His famous projects include City Montessori School in Maharajganj, Pramila Homeo Clinic in Gorakhpur, and JN Hospital in various cities.
+              </p>
 
               <div className="mt-8">
                 <Button asChild>

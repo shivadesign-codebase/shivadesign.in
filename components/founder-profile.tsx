@@ -116,7 +116,7 @@ export default function FounderProfile() {
                 </div>
 
                 <p className="text-muted-foreground mb-6">
-                  ER. Harsh Verma brings over two decades of expertise in civil and structural engineering. As the
+                  ER. Harsh Verma brings over 6+ years of expertise in civil and structural engineering. As the
                   founder of Shiva Design Associates, he has led numerous landmark projects across residential,
                   commercial, and infrastructure sectors. His innovative approach to engineering challenges and
                   commitment to sustainable design principles has established him as a respected authority in the field.
