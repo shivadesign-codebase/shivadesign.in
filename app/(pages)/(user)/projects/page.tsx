@@ -31,7 +31,7 @@ export default function ProjectsPage() {
   const observerRef = useRef<IntersectionObserver | null>(null)
   const loadMoreRef = useRef<HTMLDivElement>(null)
 
-  const ITEMS_PER_PAGE = 6
+  const ITEMS_PER_PAGE = 9
 
   // Initialize Fuse for fuzzy search
   const fuse = useMemo(() => {
@@ -52,13 +52,12 @@ export default function ProjectsPage() {
   const fetchInitialProjects = async () => {
     setInitialLoading(true)
     try {
-      const res = await fetch('/api/projects?limit=100')
+      const res = await fetch(`/api/projects?limit=${ITEMS_PER_PAGE}`)
       const data = await res.json()
       setAllProjects(data.projects)
-
+      setPage(2);
       // Set initial displayed projects
-      setDisplayedProjects(data.projects.slice(0, ITEMS_PER_PAGE))
-      setPage(2)
+      setDisplayedProjects(data.projects)
     } catch (error) {
       console.error("Failed to fetch projects:", error)
       toast("Error", { description: "Failed to load projects." })
@@ -69,17 +68,11 @@ export default function ProjectsPage() {
 
   // Load more projects
   const loadMoreProjects = async () => {
-    if (loadingMore || !hasMore) return
-
     setLoadingMore(true)
     try {
-      const startIndex = (page - 1) * ITEMS_PER_PAGE
-      const endIndex = page * ITEMS_PER_PAGE
-
-      // TODO:
-      // const res = await fetch(`/api/projects?page=${page}&limit=${ITEMS_PER_PAGE}`)
-      // const data = await res.json()
-      const newProjects = getFilteredProjects().slice(startIndex, endIndex)
+      const res = await fetch(`/api/projects?page=${page}&limit=${ITEMS_PER_PAGE}`)
+      const data = await res.json()
+      const newProjects = data.projects || [];
 
       if (newProjects.length === 0) {
         setHasMore(false)
@@ -88,7 +81,7 @@ export default function ProjectsPage() {
           // Create a Set of existing IDs to prevent duplicates
           const existingIds = new Set(prev.map((p) => p._id))
           // Only add projects that aren't already displayed
-          const uniqueNewProjects = newProjects.filter((p) => !existingIds.has(p._id))
+          const uniqueNewProjects = newProjects.filter((p: IProject) => !existingIds.has(p._id))
           return [...prev, ...uniqueNewProjects]
         })
         setPage((prev) => prev + 1)
@@ -152,35 +145,6 @@ export default function ProjectsPage() {
     setIsDialogOpen(true)
   }
 
-  // Setup Intersection Observer for infinite scrolling
-  useEffect(() => {
-    if (initialLoading) return
-
-    const options = {
-      root: null,
-      rootMargin: "0px",
-      threshold: 0.1,
-    }
-
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && hasMore && !loadingMore) {
-        loadMoreProjects()
-      }
-    }, options)
-
-    if (loadMoreRef.current) {
-      observer.observe(loadMoreRef.current)
-    }
-
-    observerRef.current = observer
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect()
-      }
-    }
-  }, [hasMore, loadingMore, initialLoading, activeCategory, searchQuery])
-
   // Fetch initial data
   useEffect(() => {
     fetchInitialProjects()
@@ -203,8 +167,7 @@ export default function ProjectsPage() {
 
   // SEO metadata
   const pageTitle = "Our Projects | Shiva Design Associates"
-  const pageDescription =
-    "Explore our portfolio of successful engineering and design projects across various categories including architecture, interior design, and infrastructure."
+  const pageDescription = "Explore our portfolio of successful engineering and design projects across various categories including architecture, interior design, and infrastructure."
 
   return (
     <>
@@ -314,12 +277,13 @@ export default function ProjectsPage() {
           </div>
         )}
 
-        {/* No more projects indicator */}
         {!initialLoading && !hasMore && displayedProjects.length > 0 && (
           <div className="text-center py-8 text-muted-foreground">
             <p>You've reached the end of our project showcase.</p>
           </div>
         )}
+
+        <Button className="cursor-pointer mx-auto block" onClick={loadMoreProjects}>Load More</Button>
 
         {/* Project Detail Dialog */}
         <ProjectDetailDialog project={selectedProject} isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} />
