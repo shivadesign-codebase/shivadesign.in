@@ -1,6 +1,7 @@
 "use client"
 
 import type React from "react"
+import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 
 interface ProjectCardProps {
@@ -27,10 +28,16 @@ export default function ProjectCard({
       className="project-card rounded-lg overflow-hidden shadow-md transition-all duration-300 hover:shadow-xl cursor-pointer"
       onClick={onClick}
     >
-      <div
-        className="relative aspect-[4/3] bg-cover bg-center"
-        style={{ backgroundImage: `url(${image || "/placeholder.svg"})` }}
-      >
+      <div className="relative aspect-[4/3]">
+        <Image
+          src={image || "/placeholder.svg"}
+          alt={title}
+          layout="fill"
+          objectFit="cover"
+          className="rounded-t-lg"
+          placeholder="blur"
+          blurDataURL="/placeholder.svg"
+        />
         <div className="absolute top-4 left-4">
           <Badge variant={badgeColor}>{category}</Badge>
         </div>
