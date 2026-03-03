@@ -1,10 +1,11 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect, useCallback, useMemo } from "react"
+import dynamic from "next/dynamic"
 import { toast } from "sonner"
 import Fuse from "fuse.js"
+
 import { Search } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -13,8 +14,9 @@ import ProjectCard from "@/components/project/project-card"
 import ScrollAnimations from "@/components/scroll-animations"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import ProjectSkeleton from "@/components/project/project-skeleton"
-import ProjectDetailDialog from "@/components/project/project-detail-dialog"
 import type { IProject } from "@/types/project"
+
+const ProjectDetailDialog = dynamic(() => import("@/components/project/project-detail-dialog"))
 
 export default function ProjectsPage() {
   const [allProjects, setAllProjects] = useState<IProject[]>([])
@@ -90,12 +92,11 @@ export default function ProjectsPage() {
   }
 
   // Handle search
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = useCallback((e: React.FormEvent) => {
     e.preventDefault()
-
     const filtered = getFilteredProjects()
     setDisplayedProjects(filtered.slice(0, ITEMS_PER_PAGE))
-  }
+  }, [getFilteredProjects])
 
   // Open project detail dialog
   const openProjectDetail = (project: IProject) => {
@@ -121,10 +122,12 @@ export default function ProjectsPage() {
       </div>
 
       <div className="container px-4 md:px-6 py-12 md:py-24">
-        <ScrollAnimations className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">Our Projects</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Explore our portfolio of successful engineering and design projects across various categories
+        <ScrollAnimations className="text-center mb-12">
+          <h1 className="text-4xl md:text-5xl font-serif font-semibold mb-4 bg-linear-to-r from-pink-500 via-orange-400 to-purple-500 bg-clip-text text-transparent">
+            Our Projects
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto text-lg">
+            A curated showcase of architectural excellence and engineering precision.
           </p>
         </ScrollAnimations>
 
@@ -138,7 +141,7 @@ export default function ProjectsPage() {
                 placeholder="Search projects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="pl-10 rounded-full border-gray-300 focus:ring-2 focus:ring-pink-400"
               />
             </div>
             <Button type="submit">Search</Button>

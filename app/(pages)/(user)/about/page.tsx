@@ -2,173 +2,194 @@ import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Mail, Phone, Calendar, BookOpen, MapPin } from "lucide-react"
+import { Mail, Phone, Calendar, MapPin } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "About ER. Harsh Verma | Shiva Design Associates | Civil Engineer | Maharajganj",
-  description: "Learn about ER. Harsh Verma, Principal Engineer and Founder of Shiva Design Associates, Maharajgnaj. Expertise in structural engineering, vastu compliant architecture, and more.",
-  keywords: ["Harsh Verma", "structural engineer", "civil engineering", "Shiva Design Associates", "vastu", "vastu compliant design", "green building", "earthquake resistant structures", "maharajganj"],
-};
+  title:
+    "About ER. Harsh Verma | Shiva Design Associates | Civil Engineer | Maharajganj",
+  description:
+    "Learn about ER. Harsh Verma, Principal Engineer and Founder of Shiva Design Associates, Maharajganj.",
+}
 
 export default function AboutPage() {
   return (
-    <div className="container px-4 md:px-6 py-12 md:py-24">
-      <div className="max-w-5xl mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">About ER. Harsh Verma</h1>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Principal Engineer & Founder of Shiva Design Associates
+    <section className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+
+        {/* PAGE HEADER */}
+        <div className="text-center mb-20">
+          <h1 className="text-5xl font-serif font-semibold text-gray-900">
+            ER. Harsh Verma
+          </h1>
+          <p className="text-gray-600 mt-6 text-lg">
+            Principal Engineer & Founder — Shiva Design Associates
           </p>
+          <div className="w-20 h-0.5 bg-gray-900 mx-auto mt-6" />
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid lg:grid-cols-3 gap-16">
+
+          {/* LEFT SIDEBAR */}
           <div className="lg:col-span-1">
-            <div className="sticky top-24">
-              <div className="relative w-full aspect-square rounded-lg overflow-hidden mb-6">
+            <div className="sticky top-32 space-y-8">
+
+              {/* Profile Image */}
+              <div className="relative w-full aspect-4/5 rounded-2xl overflow-hidden shadow-xl">
                 <Image
-                  src="/assets/Harsh.jpg?height=400&width=400"
-                  alt="ER. Harsh Verma"
+                  src="/assets/Harsh.jpg"
+                  alt="Er. Harsh Verma"
                   fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover"
+                  quality={85}
                 />
               </div>
 
-              <Card className="mb-6">
-                <CardContent className="p-4">
-                  <h3 className="font-semibold mb-4">Contact Information</h3>
+              {/* Contact Box */}
+              <div className="border border-gray-200 rounded-xl p-6 space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">
+                  Contact Information
+                </h3>
 
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-3">
-                      <Mail className="h-5 w-5 text-primary" />
-                      <span>shivaconsultant97@gmail.com</span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <Phone className="h-5 w-5 text-primary" />
-                      <span>+91 97940 86149</span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <Calendar className="h-5 w-5 text-primary" />
-                      <span>Available for consultations</span>
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <MapPin className="h-5 w-5 text-primary" />
-                      <span>Maharajganj, Uttar Pradesh</span>
-                    </div>
+                <div className="space-y-3 text-gray-600 text-sm">
+                  <div className="flex items-center gap-3">
+                    <Mail className="h-4 w-4" />
+                    shivaconsultant97@gmail.com
                   </div>
-                </CardContent>
-              </Card>
 
-              <div className="flex flex-col gap-3">
-                <Button asChild>
-                  <Link href="/contact?subject=Consultation with ER. Harsh Verma">Schedule a Consultation</Link>
+                  <div className="flex items-center gap-3">
+                    <Phone className="h-4 w-4" />
+                    +91 97940 86149
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <Calendar className="h-4 w-4" />
+                    Available for Consultations
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <MapPin className="h-4 w-4" />
+                    Maharajganj, Uttar Pradesh
+                  </div>
+                </div>
+
+                <Button asChild className="w-full rounded-full mt-4">
+                  <Link href="/contact">
+                    Schedule Consultation
+                  </Link>
                 </Button>
               </div>
             </div>
           </div>
 
-          <div className="lg:col-span-2">
-            <div className="prose max-w-none">
-              <h2>Professional Background</h2>
+          {/* RIGHT CONTENT */}
+          <div className="lg:col-span-2 space-y-14">
 
-              <p>
-                ER. Harsh Verma is the founder and principal engineer of Shiva Design Associates, bringing over 5+ years
-                of expertise in civil and structural engineering. After completing his M.Tech in Structural Engineering
-                from IIT Delhi, he worked with leading construction firms before establishing his own consultancy in
-                2019.
+            {/* Professional Background */}
+            <div>
+              <h2 className="text-3xl font-serif font-semibold mb-6 text-gray-900">
+                Professional Background
+              </h2>
+
+              <p className="text-gray-600 leading-relaxed mb-6 text-lg">
+                ER. Harsh Verma brings over 6+ years of expertise in civil and
+                structural engineering. He gained hands-on experience with
+                leading construction firms before establishing Shiva Design
+                Associates in 2019.
               </p>
 
-              <p>
-                His technical proficiency spans structural design, construction management, and innovative engineering
-                solutions. ER. Verma has led the design and execution of numerous landmark projects across residential,
-                commercial, and infrastructure sectors throughout India.
+              <p className="text-gray-600 leading-relaxed text-lg">
+                His work spans residential, commercial, and infrastructure
+                sectors, with a strong emphasis on structural precision,
+                sustainability, and Vastu-compliant architecture.
               </p>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-8">
-                <Card>
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3 mb-4">
-                      <div className="bg-primary/10 p-2 rounded-full">
-                        <BookOpen className="h-5 w-5 text-primary" />
-                      </div>
-                      <h3 className="font-semibold">Areas of Expertise</h3>
-                    </div>
+            {/* Expertise */}
+            <div>
+              <h2 className="text-3xl font-serif font-semibold mb-6 text-gray-900">
+                Areas of Expertise
+              </h2>
 
-                    <ul className="space-y-2">
-                      <li className="flex items-center gap-2">
-                        <Badge>Structural Design</Badge>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Badge>Vastu Compliant Architecture</Badge>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Badge>Earthquake Resistant Structures</Badge>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Badge>Green Building Design</Badge>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Badge>Construction Management</Badge>
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <Badge>Design According To Vastu</Badge>
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
-
-              <h2>Professional Philosophy</h2>
-
-              <blockquote className="italic border-l-4 border-primary pl-4 my-6">
-                "Engineering is not just about calculations and drawings; it's about creating spaces that enhance human
-                lives while respecting the environment. Every structure we design should stand as a testament to both
-                technical excellence and thoughtful purpose."
-              </blockquote>
-
-              <p>
-                ER. Verma's approach to engineering is characterized by a meticulous attention to detail, innovative
-                problem-solving, and a commitment to sustainable design principles. He believes in combining traditional
-                wisdom with modern technology, as evidenced by his expertise in Vastu-compliant structural designs.
-              </p>
-
-              <h2 className="font-bold text-xl mt-4">Notable Projects</h2>
-              <ul className="space-y-4 my-6">
-                <li className="border-b pb-3">
-                  <h4 className="font-medium">
-                    City Montessori School
-                  </h4>
-                  <p className="text-sm text-muted-foreground">Maharajganj</p>
-                </li>
-
-                <li className="border-b pb-3">
-                  <h4 className="font-medium">Pramila Homeo Clinic</h4>
-                  <p className="text-sm text-muted-foreground">Gorakhpur</p>
-                </li>
-
-                <li className="border-b pb-3">
-                  <h4 className="font-medium">JN Hospital</h4>
-                  <p className="text-sm text-muted-foreground">Maharajganj</p>
-                </li>
-              </ul>
-
-              <p>
-                ER. Verma has successfully completed notable projects in various cities, including interior design, Vastu-compliant architecture, 2D and 3D site inspections, and government approvals. His famous projects include City Montessori School in Maharajganj, Pramila Homeo Clinic in Gorakhpur, and JN Hospital in various cities.
-              </p>
-
-              <div className="mt-8">
-                <Button asChild>
-                  <Link href="https://wa.me/919794086149" target="_blank">Contact ER. Harsh Verma</Link>
-                </Button>
+              <div className="flex flex-wrap gap-3">
+                {[
+                  "Structural Design",
+                  "Vastu Compliant Architecture",
+                  "Earthquake Resistant Structures",
+                  "Green Building Design",
+                  "Construction Management",
+                ].map((item, index) => (
+                  <Badge
+                    key={index}
+                    variant="outline"
+                    className="px-4 py-2 text-sm"
+                  >
+                    {item}
+                  </Badge>
+                ))}
               </div>
             </div>
+
+            {/* Philosophy */}
+            <div>
+              <h2 className="text-3xl font-serif font-semibold mb-6 text-gray-900">
+                Professional Philosophy
+              </h2>
+
+              <blockquote className="border-l-4 border-gray-900 pl-6 italic text-gray-700 text-lg leading-relaxed">
+                Engineering is not merely about calculations and drawings.
+                It is about designing structures that improve lives while
+                respecting the environment. Every project should reflect
+                both technical excellence and thoughtful purpose.
+              </blockquote>
+            </div>
+
+            {/* Notable Projects */}
+            <div>
+              <h2 className="text-3xl font-serif font-semibold mb-6 text-gray-900">
+                Notable Projects
+              </h2>
+
+              <div className="space-y-6 text-gray-700">
+                <div className="border-b pb-4">
+                  <h4 className="font-medium text-lg">
+                    City Montessori School
+                  </h4>
+                  <p className="text-sm text-gray-500">Maharajganj</p>
+                </div>
+
+                <div className="border-b pb-4">
+                  <h4 className="font-medium text-lg">
+                    Pramila Homeo Clinic
+                  </h4>
+                  <p className="text-sm text-gray-500">Gorakhpur</p>
+                </div>
+
+                <div>
+                  <h4 className="font-medium text-lg">
+                    JN Hospital
+                  </h4>
+                  <p className="text-sm text-gray-500">Maharajganj</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Final CTA */}
+            <div className="pt-10">
+              <Button asChild className="rounded-full px-8 py-6">
+                <Link
+                  href="https://wa.me/919794086149"
+                  target="_blank"
+                >
+                  Contact ER. Harsh Verma
+                </Link>
+              </Button>
+            </div>
+
           </div>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

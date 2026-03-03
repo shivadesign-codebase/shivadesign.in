@@ -4,7 +4,6 @@ import type React from "react"
 import { useState } from "react"
 import type { ReactNode } from "react"
 import Link from "next/link"
-import { Card, CardContent } from "@/components/ui/card"
 import { ChevronRight } from "lucide-react"
 import ServiceInfoDialog from "./service-info-dialog"
 
@@ -36,25 +35,45 @@ export default function ServiceCard({
 
   return (
     <>
-      <Card className="h-full flex flex-col bg-[#2a3142] border-none text-white">
-        <CardContent className="flex flex-col h-full pt-6">
-          <div className="mb-4 text-[#5d9cec]">{icon}</div>
-          <h3 className="text-xl font-semibold mb-3">{title}</h3>
-          <p className="text-gray-300 mb-auto">{description}</p>
-          {showPopup ? (
-            <button
-              onClick={handleLearnMore}
-              className="text-[#5d9cec] flex items-center mt-6 hover:underline group text-left"
-            >
-              Learn More About {title} <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-          ) : (
-            <Link href={link} className="text-[#5d9cec] flex items-center mt-6 hover:underline group">
-              Learn More About {title} <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          )}
-        </CardContent>
-      </Card>
+      <div className="group relative p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
+
+        {/* Subtle Holi Glow */}
+        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-pink-200/0 via-orange-100/0 to-purple-200/0 group-hover:from-pink-200/40 group-hover:to-purple-200/40 transition-all duration-500 -z-10" />
+
+        {/* Icon */}
+        <div className="mb-6 text-pink-500 group-hover:scale-110 transition-transform duration-300">
+          {icon}
+        </div>
+
+        {/* Title */}
+        <h3 className="text-xl font-semibold mb-4 text-gray-900">
+          {title}
+        </h3>
+
+        {/* Description */}
+        <p className="text-gray-600 leading-relaxed">
+          {description}
+        </p>
+
+        {/* CTA */}
+        {showPopup ? (
+          <button
+            onClick={handleLearnMore}
+            className="mt-6 inline-flex items-center text-sm font-medium text-pink-600 hover:text-purple-600 transition"
+          >
+            Learn More
+            <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </button>
+        ) : (
+          <Link
+            href={link}
+            className="mt-6 inline-flex items-center text-sm font-medium text-pink-600 hover:text-purple-600 transition"
+          >
+            Learn More
+            <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        )}
+      </div>
 
       {showPopup && (
         <ServiceInfoDialog

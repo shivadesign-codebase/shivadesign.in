@@ -1,172 +1,119 @@
 "use client"
 
-import { useState } from "react"
+import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { motion } from "framer-motion"
-import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Mail, Phone, Calendar, Award, FileText, ArrowRight } from "lucide-react"
+import { ArrowRight, Mail, Phone } from "lucide-react"
 
 export default function FounderProfile() {
-  const [isHovered, setIsHovered] = useState(false)
-
-  const achievements = [
-    "5+ Years of Experience",
-    "75+ Projects Completed",
-  ]
-
   const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    hidden: { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.7 } },
   }
 
   return (
-    <section className="py-16 md:py-24 bg-gradient-to-b from-background to-secondary/10">
-      <div className="container px-4 md:px-6">
+    <section className="py-24 bg-white">
+      <div className="max-w-7xl mx-auto px-6">
+
+        {/* Section Header */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={fadeIn}
-          className="text-center mb-12"
+          className="text-center mb-20"
         >
-          <h2 className="text-3xl font-bold mb-4">Meet Our Principal Engineer</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            The driving force behind our engineering excellence and innovative solutions
+          <h2 className="text-4xl md:text-5xl font-serif font-semibold text-gray-900">
+            Meet Our Principal Engineer
+          </h2>
+          <p className="text-gray-600 mt-6 max-w-2xl mx-auto text-lg">
+            Leadership driven by precision, innovation, and technical excellence.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+
+          {/* LEFT — IMAGE */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="lg:col-span-5 flex justify-center"
+            className="relative flex justify-center"
           >
-            <div className="relative" onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-              <div className="relative w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden border-4 border-primary/20">
-                <Image
-                  src="/assets/Harsh.jpg?height=400&width=400"
-                  alt="ER. Harsh Verma"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{
-                  scale: isHovered ? 1 : 0.8,
-                  opacity: isHovered ? 1 : 0,
-                  rotate: isHovered ? 0 : -5,
-                }}
-                transition={{ duration: 0.3 }}
-                className="absolute -bottom-4 -right-4 bg-primary text-primary-foreground px-4 py-2 rounded-lg shadow-lg"
-              >
-                <span className="text-sm font-medium">Since 2019</span>
-              </motion.div>
-
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{
-                  scale: isHovered ? 1 : 0.8,
-                  opacity: isHovered ? 1 : 0,
-                  rotate: isHovered ? 0 : 5,
-                }}
-                transition={{ duration: 0.3 }}
-                className="absolute -top-4 -left-4 bg-card text-card-foreground px-4 py-2 rounded-lg shadow-lg border border-border"
-              >
-                <Badge variant="secondary">Principal Engineer</Badge>
-              </motion.div>
+            <div className="relative w-[320px] h-[420px] md:w-[380px] md:h-[480px] overflow-hidden rounded-2xl shadow-2xl">
+              <Image
+                src="/assets/Harsh.jpg"
+                alt="Er. Harsh Verma"
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                className="object-cover"
+                quality={80}
+              />
             </div>
           </motion.div>
 
+          {/* RIGHT — CONTENT */}
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeIn}
-            className="lg:col-span-7"
           >
-            <Card className="border-primary/10 shadow-lg bg-card/50 backdrop-blur-sm">
-              <CardContent className="p-6 md:p-8">
-                <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
-                  <div>
-                    <h3 className="text-2xl md:text-3xl font-bold">ER. Harsh Verma</h3>
-                    <p className="text-primary font-medium">Civil Engineer</p>
-                  </div>
-                  <div className="flex gap-2 mt-4 md:mt-0">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="rounded-full"
-                    >
-                      <Mail className="h-4 w-4 mr-2" />
-                      <Link href='mailto:shivaconsultant97@gmail.com' target="_blank">Contact</Link>
+            <h3 className="text-3xl font-semibold text-gray-900">
+              Er. Harsh Verma
+            </h3>
+            <p className="text-gray-500 mt-2 text-lg">
+              Civil Engineer & Founder
+            </p>
 
-                    </Button>
-                    <Button variant="outline" size="sm" className="rounded-full">
-                      <Calendar className="h-4 w-4 mr-2" />
-                      <Link href='/contact'>Schedule</Link>
-                    </Button>
-                  </div>
-                </div>
+            <div className="w-16 h-[2px] bg-gray-900 mt-6 mb-8" />
 
-                <p className="text-muted-foreground mb-6">
-                  ER. Harsh Verma brings over 6+ years of expertise in civil and structural engineering. As the
-                  founder of Shiva Design Associates, he has led numerous landmark projects across residential,
-                  commercial, and infrastructure sectors. His innovative approach to engineering challenges and
-                  commitment to sustainable design principles has established him as a respected authority in the field.
-                </p>
+            <p className="text-gray-600 leading-relaxed mb-8 text-lg">
+              With over 6+ years of experience in civil and structural engineering,
+              Harsh Verma has successfully delivered residential, commercial,
+              and infrastructure projects with uncompromising precision.
+              His approach combines technical expertise with aesthetic
+              understanding to create structures that endure and inspire.
+            </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-full">
-                      <Award className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Expertise</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Structural Design, Vastu Compliance, Elevation Design, Interior Design, Project Management
-                      </p>
-                    </div>
-                  </div>
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-8 mb-10">
+              <div>
+                <h4 className="text-2xl font-semibold text-gray-900">75+</h4>
+                <p className="text-gray-500">Projects Completed</p>
+              </div>
+              <div>
+                <h4 className="text-2xl font-semibold text-gray-900">6+</h4>
+                <p className="text-gray-500">Years of Experience</p>
+              </div>
+            </div>
 
-                  <div className="flex items-start gap-3">
-                    <div className="bg-primary/10 p-2 rounded-full">
-                      <Phone className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h4 className="font-medium">Direct Contact</h4>
-                      <p className="text-sm text-muted-foreground">+91 979 408 6149</p>
-                    </div>
-                  </div>
-                </div>
+            {/* Contact Row */}
+            <div className="flex flex-wrap gap-6 items-center mb-10 text-gray-700">
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4" />
+                <span>+91 97940 86149</span>
+              </div>
 
-                <div className="mb-6">
-                  <h4 className="font-medium mb-3">Notable Achievements</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {achievements.map((achievement, index) => (
-                      <Badge key={index} variant="secondary" className="bg-secondary/30">
-                        {achievement}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                <a href="mailto:shivaconsultant97@gmail.com" className="hover:underline">
+                  shivaconsultant97@gmail.com
+                </a>
+              </div>
+            </div>
 
-                <div className="flex justify-end">
-                  <Button asChild>
-                    <Link href="/about">
-                      Full Profile <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            {/* CTA */}
+            <Button asChild className="rounded-full px-8 py-6">
+              <Link href="/about">
+                View Full Profile
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
           </motion.div>
+
         </div>
       </div>
     </section>
