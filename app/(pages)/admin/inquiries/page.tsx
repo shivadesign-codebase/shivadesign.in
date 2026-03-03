@@ -14,8 +14,8 @@ export default function InquiriesPage() {
   const inquiries = [
     {
       id: 1,
-      name: "John Smith",
-      email: "john.smith@example.com",
+      name: "Alok Verma",
+      email: "alok.verma@example.com",
       phone: "+91 98765 43210",
       subject: "Commercial Building Project",
       service: "AutoCAD Drafting",

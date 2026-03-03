@@ -182,7 +182,7 @@ export default function FeedbackPage() {
                         <Input
                           id="name"
                           {...register("name", { required: "Name is required" })}
-                          placeholder="John Doe"
+                          placeholder="Alok Verma"
                         />
                         {errors.name && (
                           <p className="text-sm text-red-500">{errors.name.message}</p>
@@ -200,7 +200,7 @@ export default function FeedbackPage() {
                               message: "Invalid email address"
                             }
                           })}
-                          placeholder="john@example.com"
+                          placeholder="alok@example.com"
                         />
                         {errors.email && (
                           <p className="text-sm text-red-500">{errors.email.message}</p>

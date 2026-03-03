@@ -76,7 +76,7 @@ export default function ContactForm() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label htmlFor="name">Your Name</Label>
-          <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="John Doe" required />
+          <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="Alok Verma" required />
         </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email Address</Label>
@@ -86,7 +86,7 @@ export default function ContactForm() {
             type="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="john@example.com"
+            placeholder="alok@example.com"
             required
           />
         </div>
