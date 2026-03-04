@@ -68,7 +68,7 @@ export default function FounderProfile() {
               Civil Engineer & Founder
             </p>
 
-            <div className="w-16 h-[2px] bg-gray-900 mt-6 mb-8" />
+            <div className="w-16 h-0.5 bg-gray-900 mt-6 mb-8" />
 
             <p className="text-gray-600 leading-relaxed mb-8 text-lg">
               With over 6+ years of experience in civil and structural engineering,

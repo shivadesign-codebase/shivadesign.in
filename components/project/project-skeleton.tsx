@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 export default function ProjectSkeleton() {
   return (
     <Card className="overflow-hidden">
-      <div className="relative aspect-[4/3]">
+      <div className="relative aspect-4/3">
         <Skeleton className="h-full w-full" />
       </div>
       <CardContent className="p-4">

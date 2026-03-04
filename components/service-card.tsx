@@ -38,7 +38,7 @@ export default function ServiceCard({
       <div className="group relative p-8 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 hover:-translate-y-1">
 
         {/* Subtle Holi Glow */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-pink-200/0 via-orange-100/0 to-purple-200/0 group-hover:from-pink-200/40 group-hover:to-purple-200/40 transition-all duration-500 -z-10" />
+        <div className="absolute inset-0 rounded-2xl bg-linear-to-br from-pink-200/0 via-orange-100/0 to-purple-200/0 group-hover:from-pink-200/40 group-hover:to-purple-200/40 transition-all duration-500 -z-10" />
 
         {/* Icon */}
         <div className="mb-6 text-pink-500 group-hover:scale-110 transition-transform duration-300">

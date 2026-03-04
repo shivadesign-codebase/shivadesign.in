@@ -33,7 +33,7 @@ export default function HeroSection() {
 
       {/* Overlay for Darkening Effect */}
       <div className="absolute inset-0 bg-[#1F2937]/60"></div>
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-[#1F2937]/40"></div>
+      <div className="absolute inset-0 bg-linear-to-b from-transparent via-black/30 to-[#1F2937]/40"></div>
 
       {/* Centered Content with Glassmorphism Effect */}
       <div className="absolute inset-0 flex flex-col justify-center items-center text-white text-center px-4">
