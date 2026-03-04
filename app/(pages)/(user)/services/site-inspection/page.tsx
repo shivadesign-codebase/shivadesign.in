@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function SiteInspectionPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1e2430] to-[#2a3142] text-white">
+    <div className="min-h-screen bg-linear-to-b from-[#1e2430] to-[#2a3142] text-white">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
@@ -41,7 +41,7 @@ export default function SiteInspectionPage() {
             </div>
             <div className="relative h-[400px] rounded-lg overflow-hidden shadow-2xl border border-gray-700">
               <Image src="/assets/site-inspection.jpg?height=800&width=800" alt="Site Inspection" fill className="object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] to-transparent opacity-70"></div>
+              <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] to-transparent opacity-70"></div>
               <div className="absolute bottom-6 left-6 right-6 p-4 bg-[#2a3142]/80 backdrop-blur-sm rounded-lg border border-gray-700">
                 <div className="flex items-center gap-3">
                   <ShieldCheck className="h-8 w-8 text-[#5d9cec]" />
@@ -134,7 +134,7 @@ export default function SiteInspectionPage() {
 
           <div className="relative max-w-4xl mx-auto">
             {/* Process timeline line */}
-            <div className="absolute left-16 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#5d9cec] to-[#5d9cec]/30 hidden md:block"></div>
+            <div className="absolute left-16 top-0 bottom-0 w-0.5 bg-linear-to-b from-[#5d9cec] to-[#5d9cec]/30 hidden md:block"></div>
 
             <div className="space-y-8 relative">
               {[
@@ -282,7 +282,7 @@ export default function SiteInspectionPage() {
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] to-transparent opacity-70"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] to-transparent opacity-70"></div>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 p-6">
                   <h3 className="text-xl font-medium mb-2">{project.title}</h3>
@@ -313,7 +313,7 @@ export default function SiteInspectionPage() {
                   "Improves communication between project stakeholders with detailed inspection reports",
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-[#5d9cec] flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="h-6 w-6 text-[#5d9cec] shrink-0 mt-0.5" />
                     <p className="text-gray-300">{benefit}</p>
                   </div>
                 ))}

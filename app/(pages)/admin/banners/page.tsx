@@ -153,7 +153,7 @@ export default function BannersPage() {
                   <div key={banner.id} className="border rounded-md p-4">
                     <div className="flex flex-col md:flex-row gap-4">
                       <div className="w-full md:w-1/3 bg-muted rounded-md overflow-hidden">
-                        <div className="aspect-[2/1] relative">
+                        <div className="aspect-2/1 relative">
                           <div className="absolute inset-0 flex items-center justify-center bg-muted">Banner Image</div>
                         </div>
                       </div>

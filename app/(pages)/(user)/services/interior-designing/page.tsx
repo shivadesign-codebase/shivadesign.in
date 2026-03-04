@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function InteriorDesignPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1e2430] to-[#2a3142] text-white">
+    <div className="min-h-screen bg-linear-to-b from-[#1e2430] to-[#2a3142] text-white">
       {/* Hero Section */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
@@ -48,7 +48,7 @@ export default function InteriorDesignPage() {
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] to-transparent opacity-70"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] to-transparent opacity-70"></div>
                 </div>
                 <div className="absolute bottom-6 left-6 right-6 p-4 bg-[#2a3142]/80 backdrop-blur-sm rounded-lg border border-gray-700">
                   <div className="flex items-center gap-3">
@@ -174,7 +174,7 @@ export default function InteriorDesignPage() {
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] to-transparent opacity-70"></div>
+                    <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] to-transparent opacity-70"></div>
                   </div>
                   <div className="space-y-6">
                     <h3 className="text-2xl font-bold capitalize">{style} Design</h3>
@@ -199,7 +199,7 @@ export default function InteriorDesignPage() {
                             "Emphasis on materials like glass, metal, and concrete",
                           ].map((feature, index) => (
                             <li key={index} className="flex items-start gap-2">
-                              <CheckCircle className="h-5 w-5 text-[#5d9cec] flex-shrink-0 mt-0.5" />
+                              <CheckCircle className="h-5 w-5 text-[#5d9cec] shrink-0 mt-0.5" />
                               <span className="text-gray-300">{feature}</span>
                             </li>
                           ))}
@@ -211,7 +211,7 @@ export default function InteriorDesignPage() {
                             "Decorative moldings, columns, and architectural details",
                           ].map((feature, index) => (
                             <li key={index} className="flex items-start gap-2">
-                              <CheckCircle className="h-5 w-5 text-[#5d9cec] flex-shrink-0 mt-0.5" />
+                              <CheckCircle className="h-5 w-5 text-[#5d9cec] shrink-0 mt-0.5" />
                               <span className="text-gray-300">{feature}</span>
                             </li>
                           ))}
@@ -223,7 +223,7 @@ export default function InteriorDesignPage() {
                             "Focus on quality over quantity in furnishings",
                           ].map((feature, index) => (
                             <li key={index} className="flex items-start gap-2">
-                              <CheckCircle className="h-5 w-5 text-[#5d9cec] flex-shrink-0 mt-0.5" />
+                              <CheckCircle className="h-5 w-5 text-[#5d9cec] shrink-0 mt-0.5" />
                               <span className="text-gray-300">{feature}</span>
                             </li>
                           ))}
@@ -235,7 +235,7 @@ export default function InteriorDesignPage() {
                             "Balance of contrasting elements for cohesive design",
                           ].map((feature, index) => (
                             <li key={index} className="flex items-start gap-2">
-                              <CheckCircle className="h-5 w-5 text-[#5d9cec] flex-shrink-0 mt-0.5" />
+                              <CheckCircle className="h-5 w-5 text-[#5d9cec] shrink-0 mt-0.5" />
                               <span className="text-gray-300">{feature}</span>
                             </li>
                           ))}
@@ -374,7 +374,7 @@ export default function InteriorDesignPage() {
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] via-[#1e2430]/70 to-transparent"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] via-[#1e2430]/70 to-transparent"></div>
                 </div>
                 <div className="absolute top-4 left-4">
                   <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#5d9cec]/20 text-[#5d9cec] text-sm">
@@ -464,7 +464,7 @@ export default function InteriorDesignPage() {
                       ))}
                     </div>
                   </div>
-                  <p className="text-gray-300 italic mb-6 flex-grow">"{testimonial.quote}"</p>
+                  <p className="text-gray-300 italic mb-6 grow">"{testimonial.quote}"</p>
                   <div className="flex items-center mt-auto">
                     <div className="relative w-12 h-12 rounded-full overflow-hidden mr-4">
                       <Image
@@ -539,7 +539,7 @@ export default function InteriorDesignPage() {
                   "Stress-free design process with clear communication and expert guidance",
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-[#5d9cec] flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="h-6 w-6 text-[#5d9cec] shrink-0 mt-0.5" />
                     <p className="text-gray-300">{benefit}</p>
                   </div>
                 ))}

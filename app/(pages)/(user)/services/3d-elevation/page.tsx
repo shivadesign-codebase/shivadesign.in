@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function ThreeDElevationPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#1e2430] to-[#2a3142] text-white">
+    <div className="min-h-screen bg-linear-to-b from-[#1e2430] to-[#2a3142] text-white">
       {/* Hero Section with 3D Model Showcase */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0 z-0 opacity-10">
@@ -48,7 +48,7 @@ export default function ThreeDElevationPage() {
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] to-transparent opacity-70"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] to-transparent opacity-70"></div>
                 </div>
                 <div className="absolute bottom-6 left-6 right-6 p-4 bg-[#2a3142]/80 backdrop-blur-sm rounded-lg border border-gray-700">
                   <div className="flex items-center gap-3">
@@ -93,7 +93,7 @@ export default function ThreeDElevationPage() {
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] to-transparent opacity-70"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] to-transparent opacity-70"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <h3 className="text-xl font-medium mb-2">Exterior Renderings</h3>
                     <p className="text-gray-300 mb-4">
@@ -170,7 +170,7 @@ export default function ThreeDElevationPage() {
                     fill
                     className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] to-transparent opacity-70"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] to-transparent opacity-70"></div>
                   <div className="absolute bottom-0 left-0 right-0 p-6">
                     <h3 className="text-xl font-medium mb-2">2D Elevation Drawings</h3>
                     <p className="text-gray-300 mb-4">
@@ -247,7 +247,7 @@ export default function ThreeDElevationPage() {
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#1e2430] via-[#1e2430]/70 to-transparent"></div>
+                  <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] via-[#1e2430]/70 to-transparent"></div>
                 </div>
                 <div className="absolute top-4 left-4">
                   <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[#5d9cec]/20 text-[#5d9cec] text-sm">
@@ -352,7 +352,7 @@ export default function ThreeDElevationPage() {
                   "Enhance decision-making with accurate spatial understanding of your project",
                 ].map((benefit, index) => (
                   <div key={index} className="flex items-start gap-3">
-                    <CheckCircle className="h-6 w-6 text-[#5d9cec] flex-shrink-0 mt-0.5" />
+                    <CheckCircle className="h-6 w-6 text-[#5d9cec] shrink-0 mt-0.5" />
                     <p className="text-gray-300">{benefit}</p>
                   </div>
                 ))}
