@@ -11,7 +11,7 @@ interface ProjectDetailDialogProps {
 
 export default function ProjectDetailDialog({ project, isOpen, onClose }: ProjectDetailDialogProps) {
   if (!project) return null
-
+  const imageUrl = project?.image ? project.image.split("/upload/").join("/upload/f_auto,q_auto,w_800/") : "/placeholder.svg?height=600&width=800";
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl w-[90vw] max-h-[90vh] overflow-hidden p-0">
@@ -29,7 +29,7 @@ export default function ProjectDetailDialog({ project, isOpen, onClose }: Projec
           <div className="relative bg-black flex items-center justify-center min-h-[300px]">
             <div
               className={"absolute inset-0 bg-contain bg-no-repeat bg-center transition-opacity duration-300 opacity-100"}
-              style={{ backgroundImage: `url(${project.image || "/placeholder.svg?height=600&width=800"})` }}
+              style={{ backgroundImage: `url(${imageUrl})` }}
             ></div>
           </div>
 

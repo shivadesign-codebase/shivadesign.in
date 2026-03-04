@@ -23,6 +23,8 @@ function ProjectCard({
   badgeColor = "default",
   onClick,
 }: ProjectCardProps) {
+  const imageUrl = image.split("/upload/").join("/upload/f_auto,q_auto,w_500/");
+
   return (
     <div
       className="rounded-xl overflow-hidden bg-white shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer group"
@@ -30,7 +32,7 @@ function ProjectCard({
     >
       <div className="relative aspect-4/3 overflow-hidden">
         <Image
-          src={image || "/placeholder.svg"}
+          src={imageUrl || "/placeholder.svg"}
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw,

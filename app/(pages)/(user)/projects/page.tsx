@@ -27,7 +27,7 @@ export default function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState<IProject | null>(null)
   const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const ITEMS_PER_PAGE = 999
+  const ITEMS_PER_PAGE = 6;
 
   // Initialize Fuse for fuzzy search
   const fuse = useMemo(() => {
