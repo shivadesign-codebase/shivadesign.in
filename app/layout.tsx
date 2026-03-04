@@ -15,6 +15,7 @@ export const metadata: Metadata = {
   description: "Shiva Design Associates in Maharajganj specializes in civil engineering, interior design, architectural planning, 2D drawings, construction consulting, and project management. Delivering quality and customized design solutions for residential, commercial, and industrial projects.",
   icons: 'favicon.ico',
   keywords: 'Shiva Design Associates, Civil Engineering, Interior Design, 2D Drawings, Architectural Planning, Construction Consulting, Project Management, Maharajganj, Uttar Pradesh, India',
+  metadataBase: new URL("https://shivadesign.in"),
   openGraph: {
     title: "Shiva Design Associates | Civil, Interior & 2D Drawing Services in Maharajganj",
     description: "Shiva Design Associates in Maharajganj specializes in civil engineering, interior design, architectural planning, 2D drawings, construction consulting, and project management. Delivering quality and customized design solutions for residential, commercial, and industrial projects.",

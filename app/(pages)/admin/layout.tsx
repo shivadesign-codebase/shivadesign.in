@@ -1,12 +1,8 @@
-import type { Metadata } from "next"
+"use client"
+
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { FileText, LayoutDashboard, ImageIcon, FolderKanban, MessageSquare, Mail, Users, Settings, LogOut, ArrowLeft } from "lucide-react"
-
-export const metadata: Metadata = {
-  title: "Admin Dashboard - Shiva Consultant",
-  description: "Admin dashboard for Shiva Consultant website",
-}
 
 export default function AdminLayout({ children, }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -20,13 +16,14 @@ export default function AdminLayout({ children, }: Readonly<{ children: React.Re
           <Button
             variant="ghost"
             size="sm"
-            asChild
-            className="text-red-500 hover:text-red-600 hover:bg-red-100 dark:hover:bg-red-900/20"
+            className="text-red-500"
+            onClick={async () => {
+              await fetch("/api/admin/logout", { method: "POST" })
+              window.location.href = "/admin/login"
+            }}
           >
-            <Link href="/">
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
-            </Link>
+            <LogOut className="mr-2 h-4 w-4" />
+            Sign Out
           </Button>
         </div>
       </header>
