@@ -33,7 +33,7 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2">
           <span
             className={`text-xl md:text-2xl font-semibold font-serif tracking-wide ${isScrolled || isNotHomePage
-                ? "bg-gray-700 bg-clip-text text-transparent"
+                ? "theme-bg bg-clip-text text-transparent"
                 : "text-black"
               }`}
           >
@@ -44,7 +44,7 @@ export default function Navbar() {
         {/* CTA */}
         <Button
           asChild
-          className="hidden md:flex rounded-full px-6 py-5 text-sm font-medium text-white hover:opacity-90 transition shadow-md"
+          className="hidden theme-bg md:flex rounded-full px-6 py-5 text-sm font-medium text-white hover:opacity-90 transition shadow-md"
         >
           <Link href="/contact">
             Book Consultation

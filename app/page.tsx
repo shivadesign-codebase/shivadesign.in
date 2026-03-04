@@ -9,7 +9,7 @@ import FounderProfile from "@/components/founder-profile"
 import TrustedClientsSection from "@/components/home/trusted-client-section"
 import getProjectsAction from "./Actions/get-paginated-projects"
 import { IProject } from "./models/project"
-import HeroSection from "@/components/theme-based/holi-hero-section"
+import HeroSection from "@/components/theme-based/theme-hero-section"
 
 export default async function Home() {
   const projects = await getProjectsAction({ limit: 3 })

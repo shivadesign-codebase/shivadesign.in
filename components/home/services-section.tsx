@@ -106,17 +106,17 @@ export default function ServicesSection() {
   return (
     <section
       id="services"
-      className="py-20 md:py-28 bg-linear-to-b from-white via-[#fff7f3] to-white"
+      className="py-20 md:py-28"
     >
       <div className="max-w-7xl mx-auto px-6">
 
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif font-semibold bg-gray-700 bg-clip-text text-transparent">
+          <h2 className="theme-text text-4xl md:text-5xl font-serif font-semibold">
             Our Engineering Services
           </h2>
 
-          <p className="text-gray-600 max-w-2xl mx-auto mt-6 text-lg leading-relaxed">
+          <p className="theme-text max-w-2xl mx-auto mt-6 text-lg leading-relaxed">
             Comprehensive architectural and civil engineering solutions crafted
             with precision, innovation, and uncompromising quality.
           </p>

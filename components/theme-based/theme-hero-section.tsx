@@ -22,24 +22,24 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden bg-[#f3e3cf]">
+    <section className="relative w-full min-h-screen overflow-hidden theme-bg">
 
       {/* Gradient Background */}
-      <div className="absolute inset-0 bg-linear-to-r from-[#f3e3cf] via-pink-100 to-purple-100 opacity-90" />
+      <div className="absolute inset-0 theme-hero-bg opacity-90" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 items-center gap-12">
 
         {/* LEFT SIDE */}
-        <div className="text-black">
+        <div className="theme-text">
           <h1 className="text-4xl md:text-6xl font-serif font-semibold leading-tight">
             Gift Yourself <br /> Your Dream.
           </h1>
 
-          <h2 className="mt-4 text-xl md:text-2xl font-medium text-gray-800">
+          <h2 className="mt-4 text-xl md:text-2xl font-medium">
             We Design It. We Build It. You Live It.
           </h2>
 
-          <p className="mt-6 text-lg text-gray-700 max-w-lg leading-relaxed">
+          <p className="mt-6 text-lg max-w-lg leading-relaxed">
             From architectural planning to structural execution, we transform
             your vision into timeless spaces crafted with precision and passion.
           </p>
@@ -47,7 +47,7 @@ export default function HeroSection() {
           <div className="mt-8">
             <Button
               asChild
-              className="px-8 py-6 rounded-full bg-black text-white hover:bg-gray-900 transition text-lg"
+              className="px-8 py-6 rounded-full theme-bg text-white hover:bg-gray-900 transition text-lg"
             >
               <Link href="/contact">
                 Book Consultation
