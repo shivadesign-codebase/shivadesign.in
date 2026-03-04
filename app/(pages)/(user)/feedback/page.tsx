@@ -112,7 +112,7 @@ export default function FeedbackPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-secondary/10 py-16 px-4">
+    <div className="min-h-screen bg-linear-to-b from-background to-secondary/10 py-16 px-4">
       <div className="container mx-auto max-w-6xl">
         <motion.div
           className="text-center mb-12"
@@ -308,7 +308,7 @@ export default function FeedbackPage() {
             className="space-y-6"
           >
             <motion.div variants={fadeIn}>
-              <Card className="border-primary/10 shadow-lg bg-gradient-to-br from-primary/5 to-primary/10">
+              <Card className="border-primary/10 shadow-lg bg-linear-to-br from-primary/5 to-primary/10">
                 <CardContent className="p-6">
                   <h2 className="text-2xl font-semibold mb-4">Why Your Feedback Matters</h2>
 
