@@ -25,7 +25,7 @@ export default function HeroSection() {
     <section className="relative w-full min-h-screen overflow-hidden bg-[#f3e3cf]">
 
       {/* Gradient Background */}
-      <div className="absolute inset-0 bg-linear-to-r from-[#f3e3cf] via-pink-200 to-purple-300 opacity-90" />
+      <div className="absolute inset-0 bg-linear-to-r from-[#f3e3cf] via-pink-100 to-purple-100 opacity-90" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 items-center gap-12">
 

@@ -20,12 +20,12 @@ export const metadata: Metadata = {
     title: "Shiva Design Associates | Civil, Interior & 2D Drawing Services in Maharajganj",
     description: "Shiva Design Associates in Maharajganj specializes in civil engineering, interior design, architectural planning, 2D drawings, construction consulting, and project management. Delivering quality and customized design solutions for residential, commercial, and industrial projects.",
     images: "/assets/og-image.png",
-    url: "https://shivadesignassociates.com",
+    url: "https://shivadesign.in",
     type: "website",
     siteName: "Shiva Design Associates",
     countryName: "India",
     emails: 'shivaconsultant98@gmail.com',
-    phoneNumbers: '+91 979 408 6149',
+    phoneNumbers: '+91 9794086149',
   },
   twitter: {
     card: "summary_large_image",
@@ -43,7 +43,12 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="default"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
           <Navbar />
           <main>{children}</main>
           <Footer />

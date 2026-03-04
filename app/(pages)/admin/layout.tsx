@@ -27,6 +27,7 @@ export default function AdminLayout({ children, }: Readonly<{ children: React.Re
           </Button>
         </div>
       </header>
+
       <div className="flex min-h-[calc(100vh-4rem)]">
         <aside className="hidden w-64 border-r bg-card md:block">
           <nav className="grid gap-2 p-4">
@@ -76,6 +77,11 @@ export default function AdminLayout({ children, }: Readonly<{ children: React.Re
               <Button variant="ghost" className="w-full justify-start">
                 <Settings className="mr-2 h-4 w-4" />
                 Settings
+              </Button>
+            </Link>
+            <Link href="/admin/theme">
+              <Button variant="ghost" className="w-full justify-start">
+                🎨 Theme Settings
               </Button>
             </Link>
             <Link href="/">

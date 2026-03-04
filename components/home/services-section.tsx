@@ -112,7 +112,7 @@ export default function ServicesSection() {
 
         {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-serif font-semibold bg-linear-to-r from-pink-500 via-orange-400 to-purple-500 bg-clip-text text-transparent">
+          <h2 className="text-4xl md:text-5xl font-serif font-semibold bg-gray-700 bg-clip-text text-transparent">
             Our Engineering Services
           </h2>
 

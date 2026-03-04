@@ -4,7 +4,7 @@ import ScrollAnimations from "@/components/scroll-animations"
 import ScrollToTop from "@/components/scroll-to-top"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import ServicesSection from "@/components/home/servises-section"
+import ServicesSection from "@/components/home/services-section"
 import FounderProfile from "@/components/founder-profile"
 import TrustedClientsSection from "@/components/home/trusted-client-section"
 import getProjectsAction from "./Actions/get-paginated-projects"
@@ -48,7 +48,6 @@ export default async function Home() {
 
       <ServicesSection />
 
-      {/* Add the Founder Profile section here */}
       <FounderProfile />
 
       {/* Projects */}
