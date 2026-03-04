@@ -32,7 +32,7 @@ export default function NotFound() {
   ]
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-background to-secondary/10 p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-linear-to-b from-background to-secondary/10 p-4">
       <div className="max-w-3xl w-full text-center">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
