@@ -52,15 +52,16 @@ export default async function Home() {
 
       {/* Projects */}
       <section className="py-16 md:py-24 bg-muted/30">
-        <div className="container px-4 md:px-6">
-          <ScrollAnimations className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Our Projects</h2>
+        <div className="container mx-auto px-4 md:px-6 max-w-7xl">
+
+          <ScrollAnimations className="text-center mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Our Projects</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
               Explore our portfolio of successful engineering projects
             </p>
           </ScrollAnimations>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {parsedProjects.map((project, index) => (
               <ScrollAnimations key={index}>
                 <ProjectCard {...project} />
@@ -68,11 +69,12 @@ export default async function Home() {
             ))}
           </div>
 
-          <ScrollAnimations className="text-center mt-12">
-            <Button asChild variant="outline">
+          <ScrollAnimations className="text-center mt-14">
+            <Button asChild variant="outline" size="lg">
               <Link href="/projects">View All Projects</Link>
             </Button>
           </ScrollAnimations>
+
         </div>
       </section>
 

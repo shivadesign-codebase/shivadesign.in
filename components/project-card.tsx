@@ -16,25 +16,37 @@ export default function ProjectCard({
   badgeColor = "default",
 }: ProjectCardProps) {
 
-  // add /f_auto,q_auto,w_500/, after upload/ to optimize the image for web
   const imageUrl = image.split("/upload/").join("/upload/f_auto,q_auto,w_500/")
 
   return (
-    <div className="project-card rounded-lg overflow-hidden">
+    <div className="group rounded-xl overflow-hidden border bg-card shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+
+      {/* Image */}
       <div
-        className="relative aspect-4/3 bg-cover bg-center"
+        className="relative h-56 bg-cover bg-center overflow-hidden"
         style={{ backgroundImage: `url(${imageUrl})` }}
       >
+
+        {/* gradient overlay */}
+        <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
+
+        {/* badge */}
         <div className="absolute top-4 left-4">
           <Badge variant={badgeColor}>{category}</Badge>
         </div>
       </div>
-      <div className="p-4 bg-card">
-        <h3 className="font-semibold text-lg">{title}</h3>
+
+      {/* content */}
+      <div className="p-5 space-y-3">
+        <h3 className="font-semibold text-lg leading-tight group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+
+        <p className="text-sm text-muted-foreground line-clamp-3">
+          {description}
+        </p>
       </div>
-      <div className="project-card-description">
-        <p>{description}</p>
-      </div>
+
     </div>
   )
 }
