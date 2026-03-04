@@ -39,6 +39,7 @@ function ProjectCard({
                  (max-width: 1200px) 50vw,
                  33vw"
           quality={70}
+          loading="lazy"
           className="object-cover group-hover:scale-105 transition-transform duration-500"
           placeholder="blur"
           blurDataURL="/placeholder.svg"
