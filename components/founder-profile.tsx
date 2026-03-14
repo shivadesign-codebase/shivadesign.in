@@ -71,7 +71,7 @@ export default function FounderProfile() {
             <div className="w-16 h-0.5 bg-gray-900 mt-6 mb-8" />
 
             <p className="text-gray-600 leading-relaxed mb-8 text-lg">
-              With over 6+ years of experience in civil and structural engineering,
+              With over 8+ years of experience in civil and structural engineering,
               Harsh Verma has successfully delivered residential, commercial,
               and infrastructure projects with uncompromising precision.
               His approach combines technical expertise with aesthetic
@@ -81,11 +81,11 @@ export default function FounderProfile() {
             {/* Stats */}
             <div className="grid grid-cols-2 gap-8 mb-10">
               <div>
-                <h4 className="text-2xl font-semibold text-gray-900">75+</h4>
+                <h4 className="text-2xl font-semibold text-gray-900">200+</h4>
                 <p className="text-gray-500">Projects Completed</p>
               </div>
               <div>
-                <h4 className="text-2xl font-semibold text-gray-900">6+</h4>
+                <h4 className="text-2xl font-semibold text-gray-900">8+</h4>
                 <p className="text-gray-500">Years of Experience</p>
               </div>
             </div>
