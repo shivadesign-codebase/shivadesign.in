@@ -68,6 +68,35 @@ export default function RootLayout({
             gtag('config', 'G-4HCBJB8NP1');
           `}
         </Script>
+
+         {/* Iubenda Configuration */}
+        <Script id="iubenda-config" strategy="afterInteractive">
+          {`
+            var _iub = _iub || [];
+            _iub.csConfiguration = {
+              "siteId":4461535,
+              "cookiePolicyId":95440982,
+              "lang":"en",
+              "storage":{"useSiteId":true}
+            };
+          `}
+        </Script>
+
+        {/* Iubenda Scripts */}
+        <Script
+          src="https://cs.iubenda.com/autoblocking/4461535.js"
+          strategy="afterInteractive"
+        />
+
+        <Script
+          src="https://cdn.iubenda.com/cs/gpp/stub.js"
+          strategy="afterInteractive"
+        />
+
+        <Script
+          src="https://cdn.iubenda.com/cs/iubenda_cs.js"
+          strategy="afterInteractive"
+        />
     </html>
   )
 }
