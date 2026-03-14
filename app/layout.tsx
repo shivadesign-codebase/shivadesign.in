@@ -1,12 +1,14 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
+import Script from "next/script"
+
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 import { Toaster } from "@/components/ui/sonner"
-import Script from "next/script"
+import getSettingsAction from "./Actions/get-settings"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -35,11 +37,9 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default async function RootLayout({ children, }: Readonly<{ children: React.ReactNode }>) {
+  const settings = await getSettingsAction();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
@@ -49,29 +49,30 @@ export default function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <Navbar />
+          <Navbar marqueeText={settings.marqueeText} />
           <main>{children}</main>
           <Footer />
           <Toaster />
         </ThemeProvider>
       </body>
-      <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-4HCBJB8NP1"
-          strategy="afterInteractive"
-        />
 
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-4HCBJB8NP1"
+        strategy="afterInteractive"
+      />
+
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-4HCBJB8NP1');
           `}
-        </Script>
+      </Script>
 
-         {/* Iubenda Configuration */}
-        <Script id="iubenda-config" strategy="afterInteractive">
-          {`
+      {/* Iubenda Configuration */}
+      <Script id="iubenda-config" strategy="afterInteractive">
+        {`
             var _iub = _iub || [];
             _iub.csConfiguration = {
               "siteId":4461535,
@@ -80,23 +81,23 @@ export default function RootLayout({
               "storage":{"useSiteId":true}
             };
           `}
-        </Script>
+      </Script>
 
-        {/* Iubenda Scripts */}
-        <Script
-          src="https://cs.iubenda.com/autoblocking/4461535.js"
-          strategy="afterInteractive"
-        />
+      {/* Iubenda Scripts */}
+      <Script
+        src="https://cs.iubenda.com/autoblocking/4461535.js"
+        strategy="afterInteractive"
+      />
 
-        <Script
-          src="https://cdn.iubenda.com/cs/gpp/stub.js"
-          strategy="afterInteractive"
-        />
+      <Script
+        src="https://cdn.iubenda.com/cs/gpp/stub.js"
+        strategy="afterInteractive"
+      />
 
-        <Script
-          src="https://cdn.iubenda.com/cs/iubenda_cs.js"
-          strategy="afterInteractive"
-        />
+      <Script
+        src="https://cdn.iubenda.com/cs/iubenda_cs.js"
+        strategy="afterInteractive"
+      />
     </html>
   )
 }

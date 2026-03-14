@@ -10,10 +10,12 @@ import TrustedClientsSection from "@/components/home/trusted-client-section"
 import getProjectsAction from "./Actions/get-paginated-projects"
 import { IProject } from "./models/project"
 import HeroSection from "@/components/theme-based/theme-hero-section"
+import getSettingsAction from "./Actions/get-settings"
 
 export default async function Home() {
   const projects = await getProjectsAction({ limit: 3 })
   const parsedProjects: IProject[] = JSON.parse(projects)
+  const settings = await getSettingsAction()
 
   const testimonials = [
     {
@@ -40,11 +42,11 @@ export default async function Home() {
       rating: 5,
       text: "The site inspection services provided by Shiva Consultant ensured our project met all quality standards and building codes. Their detailed reports and recommendations were invaluable throughout the construction process.",
     },
-  ]
+  ];
 
   return (
     <>
-      <HeroSection />
+      <HeroSection settings={settings} />
 
       <ServicesSection />
 

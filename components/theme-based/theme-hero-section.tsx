@@ -1,12 +1,20 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Play, Pause } from "lucide-react"
+import { GetSettingsActionResponse } from "@/app/Actions/get-settings"
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  settings: GetSettingsActionResponse
+}
+
+const FALLBACK_VIDEO = "/videos/founder-message.mp4"
+
+export default function HeroSection({ settings }: HeroSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [videoSrc, setVideoSrc] = useState(settings?.introVideoLink || FALLBACK_VIDEO)
   const [isPlaying, setIsPlaying] = useState(false)
 
   const toggleVideo = () => {
@@ -22,7 +30,7 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden theme-bg">
+    <section className="relative w-full min-h-screen overflow-hidden theme-bg pt-8">
 
       {/* Gradient Background */}
       <div className="absolute inset-0 theme-hero-bg opacity-90" />
@@ -58,24 +66,33 @@ export default function HeroSection() {
 
         {/* RIGHT SIDE – PHONE */}
         <div className="flex justify-center">
-          <div className="relative border-black bg-black border-14 rounded-[2.5rem] h-[600px] w-[300px] shadow-2xl">
+          <div className="relative border-black bg-black border-14 rounded-[2.5rem] h-150 w-75 shadow-2xl">
 
             {/* Side Buttons */}
-            <div className="h-8 w-[3px] bg-black absolute -left-[17px] top-[72px] rounded-l-lg"></div>
-            <div className="h-[46px] w-[3px] bg-black absolute -left-[17px] top-[124px] rounded-l-lg"></div>
-            <div className="h-[46px] w-[3px] bg-black absolute -left-[17px] top-[178px] rounded-l-lg"></div>
-            <div className="h-16 w-[3px] bg-black absolute -right-[17px] top-[142px] rounded-r-lg"></div>
+            <div className="h-8 w-0.75 bg-black absolute -left-4.25 top-18 rounded-l-lg"></div>
+            <div className="h-11.5 w-0.75 bg-black absolute -left-4.25 top-31 rounded-l-lg"></div>
+            <div className="h-11.5 w-0.75 bg-black absolute -left-4.25 top-44.5 rounded-l-lg"></div>
+            <div className="h-16 w-0.75 bg-black absolute -right-4.25 top-35.5 rounded-r-lg"></div>
 
             {/* SCREEN */}
-            <div className="relative rounded-4xl overflow-hidden w-[272px] h-[572px] bg-black">
+            <div className="relative rounded-4xl overflow-hidden w-68 h-143 bg-black">
 
               {/* VIDEO */}
               <video
                 ref={videoRef}
                 className="w-full h-full object-cover"
-                src="/videos/founder-message.mp4"
+                playsInline
+                preload="metadata"
+                onError={() => {
+                  if (videoSrc !== FALLBACK_VIDEO) {
+                    setVideoSrc(FALLBACK_VIDEO)
+                    setIsPlaying(false)
+                  }
+                }}
                 onEnded={() => setIsPlaying(false)}
-              />
+              >
+                <source src={videoSrc} type="video/mp4" />
+              </video>
 
               {/* Overlay Play Button */}
               <div className="absolute inset-0 flex items-center justify-center">
