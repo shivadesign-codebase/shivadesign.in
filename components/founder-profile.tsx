@@ -42,7 +42,7 @@ export default function FounderProfile() {
             variants={fadeIn}
             className="relative flex justify-center"
           >
-            <div className="relative w-[320px] h-[420px] md:w-[380px] md:h-[480px] overflow-hidden rounded-2xl shadow-2xl">
+            <div className="relative w-[320px] h-105 md:w-95 md:h-120 overflow-hidden rounded-2xl shadow-2xl">
               <Image
                 src="/assets/Harsh.jpg"
                 alt="Er. Harsh Verma"

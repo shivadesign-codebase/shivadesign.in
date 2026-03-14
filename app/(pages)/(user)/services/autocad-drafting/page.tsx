@@ -40,7 +40,7 @@ export default function AutoCADDraftingPage() {
                 </Button>
               </div>
             </div>
-            <div className="relative h-[400px] rounded-lg overflow-hidden shadow-2xl border border-gray-700">
+            <div className="relative h-100 rounded-lg overflow-hidden shadow-2xl border border-gray-700">
               <Image src="/assets/cad.jpg?height=800&width=800" alt="AutoCAD Drafting" fill className="object-cover" />
               <div className="absolute inset-0 bg-linear-to-t from-[#1e2430] to-transparent opacity-70"></div>
               <div className="absolute bottom-6 left-6 right-6 p-4 bg-[#2a3142]/80 backdrop-blur-sm rounded-lg border border-gray-700">

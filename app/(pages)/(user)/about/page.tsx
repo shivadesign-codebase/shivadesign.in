@@ -93,7 +93,7 @@ export default function AboutPage() {
               </h2>
 
               <p className="text-gray-600 leading-relaxed mb-6 text-lg">
-                ER. Harsh Verma brings over 6+ years of expertise in civil and
+                ER. Harsh Verma brings over 8+ years of expertise in civil and
                 structural engineering. He gained hands-on experience with
                 leading construction firms before establishing Shiva Design
                 Associates in 2019.
