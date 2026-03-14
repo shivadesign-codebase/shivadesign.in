@@ -33,8 +33,8 @@ export default function Navbar() {
         <Link href="/" className="flex items-center gap-2">
           <span
             className={`text-xl md:text-2xl font-semibold font-serif tracking-wide ${isScrolled || isNotHomePage
-                ? "theme-bg bg-clip-text text-transparent"
-                : "text-black"
+                ? "theme-bg bg-clip-text theme-text"
+                : "theme-text"
               }`}
           >
             Shiva Design Associates
