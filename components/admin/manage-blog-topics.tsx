@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { ImageIcon, Trash2, Loader2, CheckCircle2, Clock } from "lucide-react"
+import { ImageIcon, Trash2, Loader2, CheckCircle2, Clock, Pencil, ChevronUp, ChevronDown, RotateCcw, Save, X } from "lucide-react"
 import { toast } from "sonner"
 
 type Topic = {
@@ -18,6 +18,7 @@ type Topic = {
   title: string
   description?: string
   thumbnail?: string
+  queueOrder: number
   isUsed: boolean
   usedAt?: string
   createdAt: string
@@ -33,6 +34,10 @@ export default function ManageBlogTopics() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [thumbnail, setThumbnail] = useState<string | null>(null)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editTitle, setEditTitle] = useState("")
+  const [editDescription, setEditDescription] = useState("")
+  const [editThumbnail, setEditThumbnail] = useState<string | null>(null)
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>({
     defaultValues: { title: "", description: "" },
@@ -86,6 +91,72 @@ export default function ManageBlogTopics() {
       toast("Deleted", { description: "Topic removed from queue." })
     } catch {
       toast("Error", { description: "Failed to delete topic." })
+    }
+  }
+
+  const startEditing = (topic: Topic) => {
+    setEditingId(topic._id)
+    setEditTitle(topic.title)
+    setEditDescription(topic.description ?? "")
+    setEditThumbnail(topic.thumbnail ?? null)
+  }
+
+  const cancelEditing = () => {
+    setEditingId(null)
+    setEditTitle("")
+    setEditDescription("")
+    setEditThumbnail(null)
+  }
+
+  const saveTopic = async (id: string) => {
+    try {
+      const res = await fetch("/api/admin/blog-topics", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id,
+          title: editTitle,
+          description: editDescription,
+          thumbnail: editThumbnail,
+        }),
+      })
+      if (!res.ok) throw new Error()
+      const data = await res.json()
+      setTopics((prev) => prev.map((t) => (t._id === id ? data.topic : t)))
+      cancelEditing()
+      toast("Updated", { description: "Topic updated successfully." })
+    } catch {
+      toast("Error", { description: "Failed to update topic." })
+    }
+  }
+
+  const moveTopic = async (id: string, action: "move-up" | "move-down") => {
+    try {
+      const res = await fetch("/api/admin/blog-topics", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, action }),
+      })
+      if (!res.ok) throw new Error()
+      await fetchTopics()
+    } catch {
+      toast("Error", { description: "Failed to reorder queue." })
+    }
+  }
+
+  const resetTopic = async (id: string) => {
+    try {
+      const res = await fetch("/api/admin/blog-topics", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, action: "reset" }),
+      })
+      if (!res.ok) throw new Error()
+      const data = await res.json()
+      setTopics((prev) => prev.map((t) => (t._id === id ? data.topic : t)))
+      toast("Reset", { description: "Topic moved back to pending queue." })
+    } catch {
+      toast("Error", { description: "Failed to reset topic." })
     }
   }
 
@@ -204,7 +275,7 @@ export default function ManageBlogTopics() {
           </p>
         ) : (
           <div className="space-y-3">
-            {topics.map((topic) => (
+            {topics.map((topic, index) => (
               <Card key={topic._id} className={topic.isUsed ? "opacity-60" : ""}>
                 <CardContent className="p-4 flex gap-4 items-start">
 
@@ -216,7 +287,7 @@ export default function ManageBlogTopics() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <h3 className="font-medium truncate">{topic.title}</h3>
+                      <h3 className="font-medium truncate">#{index + 1} {topic.title}</h3>
                       {topic.isUsed ? (
                         <Badge variant="default" className="text-xs gap-1">
                           <CheckCircle2 className="h-3 w-3" /> Published
@@ -228,8 +299,38 @@ export default function ManageBlogTopics() {
                       )}
                     </div>
 
-                    {topic.description && (
-                      <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{topic.description}</p>
+                    {editingId === topic._id ? (
+                      <div className="space-y-2 mt-2">
+                        <Input value={editTitle} onChange={(e) => setEditTitle(e.target.value)} placeholder="Topic title" />
+                        <Textarea value={editDescription} onChange={(e) => setEditDescription(e.target.value)} rows={2} placeholder="Additional context" />
+                        <div className="border border-dashed rounded-md p-3 text-center">
+                          {editThumbnail && (
+                            <div className="mb-2">
+                              <Image
+                                src={editThumbnail}
+                                alt="Topic thumbnail"
+                                width={300}
+                                height={140}
+                                className="mx-auto rounded-md object-cover h-28 w-full"
+                              />
+                            </div>
+                          )}
+                          <CldUploadButton
+                            uploadPreset="shivadesign"
+                            onSuccess={(result: any) => {
+                              const url = result?.info?.secure_url
+                              if (url) setEditThumbnail(url)
+                            }}
+                            className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent h-8 px-3 py-1.5 cursor-pointer"
+                          >
+                            {editThumbnail ? "Change thumbnail" : "Upload thumbnail"}
+                          </CldUploadButton>
+                        </div>
+                      </div>
+                    ) : (
+                      topic.description && (
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{topic.description}</p>
+                      )
                     )}
 
                     <p className="text-xs text-muted-foreground mt-1">
@@ -242,16 +343,48 @@ export default function ManageBlogTopics() {
                     </p>
                   </div>
 
-                  {!topic.isUsed && (
-                    <Button
-                      size="sm"
-                      variant="destructive"
-                      onClick={() => deleteTopic(topic._id)}
-                      className="shrink-0"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  )}
+                  <div className="flex flex-col gap-2 shrink-0">
+                    {editingId === topic._id ? (
+                      <>
+                        <Button size="sm" variant="default" onClick={() => saveTopic(topic._id)}>
+                          <Save className="h-4 w-4 mr-1" /> Save
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={cancelEditing}>
+                          <X className="h-4 w-4 mr-1" /> Cancel
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button size="sm" variant="outline" onClick={() => startEditing(topic)}>
+                          <Pencil className="h-4 w-4 mr-1" /> Edit
+                        </Button>
+                        {!topic.isUsed && (
+                          <>
+                            <Button size="sm" variant="outline" onClick={() => moveTopic(topic._id, "move-up")}>
+                              <ChevronUp className="h-4 w-4 mr-1" /> Up
+                            </Button>
+                            <Button size="sm" variant="outline" onClick={() => moveTopic(topic._id, "move-down")}>
+                              <ChevronDown className="h-4 w-4 mr-1" /> Down
+                            </Button>
+                          </>
+                        )}
+                        {topic.isUsed && (
+                          <Button size="sm" variant="outline" onClick={() => resetTopic(topic._id)}>
+                            <RotateCcw className="h-4 w-4 mr-1" /> Reset
+                          </Button>
+                        )}
+                        {!topic.isUsed && (
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => deleteTopic(topic._id)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </>
+                    )}
+                  </div>
 
                 </CardContent>
               </Card>

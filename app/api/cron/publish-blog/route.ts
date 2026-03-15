@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
   // ── Pick next unused topic ─────────────────────────────────────────────────
   await connect_db()
 
-  const topic = await BlogTopic.findOne({ isUsed: false }).sort({ createdAt: 1 })
+  const topic = await BlogTopic.findOne({ isUsed: false }).sort({ queueOrder: 1, createdAt: 1 })
 
   if (!topic) {
     console.info("[Cron] No unused blog topics found. Skipping.")

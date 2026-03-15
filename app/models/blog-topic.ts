@@ -4,6 +4,7 @@ export interface IBlogTopic extends Document {
   title: string
   description?: string
   thumbnail?: string
+  queueOrder: number
   isUsed: boolean
   usedAt?: Date
   blogId?: string
@@ -24,6 +25,11 @@ const blogTopicSchema = new Schema<IBlogTopic>(
     thumbnail: {
       type: String,
       default: null,
+    },
+    queueOrder: {
+      type: Number,
+      default: 0,
+      index: true,
     },
     isUsed: {
       type: Boolean,
