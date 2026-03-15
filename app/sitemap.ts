@@ -42,10 +42,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "about",
     "contact",
     "projects",
+    // service pages
+    "services",
     "services/autocad-drafting",
     "services/3d-elevation",
-    "services/site-inspection",
     "services/interior-designing",
+    "services/vastu-consultation",
+    "services/construction-estimate",
+    "services/map-approval",
   ].map((page) => ({
     url: `${process.env.NEXT_PUBLIC_SITE_URL}/${page}`,
     lastModified: new Date(),

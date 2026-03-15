@@ -50,7 +50,7 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
           disableTransitionOnChange
         >
           <Navbar marqueeText={settings.marqueeText} />
-          <main>{children}</main>
+          <main className="pt-8">{children}</main>
           <Footer />
           <Toaster />
         </ThemeProvider>

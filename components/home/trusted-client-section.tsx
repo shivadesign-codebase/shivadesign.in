@@ -5,8 +5,10 @@ import { useEffect, useRef } from "react"
 const logos = [
   "Pramila Homeo Clinic",
   "City Montessori School",
-  "JN Hospital"
-]
+  "Divine Puplic School",
+  "JN Chikitsalaya",
+  "Several individual clients",
+];
 
 function TrustedClientsSection() {
   const scrollRef = useRef<HTMLDivElement>(null)
@@ -41,7 +43,7 @@ function TrustedClientsSection() {
           {[...logos, ...logos].map((name, i) => (
             <div
               key={i}
-              className="flex items-center justify-center bg-muted h-16 min-w-[200px] rounded text-muted-foreground font-semibold text-sm uppercase tracking-wide shadow-sm"
+              className="flex p-4 items-center justify-center bg-muted h-16 min-w-50 rounded text-muted-foreground font-semibold text-sm uppercase tracking-wide shadow-sm"
             >
               {name}
             </div>

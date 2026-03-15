@@ -94,6 +94,7 @@ export default async function Home() {
             <TestimonialCarousel testimonials={testimonials} />
           </ScrollAnimations>
         </div>
+
         <TrustedClientsSection />
       </section>
       <ScrollToTop />

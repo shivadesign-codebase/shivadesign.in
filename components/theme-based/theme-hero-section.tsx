@@ -44,7 +44,7 @@ export default function HeroSection({ settings }: HeroSectionProps) {
           </h1>
 
           <h2 className="mt-4 text-xl md:text-2xl font-medium">
-            We Design It. We Build It. You Live It.
+            You dream it, we build it.
           </h2>
 
           <p className="mt-6 text-lg max-w-lg leading-relaxed">

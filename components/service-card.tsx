@@ -1,11 +1,8 @@
 "use client"
 
-import type React from "react"
-import { useState } from "react"
 import type { ReactNode } from "react"
 import Link from "next/link"
 import { ChevronRight } from "lucide-react"
-import ServiceInfoDialog from "./service-info-dialog"
 
 interface ServiceCardProps {
   title: string
@@ -21,17 +18,7 @@ export default function ServiceCard({
   description,
   icon,
   link,
-  features = [],
-  showPopup = false,
 }: ServiceCardProps) {
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
-
-  const handleLearnMore = (e: React.MouseEvent) => {
-    if (showPopup) {
-      e.preventDefault()
-      setIsDialogOpen(true)
-    }
-  }
 
   return (
     <>
@@ -55,35 +42,15 @@ export default function ServiceCard({
           {description}
         </p>
 
-        {/* CTA */}
-        {showPopup ? (
-          <button
-            onClick={handleLearnMore}
-            className="mt-6 inline-flex items-center text-sm font-medium theme-text hover:text-purple-600 transition"
-          >
-            Learn More
-            <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-          </button>
-        ) : (
-          <Link
-            href={link}
-            className="mt-6 inline-flex items-center text-sm font-medium theme-text hover:text-purple-600 transition"
-          >
-            Learn More
-            <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        )}
-      </div>
+        <Link
+          href={link}
+          className="mt-6 inline-flex items-center text-sm font-medium theme-text hover:text-purple-600 transition"
+        >
+          Learn More
+          <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+        </Link>
 
-      {showPopup && (
-        <ServiceInfoDialog
-          isOpen={isDialogOpen}
-          onClose={() => setIsDialogOpen(false)}
-          title={title}
-          description={description}
-          features={features}
-        />
-      )}
+      </div>
     </>
   )
 }
