@@ -1,5 +1,7 @@
 import type { MetadataRoute } from 'next';
 import getProjectsAction from './Actions/get-paginated-projects';
+import connect_db from '@/config/db';
+import Blog from '@/app/models/blog';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!process.env.NEXT_PUBLIC_SITE_URL) {
@@ -42,6 +44,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "about",
     "contact",
     "projects",
+    "blogs",
     // service pages
     "services",
     "services/autocad-drafting",
@@ -57,6 +60,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
+  // Fetch all published blog posts for dynamic sitemap entries
+  let blogEntries: MetadataRoute.Sitemap = [];
+  try {
+    await connect_db();
+    const blogs = await Blog.find({ isPublished: true })
+      .select("_id updatedAt createdAt")
+      .lean() as { _id: any; updatedAt?: Date; createdAt?: Date }[];
+
+    blogEntries = blogs.map((blog) => ({
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/blogs/${blog._id.toString()}`,
+      lastModified: new Date(blog.updatedAt ?? blog.createdAt ?? Date.now()),
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+    }));
+  } catch (error) {
+    console.error("Error fetching blogs for sitemap:", error);
+  }
+
   return [
     {
       url: `${process.env.NEXT_PUBLIC_SITE_URL}`,
@@ -66,5 +87,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     ...staticPages,
     ...sitemapEntries,
+    ...blogEntries,
   ];
 }

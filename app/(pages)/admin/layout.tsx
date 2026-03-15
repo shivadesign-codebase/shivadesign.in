@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { FileText, LayoutDashboard, ImageIcon, FolderKanban, MessageSquare, Mail, Users, Settings, LogOut, ArrowLeft } from "lucide-react"
+import { FileText, LayoutDashboard, ImageIcon, FolderKanban, MessageSquare, Mail, Users, Settings, LogOut, ArrowLeft, BookOpen } from "lucide-react"
 
 export default function AdminLayout({ children, }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -71,6 +71,12 @@ export default function AdminLayout({ children, }: Readonly<{ children: React.Re
               <Button variant="ghost" className="w-full justify-start">
                 <Users className="mr-2 h-4 w-4" />
                 Testimonials
+              </Button>
+            </Link>
+            <Link href="/admin/blog">
+              <Button variant="ghost" className="w-full justify-start">
+                <BookOpen className="mr-2 h-4 w-4" />
+                Blog
               </Button>
             </Link>
             <Link href="/admin/settings">
