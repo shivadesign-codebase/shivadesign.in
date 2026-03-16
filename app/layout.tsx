@@ -18,6 +18,11 @@ export const metadata: Metadata = {
   icons: 'favicon.ico',
   keywords: 'Shiva Design Associates, Civil Engineering, Interior Design, 2D Drawings, Architectural Planning, Construction Consulting, Project Management, Maharajganj, Uttar Pradesh, India',
   metadataBase: new URL("https://shivadesign.in"),
+  verification: {
+    other: {
+      "p:domain_verify": "a86839452f037031b34482579a8e3e2c",
+    },
+  },
   openGraph: {
     title: "Shiva Design Associates | Civil, Interior & 2D Drawing Services in Maharajganj",
     description: "Shiva Design Associates in Maharajganj specializes in civil engineering, interior design, architectural planning, 2D drawings, construction consulting, and project management. Delivering quality and customized design solutions for residential, commercial, and industrial projects.",
@@ -42,6 +47,9 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
 
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <meta name="p:domain_verify" content="a86839452f037031b34482579a8e3e2c" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
