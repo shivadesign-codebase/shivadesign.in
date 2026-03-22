@@ -1,76 +1,127 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Eye, Mail, Phone } from "lucide-react"
+import { Switch } from "@/components/ui/switch"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { Mail, Phone, Trash2 } from "lucide-react"
+import { toast } from "sonner"
+
+type InquiryStatus = "new" | "replied" | "closed"
+
+type Inquiry = {
+  _id: string
+  name: string
+  email: string
+  phone?: string
+  subject: string
+  service?: string
+  message: string
+  consent: boolean
+  status: InquiryStatus
+  isRead: boolean
+  createdAt: string
+}
 
 export default function InquiriesPage() {
   const [searchTerm, setSearchTerm] = useState("")
+  const [inquiries, setInquiries] = useState<Inquiry[]>([])
+  const [loading, setLoading] = useState(true)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
 
-  const inquiries = [
-    {
-      id: 1,
-      name: "Alok Verma",
-      email: "alok.verma@example.com",
-      phone: "+91 98765 43210",
-      subject: "Commercial Building Project",
-      service: "AutoCAD Drafting",
-      message:
-        "I'm looking for detailed AutoCAD drafting services for a new commercial building project in Gurugram. The project is approximately 50,000 sq ft and we need complete structural and architectural drawings.",
-      date: "June 22, 2023",
-      status: "new",
-    },
-    {
-      id: 2,
-      name: "Priya Sharma",
-      email: "priya.sharma@example.com",
-      phone: "+91 87654 32109",
-      subject: "Residential Project Consultation",
-      service: "3D Elevation",
-      message:
-        "We're developing a luxury residential complex and need 3D elevation designs for marketing materials. Would like to discuss the project details and timeline.",
-      date: "June 20, 2023",
-      status: "replied",
-    },
-    {
-      id: 3,
-      name: "Rajesh Kumar",
-      email: "rajesh.kumar@example.com",
-      phone: "+91 76543 21098",
-      subject: "Site Inspection Request",
-      service: "Site Inspection",
-      message:
-        "We need a comprehensive site inspection for our ongoing construction project to ensure compliance with building codes and quality standards.",
-      date: "June 18, 2023",
-      status: "closed",
-    },
-    {
-      id: 4,
-      name: "Amit Patel",
-      email: "amit.patel@example.com",
-      phone: "+91 65432 10987",
-      subject: "Bridge Design Consultation",
-      service: "Structural Design",
-      message:
-        "Looking for consultation on a small bridge design for a private property. Need to understand the feasibility and cost estimates.",
-      date: "June 15, 2023",
-      status: "new",
-    },
-  ]
+  const fetchInquiries = async () => {
+    try {
+      const res = await fetch("/api/admin/inquiries")
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || "Failed to fetch inquiries")
+      setInquiries(data.inquiries ?? [])
+    } catch (error: any) {
+      toast("Error", { description: error?.message || "Could not load inquiries." })
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  const filteredInquiries = inquiries.filter(
-    (inquiry) =>
-      inquiry.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      inquiry.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      inquiry.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      inquiry.service.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  useEffect(() => {
+    fetchInquiries()
+  }, [])
 
-  const getStatusBadge = (status: string) => {
+  const filteredInquiries = useMemo(() => {
+    const query = searchTerm.trim().toLowerCase()
+    if (!query) return inquiries
+
+    return inquiries.filter((inquiry) => {
+      return (
+        inquiry.name.toLowerCase().includes(query) ||
+        inquiry.email.toLowerCase().includes(query) ||
+        (inquiry.phone || "").toLowerCase().includes(query) ||
+        inquiry.subject.toLowerCase().includes(query) ||
+        (inquiry.service || "").toLowerCase().includes(query) ||
+        inquiry.message.toLowerCase().includes(query)
+      )
+    })
+  }, [inquiries, searchTerm])
+
+  const updateInquiry = async (
+    id: string,
+    payload: Partial<Pick<Inquiry, "status" | "isRead">>
+  ) => {
+    setUpdatingId(id)
+    try {
+      const res = await fetch("/api/admin/inquiries", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, ...payload }),
+      })
+      const data = await res.json()
+
+      if (!res.ok) throw new Error(data?.error || "Failed to update inquiry")
+
+      setInquiries((prev) =>
+        prev.map((item) => (item._id === id ? { ...item, ...payload } : item))
+      )
+
+      toast("Updated", { description: "Inquiry updated successfully." })
+    } catch (error: any) {
+      toast("Error", { description: error?.message || "Could not update inquiry." })
+    } finally {
+      setUpdatingId(null)
+    }
+  }
+
+  const deleteInquiry = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this inquiry?")) return
+
+    setUpdatingId(id)
+    try {
+      const res = await fetch("/api/admin/inquiries", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data?.error || "Failed to delete inquiry")
+
+      setInquiries((prev) => prev.filter((item) => item._id !== id))
+      toast("Deleted", { description: "Inquiry removed." })
+    } catch (error: any) {
+      toast("Error", { description: error?.message || "Could not delete inquiry." })
+    } finally {
+      setUpdatingId(null)
+    }
+  }
+
+  const getStatusBadge = (status: InquiryStatus) => {
     switch (status) {
       case "new":
         return <Badge variant="default">New</Badge>
@@ -83,11 +134,110 @@ export default function InquiriesPage() {
     }
   }
 
+  const renderList = (status?: InquiryStatus) => {
+    const list = status
+      ? filteredInquiries.filter((inquiry) => inquiry.status === status)
+      : filteredInquiries
+
+    if (loading) {
+      return <p className="text-center text-muted-foreground py-4">Loading inquiries...</p>
+    }
+
+    if (list.length === 0) {
+      return <p className="text-center text-muted-foreground py-4">No inquiries found</p>
+    }
+
+    return (
+      <div className="space-y-4">
+        {list.map((inquiry) => (
+          <div key={inquiry._id} className="border rounded-md p-4">
+            <div className="flex flex-col lg:flex-row justify-between items-start gap-3 mb-2">
+              <div>
+                <h3 className="font-semibold">{inquiry.subject}</h3>
+                <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+                  <span>{inquiry.name}</span>
+                  <span>•</span>
+                  <span>{inquiry.service || "General Inquiry"}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 flex-wrap">
+                {getStatusBadge(inquiry.status)}
+                <Badge variant={inquiry.isRead ? "secondary" : "default"}>
+                  {inquiry.isRead ? "Read" : "Unread"}
+                </Badge>
+                <span className="text-xs text-muted-foreground">
+                  {new Date(inquiry.createdAt).toLocaleString("en-IN")}
+                </span>
+              </div>
+            </div>
+
+            <p className="text-sm mb-4 whitespace-pre-wrap">{inquiry.message}</p>
+
+            <div className="grid gap-1 text-sm text-muted-foreground mb-4">
+              <p className="flex items-center gap-2">
+                <Mail className="h-4 w-4" />
+                {inquiry.email}
+              </p>
+              <p className="flex items-center gap-2">
+                <Phone className="h-4 w-4" />
+                {inquiry.phone || "No phone provided"}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Read</span>
+                <Switch
+                  checked={inquiry.isRead}
+                  disabled={updatingId === inquiry._id}
+                  onCheckedChange={(checked) =>
+                    updateInquiry(inquiry._id, { isRead: checked })
+                  }
+                  aria-label={`Toggle read status for ${inquiry.name}`}
+                />
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-muted-foreground">Status</span>
+                <Select
+                  value={inquiry.status}
+                  onValueChange={(value: InquiryStatus) =>
+                    updateInquiry(inquiry._id, { status: value })
+                  }
+                  disabled={updatingId === inquiry._id}
+                >
+                  <SelectTrigger className="w-35 h-9">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="new">New</SelectItem>
+                    <SelectItem value="replied">Replied</SelectItem>
+                    <SelectItem value="closed">Closed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <Button
+                variant="destructive"
+                size="sm"
+                className="ml-auto"
+                disabled={updatingId === inquiry._id}
+                onClick={() => deleteInquiry(inquiry._id)}
+              >
+                <Trash2 className="h-4 w-4 mr-1" /> Delete
+              </Button>
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold">Inquiries</h1>
-        <p className="text-muted-foreground">Manage contact form submissions and inquiries</p>
+        <p className="text-muted-foreground">Manage contact form submissions and inquiry lifecycle.</p>
       </div>
 
       <div className="flex items-center gap-4">
@@ -112,47 +262,7 @@ export default function InquiriesPage() {
             <CardHeader>
               <CardTitle>All Inquiries</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredInquiries.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-4">No inquiries found</p>
-                ) : (
-                  filteredInquiries.map((inquiry) => (
-                    <div key={inquiry.id} className="border rounded-md p-4">
-                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
-                        <div>
-                          <h3 className="font-semibold">{inquiry.subject}</h3>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                            <span>{inquiry.name}</span>
-                            <span>•</span>
-                            <span>{inquiry.service}</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2 mt-2 md:mt-0">
-                          {getStatusBadge(inquiry.status)}
-                          <span className="text-sm text-muted-foreground">{inquiry.date}</span>
-                        </div>
-                      </div>
-                      <p className="text-sm mb-4 line-clamp-2">{inquiry.message}</p>
-                      <div className="flex flex-wrap gap-2">
-                        <Button variant="outline" size="sm">
-                          <Eye className="h-4 w-4 mr-1" />
-                          View Details
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Mail className="h-4 w-4 mr-1" />
-                          Reply
-                        </Button>
-                        <Button variant="outline" size="sm">
-                          <Phone className="h-4 w-4 mr-1" />
-                          Call
-                        </Button>
-                      </div>
-                    </div>
-                  ))
-                )}
-              </div>
-            </CardContent>
+            <CardContent>{renderList()}</CardContent>
           </Card>
         </TabsContent>
 
@@ -161,102 +271,16 @@ export default function InquiriesPage() {
             <CardHeader>
               <CardTitle>New Inquiries</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredInquiries.filter((i) => i.status === "new").length === 0 ? (
-                  <p className="text-center text-muted-foreground py-4">No new inquiries found</p>
-                ) : (
-                  filteredInquiries
-                    .filter((i) => i.status === "new")
-                    .map((inquiry) => (
-                      <div key={inquiry.id} className="border rounded-md p-4">
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
-                          <div>
-                            <h3 className="font-semibold">{inquiry.subject}</h3>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <span>{inquiry.name}</span>
-                              <span>•</span>
-                              <span>{inquiry.service}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 mt-2 md:mt-0">
-                            {getStatusBadge(inquiry.status)}
-                            <span className="text-sm text-muted-foreground">{inquiry.date}</span>
-                          </div>
-                        </div>
-                        <p className="text-sm mb-4 line-clamp-2">{inquiry.message}</p>
-                        <div className="flex flex-wrap gap-2">
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-1" />
-                            View Details
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <Mail className="h-4 w-4 mr-1" />
-                            Reply
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <Phone className="h-4 w-4 mr-1" />
-                            Call
-                          </Button>
-                        </div>
-                      </div>
-                    ))
-                )}
-              </div>
-            </CardContent>
+            <CardContent>{renderList("new")}</CardContent>
           </Card>
         </TabsContent>
 
         <TabsContent value="replied" className="space-y-4">
-          {/* Similar content for replied inquiries */}
           <Card>
             <CardHeader>
               <CardTitle>Replied Inquiries</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredInquiries.filter((i) => i.status === "replied").length === 0 ? (
-                  <p className="text-center text-muted-foreground py-4">No replied inquiries found</p>
-                ) : (
-                  filteredInquiries
-                    .filter((i) => i.status === "replied")
-                    .map((inquiry) => (
-                      <div key={inquiry.id} className="border rounded-md p-4">
-                        {/* Inquiry content */}
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
-                          <div>
-                            <h3 className="font-semibold">{inquiry.subject}</h3>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <span>{inquiry.name}</span>
-                              <span>•</span>
-                              <span>{inquiry.service}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 mt-2 md:mt-0">
-                            {getStatusBadge(inquiry.status)}
-                            <span className="text-sm text-muted-foreground">{inquiry.date}</span>
-                          </div>
-                        </div>
-                        <p className="text-sm mb-4 line-clamp-2">{inquiry.message}</p>
-                        <div className="flex flex-wrap gap-2">
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-1" />
-                            View Details
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <Mail className="h-4 w-4 mr-1" />
-                            Reply
-                          </Button>
-                          <Button variant="outline" size="sm">
-                            <Phone className="h-4 w-4 mr-1" />
-                            Call
-                          </Button>
-                        </div>
-                      </div>
-                    ))
-                )}
-              </div>
-            </CardContent>
+            <CardContent>{renderList("replied")}</CardContent>
           </Card>
         </TabsContent>
 
@@ -265,45 +289,10 @@ export default function InquiriesPage() {
             <CardHeader>
               <CardTitle>Closed Inquiries</CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {filteredInquiries.filter((i) => i.status === "closed").length === 0 ? (
-                  <p className="text-center text-muted-foreground py-4">No closed inquiries found</p>
-                ) : (
-                  filteredInquiries
-                    .filter((i) => i.status === "closed")
-                    .map((inquiry) => (
-                      <div key={inquiry.id} className="border rounded-md p-4">
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-2">
-                          <div>
-                            <h3 className="font-semibold">{inquiry.subject}</h3>
-                            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                              <span>{inquiry.name}</span>
-                              <span>•</span>
-                              <span>{inquiry.service}</span>
-                            </div>
-                          </div>
-                          <div className="flex items-center gap-2 mt-2 md:mt-0">
-                            {getStatusBadge(inquiry.status)}
-                            <span className="text-sm text-muted-foreground">{inquiry.date}</span>
-                          </div>
-                        </div>
-                        <p className="text-sm mb-4 line-clamp-2">{inquiry.message}</p>
-                        <div className="flex flex-wrap gap-2">
-                          <Button variant="outline" size="sm">
-                            <Eye className="h-4 w-4 mr-1" />
-                            View Details
-                          </Button>
-                        </div>
-                      </div>
-                    ))
-                )}
-              </div>
-            </CardContent>
+            <CardContent>{renderList("closed")}</CardContent>
           </Card>
         </TabsContent>
       </Tabs>
     </div>
   )
 }
-

@@ -1,6 +1,8 @@
 "use server"
 
 import { revalidatePath } from "next/cache"
+import connect_db from "@/config/db"
+import Contact from "@/app/models/contact"
 
 interface ContactFormData {
   name: string
@@ -13,13 +15,32 @@ interface ContactFormData {
 }
 
 export async function sendContactForm(data: ContactFormData) {
-  // In a real application, you would send this data to your email service or database
-  console.log("Contact form data:", data)
+  const name = typeof data.name === "string" ? data.name.trim() : ""
+  const email = typeof data.email === "string" ? data.email.trim() : ""
+  const phone = typeof data.phone === "string" ? data.phone.trim() : ""
+  const subject = typeof data.subject === "string" ? data.subject.trim() : ""
+  const service = typeof data.service === "string" ? data.service.trim() : ""
+  const message = typeof data.message === "string" ? data.message.trim() : ""
 
-  // Simulate a delay to mimic API call
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+  if (!name || !email || !subject || !message || !data.consent) {
+    throw new Error("Please fill all required enquiry fields and consent to proceed.")
+  }
 
-  // For demo purposes, we'll just return success
+  await connect_db()
+
+  await Contact.create({
+    name,
+    email,
+    phone,
+    subject,
+    service,
+    message,
+    consent: true,
+    status: "new",
+    isRead: false,
+  })
+
+  revalidatePath("/admin/inquiries")
   return { success: true }
 }
 
