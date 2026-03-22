@@ -147,7 +147,7 @@ export default function PublishBlogForm() {
                     alt="Cover preview"
                     width={600}
                     height={300}
-                    className="mx-auto rounded-md object-cover h-[220px] w-full"
+                    className="mx-auto rounded-md object-cover h-55 w-full"
                   />
                 </div>
               )}
@@ -179,7 +179,7 @@ export default function PublishBlogForm() {
                 {errors.content && <p className="text-sm text-red-500">{errors.content.message}</p>}
               </TabsContent>
               <TabsContent value="preview">
-                <div className="min-h-[300px] border rounded-md p-4 markdown-content">
+                <div className="min-h-75 border rounded-md p-4 markdown-content">
                   {contentValue ? (
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{contentValue}</ReactMarkdown>
                   ) : (
