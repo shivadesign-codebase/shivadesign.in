@@ -28,9 +28,42 @@ export default function SharedDocumentPage() {
   const [unlocking, setUnlocking] = useState(false)
   const [authorized, setAuthorized] = useState(false)
   const [accessError, setAccessError] = useState("")
+  const [downloading, setDownloading] = useState(false)
   const [meta, setMeta] = useState<DocumentMeta | null>(null)
-
   const fileUrl = `/api/documents/${accessKey}/file`
+
+  const handleDownload = async () => {
+    if (!meta?.allowDownload) return
+
+    try {
+      setDownloading(true)
+
+      const response = await fetch(`${fileUrl}?download=1`, {
+        method: "GET",
+        cache: "no-store",
+      })
+
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}))
+        throw new Error(payload?.error || "Failed to download file")
+      }
+
+      const blob = await response.blob()
+      const objectUrl = URL.createObjectURL(blob)
+      const link = document.createElement("a")
+      link.href = objectUrl
+      link.download = meta.fileName || "document"
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+      URL.revokeObjectURL(objectUrl)
+    } catch (error: any) {
+      const message = error?.message || "Failed to download file"
+      toast("Error", { description: message })
+    } finally {
+      setDownloading(false)
+    }
+  }
 
   const fetchMeta = async () => {
     try {
@@ -82,19 +115,6 @@ export default function SharedDocumentPage() {
 
       if (!res.ok) {
         throw new Error(data?.error || "Invalid password")
-      }
-
-      const verifyRes = await fetch(`/api/documents/${accessKey}/file`, {
-        method: "HEAD",
-        cache: "no-store",
-      })
-
-      if (!verifyRes.ok) {
-        const fallbackMessage = verifyRes.status === 401
-          ? "Access session could not be established. Please retry once."
-          : "Document is unavailable right now."
-
-        throw new Error(fallbackMessage)
       }
 
       setAuthorized(true)
@@ -154,15 +174,36 @@ export default function SharedDocumentPage() {
             </form>
           ) : (
             <div className="space-y-4 select-none">
-              {meta.mimeType === "application/pdf" ? (
-                <iframe src={fileUrl} className="w-full h-[70vh] rounded-md border" title={meta.fileName} />
+              {meta.mimeType.startsWith("image/") ? (
+                <div className="relative overflow-hidden rounded-md border bg-muted/20">
+                  <img src={fileUrl} alt={meta.fileName} className="max-h-[70vh] w-full object-contain opacity-90" />
+
+                  {!meta.allowDownload ? (
+                    <>
+                      <div
+                        className="pointer-events-none absolute inset-0"
+                        style={{
+                          backgroundImage: "url('/assets/logo-2.png')",
+                          backgroundRepeat: "repeat",
+                          backgroundSize: "220px auto",
+                          backgroundPosition: "center",
+                          opacity: 0.22,
+                          filter: "blur(0.4px)",
+                        }}
+                      />
+                      <div className="pointer-events-none absolute inset-0 bg-white/15 backdrop-blur-[1.5px]" />
+                    </>
+                  ) : null}
+                </div>
               ) : (
-                <img src={fileUrl} alt={meta.fileName} className="max-h-[70vh] w-full object-contain rounded-md border" />
+                <p className="text-sm text-muted-foreground">
+                  Secure preview is shown as low-quality images only. PDF files are available through download when enabled.
+                </p>
               )}
 
               {meta.allowDownload ? (
-                <Button asChild variant="outline">
-                  <a href={`${fileUrl}?download=1`}>Download File</a>
+                <Button variant="outline" onClick={handleDownload} disabled={downloading}>
+                  {downloading ? "Preparing download..." : "Download File"}
                 </Button>
               ) : (
                 <p className="text-sm text-muted-foreground">Download is disabled by admin for this file.</p>

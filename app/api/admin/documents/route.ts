@@ -18,11 +18,13 @@ function parseExpiresAt(value: string | null) {
 }
 
 async function uploadBufferToCloudinary(fileBuffer: Buffer, fileName: string, mimeType: string) {
+  const resourceType = mimeType === "application/pdf" ? "raw" : "image"
+
   return await new Promise<any>((resolve, reject) => {
     const upload = cloudinary.uploader.upload_stream(
       {
         folder: "shiva-design/documents",
-        resource_type: "auto",
+        resource_type: resourceType,
         type: "authenticated",
         use_filename: true,
         unique_filename: true,

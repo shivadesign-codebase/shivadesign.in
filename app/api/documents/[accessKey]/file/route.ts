@@ -4,9 +4,25 @@ import { NextRequest, NextResponse } from "next/server"
 import connect_db from "@/config/db"
 import SharedDocument from "@/app/models/document"
 import cloudinary from "@/lib/cloudinary"
-import { getDocumentAccessCookieName, verifyDocumentAccessToken } from "@/lib/document-security"
+import {
+  getDocumentAccessCookieName,
+  verifyDocumentAccessToken,
+} from "@/lib/document-security"
 
 export const runtime = "nodejs"
+
+function getFileFormat(doc: any) {
+  const fromName = String(doc.fileName || "").split(".").pop()?.toLowerCase() || ""
+  const normalizedFromName = fromName === "jpeg" ? "jpg" : fromName
+
+  if (normalizedFromName) return normalizedFromName
+
+  if (doc.mimeType === "application/pdf") return "pdf"
+  if (String(doc.mimeType || "").includes("png")) return "png"
+  if (String(doc.mimeType || "").includes("jpeg") || String(doc.mimeType || "").includes("jpg")) return "jpg"
+
+  return undefined
+}
 
 async function authorizeDocument(accessKey: string, downloadRequested: boolean) {
   await connect_db()
@@ -43,6 +59,7 @@ export async function HEAD(request: NextRequest, { params }: { params: Promise<{
   try {
     const { accessKey } = await params
     const downloadRequested = request.nextUrl.searchParams.get("download") === "1"
+
     const result = await authorizeDocument(accessKey, downloadRequested)
 
     if (result.error) {
@@ -60,6 +77,7 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   try {
     const { accessKey } = await params
     const downloadRequested = request.nextUrl.searchParams.get("download") === "1"
+
     const result = await authorizeDocument(accessKey, downloadRequested)
 
     if (result.error) {
@@ -69,17 +87,48 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     const doc = result.doc
 
     const expiresAt = Math.floor(Date.now() / 1000) + 60
-    const signedUrl = cloudinary.url(doc.cloudinaryPublicId, {
-      resource_type: doc.cloudinaryResourceType,
-      type: "authenticated",
-      sign_url: true,
-      secure: true,
-      expires_at: expiresAt,
-    })
+    const isImagePreview = !downloadRequested && String(doc.mimeType || "").startsWith("image/")
+
+    let signedUrl = ""
+    if (isImagePreview) {
+      signedUrl = cloudinary.url(doc.cloudinaryPublicId, {
+        resource_type: doc.cloudinaryResourceType,
+        type: "authenticated",
+        sign_url: true,
+        secure: true,
+        expires_at: expiresAt,
+        transformation: [
+          { width: 900, crop: "limit" },
+          { quality: "20" },
+          { effect: "blur:300" },
+          { fetch_format: "jpg" },
+        ],
+      })
+    } else {
+      const fileFormat = getFileFormat(doc)
+      const resolvedFileFormat = fileFormat || ""
+
+      if (!resolvedFileFormat) {
+        return NextResponse.json({ error: "Unable to infer file format" }, { status: 500 })
+      }
+
+      signedUrl = cloudinary.utils.private_download_url(doc.cloudinaryPublicId, resolvedFileFormat, {
+        resource_type: doc.cloudinaryResourceType,
+        type: "authenticated",
+        expires_at: expiresAt,
+        attachment: false,
+      })
+    }
 
     const upstream = await fetch(signedUrl, { cache: "no-store" })
     if (!upstream.ok || !upstream.body) {
-      return NextResponse.json({ error: "Unable to retrieve file" }, { status: 502 })
+      return NextResponse.json(
+        {
+          error: "Unable to retrieve file",
+          details: `Cloudinary responded with ${upstream.status}`,
+        },
+        { status: 502 }
+      )
     }
 
     const dispositionType = downloadRequested ? "attachment" : "inline"

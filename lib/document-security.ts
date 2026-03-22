@@ -30,6 +30,25 @@ export function createDocumentAccessToken(accessKey: string, expiresAtMs: number
   return `${payload}${TOKEN_SEPARATOR}${signature}`
 }
 
+export function verifyDocumentPreviewToken(token: string, expectedAccessKey: string) {
+  const [scope, accessKey, expiresAtRaw, signature] = token.split(TOKEN_SEPARATOR)
+  if (!scope || !accessKey || !expiresAtRaw || !signature) return false
+  if (scope !== "preview") return false
+  if (accessKey !== expectedAccessKey) return false
+
+  const payload = `${scope}${TOKEN_SEPARATOR}${accessKey}${TOKEN_SEPARATOR}${expiresAtRaw}`
+  const expectedSig = createHmac("sha256", getDocumentSecret()).update(payload).digest("hex")
+  if (expectedSig.length !== signature.length) return false
+
+  const validSig = timingSafeEqual(Buffer.from(expectedSig), Buffer.from(signature))
+  if (!validSig) return false
+
+  const expiresAt = Number(expiresAtRaw)
+  if (!Number.isFinite(expiresAt)) return false
+
+  return Date.now() < expiresAt
+}
+
 export function verifyDocumentAccessToken(token: string, expectedAccessKey: string) {
   const [accessKey, expiresAtRaw, signature] = token.split(TOKEN_SEPARATOR)
   if (!accessKey || !expiresAtRaw || !signature) return false
