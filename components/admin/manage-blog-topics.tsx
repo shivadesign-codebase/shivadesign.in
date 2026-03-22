@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { CldUploadButton } from "next-cloudinary"
 import Image from "next/image"
@@ -18,10 +18,18 @@ type Topic = {
   title: string
   description?: string
   thumbnail?: string
+  contentImages?: TopicContentImage[]
   queueOrder: number
   isUsed: boolean
   usedAt?: string
   createdAt: string
+}
+
+type TopicContentImage = {
+  url: string
+  alt: string
+  caption?: string
+  order: number
 }
 
 type FormValues = {
@@ -34,10 +42,12 @@ export default function ManageBlogTopics() {
   const [loading, setLoading] = useState(true)
   const [submitting, setSubmitting] = useState(false)
   const [thumbnail, setThumbnail] = useState<string | null>(null)
+  const [contentImages, setContentImages] = useState<TopicContentImage[]>([])
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editTitle, setEditTitle] = useState("")
   const [editDescription, setEditDescription] = useState("")
   const [editThumbnail, setEditThumbnail] = useState<string | null>(null)
+  const [editContentImages, setEditContentImages] = useState<TopicContentImage[]>([])
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<FormValues>({
     defaultValues: { title: "", description: "" },
@@ -57,19 +67,76 @@ export default function ManageBlogTopics() {
 
   useEffect(() => { fetchTopics() }, [])
 
+  const normalizeImages = (images: TopicContentImage[]) => {
+    const clean = images
+      .map((img, idx) => ({
+        url: img.url?.trim() ?? "",
+        alt: img.alt?.trim() ?? "",
+        caption: img.caption?.trim() ?? "",
+        order: idx + 1,
+      }))
+      .filter((img) => img.url)
+
+    return clean.slice(0, 5)
+  }
+
+  const validateImages = (images: TopicContentImage[]) => {
+    for (const image of images) {
+      if (!image.alt) {
+        return "Alt text is required for every provided content image link."
+      }
+    }
+    return null
+  }
+
+  const addImageSlot = (setter: Dispatch<SetStateAction<TopicContentImage[]>>) => {
+    setter((prev) => {
+      if (prev.length >= 5) return prev
+      return [...prev, { url: "", alt: "", caption: "", order: prev.length + 1 }]
+    })
+  }
+
+  const removeImageSlot = (
+    index: number,
+    setter: Dispatch<SetStateAction<TopicContentImage[]>>
+  ) => {
+    setter((prev) => prev.filter((_, idx) => idx !== index).map((img, idx) => ({ ...img, order: idx + 1 })))
+  }
+
+  const updateImageField = (
+    index: number,
+    field: "url" | "alt" | "caption",
+    value: string,
+    setter: Dispatch<SetStateAction<TopicContentImage[]>>
+  ) => {
+    setter((prev) =>
+      prev.map((img, idx) => (idx === index ? { ...img, [field]: value, order: idx + 1 } : img))
+    )
+  }
+
   const onSubmit = async (data: FormValues) => {
     try {
       setSubmitting(true)
+
+      const normalizedImages = normalizeImages(contentImages)
+      const imageValidationError = validateImages(normalizedImages)
+      if (imageValidationError) {
+        toast("Validation", { description: imageValidationError })
+        setSubmitting(false)
+        return
+      }
+
       const res = await fetch("/api/admin/blog-topics", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...data, thumbnail }),
+        body: JSON.stringify({ ...data, thumbnail, contentImages: normalizedImages }),
       })
       if (!res.ok) throw new Error()
       const { topic } = await res.json()
       setTopics((prev) => [topic, ...prev])
       reset()
       setThumbnail(null)
+      setContentImages([])
       toast("Added", { description: "Topic added to the queue." })
     } catch {
       toast("Error", { description: "Failed to add topic." })
@@ -99,6 +166,12 @@ export default function ManageBlogTopics() {
     setEditTitle(topic.title)
     setEditDescription(topic.description ?? "")
     setEditThumbnail(topic.thumbnail ?? null)
+    setEditContentImages((topic.contentImages ?? []).map((img, idx) => ({
+      url: img.url ?? "",
+      alt: img.alt ?? "",
+      caption: img.caption ?? "",
+      order: idx + 1,
+    })))
   }
 
   const cancelEditing = () => {
@@ -106,10 +179,18 @@ export default function ManageBlogTopics() {
     setEditTitle("")
     setEditDescription("")
     setEditThumbnail(null)
+    setEditContentImages([])
   }
 
   const saveTopic = async (id: string) => {
     try {
+      const normalizedImages = normalizeImages(editContentImages)
+      const imageValidationError = validateImages(normalizedImages)
+      if (imageValidationError) {
+        toast("Validation", { description: imageValidationError })
+        return
+      }
+
       const res = await fetch("/api/admin/blog-topics", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -118,6 +199,7 @@ export default function ManageBlogTopics() {
           title: editTitle,
           description: editDescription,
           thumbnail: editThumbnail,
+          contentImages: normalizedImages,
         }),
       })
       if (!res.ok) throw new Error()
@@ -208,6 +290,47 @@ export default function ManageBlogTopics() {
                 placeholder="e.g. Focus on north-facing home tips, mention Maharajganj audience"
                 rows={3}
               />
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <Label>Blog Content Images</Label>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Optional: add up to 5 Cloudinary image links. Use placeholders like {"{{img1}}"} in content positions.
+                </p>
+              </div>
+
+              {contentImages.map((img, idx) => (
+                <div key={`new-image-${idx}`} className="grid gap-2 rounded-md border p-3">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs font-medium text-muted-foreground">Image #{idx + 1}</p>
+                    <Button type="button" size="sm" variant="ghost" onClick={() => removeImageSlot(idx, setContentImages)}>
+                      Remove
+                    </Button>
+                  </div>
+                  <Input
+                    value={img.url}
+                    onChange={(e) => updateImageField(idx, "url", e.target.value, setContentImages)}
+                    placeholder="https://res.cloudinary.com/..."
+                  />
+                  <Input
+                    value={img.alt}
+                    onChange={(e) => updateImageField(idx, "alt", e.target.value, setContentImages)}
+                    placeholder="Alt text for SEO"
+                  />
+                  <Input
+                    value={img.caption ?? ""}
+                    onChange={(e) => updateImageField(idx, "caption", e.target.value, setContentImages)}
+                    placeholder="Caption (optional)"
+                  />
+                </div>
+              ))}
+
+              {contentImages.length < 5 && (
+                <Button type="button" variant="outline" onClick={() => addImageSlot(setContentImages)}>
+                  + Add content image link
+                </Button>
+              )}
             </div>
 
             {/* Thumbnail */}
@@ -326,11 +449,63 @@ export default function ManageBlogTopics() {
                             {editThumbnail ? "Change thumbnail" : "Upload thumbnail"}
                           </CldUploadButton>
                         </div>
+
+                        <div className="space-y-2 rounded-md border p-3">
+                          <div className="flex items-center justify-between">
+                            <p className="text-xs font-medium text-muted-foreground">Content images for placeholders</p>
+                            {editContentImages.length < 5 && (
+                              <Button type="button" size="sm" variant="outline" onClick={() => addImageSlot(setEditContentImages)}>
+                                + Add
+                              </Button>
+                            )}
+                          </div>
+                          {editContentImages.length === 0 ? (
+                            <p className="text-xs text-muted-foreground">No image links added.</p>
+                          ) : (
+                            editContentImages.map((img, idx) => (
+                              <div key={`edit-image-${idx}`} className="grid gap-2 border rounded-md p-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs text-muted-foreground">Image #{idx + 1}</span>
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => removeImageSlot(idx, setEditContentImages)}
+                                  >
+                                    Remove
+                                  </Button>
+                                </div>
+                                <Input
+                                  value={img.url}
+                                  onChange={(e) => updateImageField(idx, "url", e.target.value, setEditContentImages)}
+                                  placeholder="https://res.cloudinary.com/..."
+                                />
+                                <Input
+                                  value={img.alt}
+                                  onChange={(e) => updateImageField(idx, "alt", e.target.value, setEditContentImages)}
+                                  placeholder="Alt text for SEO"
+                                />
+                                <Input
+                                  value={img.caption ?? ""}
+                                  onChange={(e) => updateImageField(idx, "caption", e.target.value, setEditContentImages)}
+                                  placeholder="Caption (optional)"
+                                />
+                              </div>
+                            ))
+                          )}
+                        </div>
                       </div>
                     ) : (
-                      topic.description && (
-                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{topic.description}</p>
-                      )
+                      <>
+                        {topic.description && (
+                          <p className="text-sm text-muted-foreground mt-1 line-clamp-2">{topic.description}</p>
+                        )}
+                        {(topic.contentImages?.length ?? 0) > 0 && (
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {(topic.contentImages ?? []).length} content image link(s) ready for placeholders.
+                          </p>
+                        )}
+                      </>
                     )}
 
                     <p className="text-xs text-muted-foreground mt-1">

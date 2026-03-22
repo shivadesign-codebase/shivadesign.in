@@ -3,6 +3,52 @@ import mongoose from "mongoose"
 import connect_db from "@/config/db"
 import BlogTopic from "@/app/models/blog-topic"
 
+type TopicContentImageInput = {
+  url: string
+  alt: string
+  caption?: string
+  order: number
+}
+
+function normalizeContentImages(input: unknown): TopicContentImageInput[] {
+  if (!Array.isArray(input)) return []
+
+  const cleaned = input
+    .filter((img): img is Partial<TopicContentImageInput> => !!img && typeof img === "object")
+    .map((img, idx) => ({
+      url: typeof img.url === "string" ? img.url.trim() : "",
+      alt: typeof img.alt === "string" ? img.alt.trim() : "",
+      caption: typeof img.caption === "string" ? img.caption.trim() : "",
+      order: idx + 1,
+    }))
+    .filter((img) => img.url)
+
+  return cleaned.slice(0, 5)
+}
+
+function validateContentImages(images: TopicContentImageInput[]) {
+  if (images.length > 5) {
+    return "Only up to 5 content images are allowed"
+  }
+
+  for (const image of images) {
+    if (!image.url) {
+      return "Each content image must include a URL"
+    }
+    if (!image.alt) {
+      return "Each content image must include alt text"
+    }
+    if (image.alt.length > 160) {
+      return "Image alt text must be 160 characters or less"
+    }
+    if ((image.caption ?? "").length > 240) {
+      return "Image caption must be 240 characters or less"
+    }
+  }
+
+  return null
+}
+
 // GET all topics
 export async function GET() {
   try {
@@ -22,6 +68,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Title is required" }, { status: 400 })
     }
 
+    const contentImages = normalizeContentImages(body.contentImages)
+    const contentImageValidationError = validateContentImages(contentImages)
+    if (contentImageValidationError) {
+      return NextResponse.json({ error: contentImageValidationError }, { status: 400 })
+    }
+
     await connect_db()
     const lastTopic = (await BlogTopic.findOne({}).sort({ queueOrder: -1 }).lean()) as any
     const nextQueueOrder = typeof lastTopic?.queueOrder === "number" ? lastTopic.queueOrder + 1 : 1
@@ -30,6 +82,7 @@ export async function POST(request: NextRequest) {
       title: body.title.trim(),
       description: body.description?.trim() ?? "",
       thumbnail: body.thumbnail ?? null,
+      contentImages,
       queueOrder: nextQueueOrder,
     })
 
@@ -47,6 +100,14 @@ export async function PATCH(request: NextRequest) {
 
     if (!id || !mongoose.isValidObjectId(id)) {
       return NextResponse.json({ error: "Invalid topic ID" }, { status: 400 })
+    }
+
+    const contentImages = normalizeContentImages(body.contentImages)
+    const contentImageValidationError = Array.isArray(body.contentImages)
+      ? validateContentImages(contentImages)
+      : null
+    if (contentImageValidationError) {
+      return NextResponse.json({ error: contentImageValidationError }, { status: 400 })
     }
 
     await connect_db()
@@ -104,6 +165,9 @@ export async function PATCH(request: NextRequest) {
     }
     if (typeof body.thumbnail === "string" || body.thumbnail === null) {
       topic.thumbnail = body.thumbnail
+    }
+    if (Array.isArray(body.contentImages)) {
+      topic.contentImages = contentImages
     }
 
     await topic.save()

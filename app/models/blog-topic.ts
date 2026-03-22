@@ -1,9 +1,17 @@
 import { Schema, Document, model, models } from "mongoose"
 
+export interface ITopicContentImage {
+  url: string
+  alt: string
+  caption?: string
+  order: number
+}
+
 export interface IBlogTopic extends Document {
   title: string
   description?: string
   thumbnail?: string
+  contentImages?: ITopicContentImage[]
   queueOrder: number
   isUsed: boolean
   usedAt?: Date
@@ -25,6 +33,21 @@ const blogTopicSchema = new Schema<IBlogTopic>(
     thumbnail: {
       type: String,
       default: null,
+    },
+    contentImages: {
+      type: [
+        {
+          url: { type: String, required: true },
+          alt: { type: String, required: true, trim: true, maxlength: 160 },
+          caption: { type: String, default: "", trim: true, maxlength: 240 },
+          order: { type: Number, required: true, min: 1, max: 5 },
+        },
+      ],
+      default: [],
+      validate: {
+        validator: (images: ITopicContentImage[]) => images.length <= 5,
+        message: "Maximum 5 content images are allowed",
+      },
     },
     queueOrder: {
       type: Number,

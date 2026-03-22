@@ -27,7 +27,8 @@ const openai = new OpenAI({
 
 export async function generateBlogContent(
   topic: string,
-  hint: string
+  hint: string,
+  placeholderCount = 0
 ): Promise<{ title: string; description: string; content: string; tags: string[] }> {
   const systemPrompt = `
 You are a professional SEO content writer for Shiva Design Associates, an architecture and interior design firm based in Maharajganj, Uttar Pradesh, India.
@@ -60,6 +61,15 @@ Write a comprehensive SEO blog article about the following topic:
 
 Topic: "${topic}"
 ${hint ? `Additional context: ${hint}` : ""}
+${
+  placeholderCount > 0
+    ? `
+Use these exact markdown placeholders inside the content where relevant visuals should appear:
+${Array.from({ length: placeholderCount }, (_, idx) => `- {{img${idx + 1}}}`).join("\n")}
+Each placeholder should appear once in a meaningful section after a related paragraph.
+`
+    : ""
+}
 
 Important SEO guidelines:
 
@@ -111,6 +121,7 @@ Rules:
 - Use '## ' for section headings.
 - Use bullet points where helpful.
 - Include bold text for important ideas.
+- If image placeholders were provided, keep them unchanged as plain tokens (for example: {{img1}}).
 - Only return the raw JSON object.
 - Do not include markdown code blocks or extra commentary.
 `

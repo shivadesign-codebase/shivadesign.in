@@ -5,6 +5,7 @@ export interface ITestimonial extends Document {
   designation?: string; // Optional
   message: string;
   rating: number;
+  isPublic: boolean;
   date: Date;
 }
 
@@ -26,6 +27,10 @@ const testimonialSchema = new Schema<ITestimonial>(
       min: 1,
       max: 5,
       required: true,
+    },
+    isPublic: {
+      type: Boolean,
+      default: true,
     },
     date: {
       type: Date,

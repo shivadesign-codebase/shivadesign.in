@@ -11,38 +11,14 @@ import getProjectsAction from "./Actions/get-paginated-projects"
 import { IProject } from "./models/project"
 import HeroSection from "@/components/theme-based/theme-hero-section"
 import getSettingsAction from "./Actions/get-settings"
+import ConsultationCtaCard from "@/components/consultation-cta-card"
+import getPublicTestimonialsAction from "./Actions/get-public-testimonials"
 
 export default async function Home() {
   const projects = await getProjectsAction({ limit: 3 })
   const parsedProjects: IProject[] = JSON.parse(projects)
   const settings = await getSettingsAction()
-
-  const testimonials = [
-    {
-      id: 1,
-      name: "Rajesh Kumar",
-      company: "GreenSpace Developers",
-      avatar: "/assets/cad.jpg?height=40&width=40",
-      rating: 5,
-      text: "Working with ER. Harsh Verma and Shiva Consultant was an excellent experience. Their attention to detail in the structural design of our commercial complex was impeccable. They provided innovative solutions that saved us both time and construction costs.",
-    },
-    {
-      id: 2,
-      name: "Priya Sharma",
-      company: "Horizon Homes",
-      avatar: "/assets/cad.jpg?height=40&width=40",
-      rating: 4,
-      text: "The team at Shiva Consultant delivered exceptional 3D elevation designs for our residential project. Their visualizations helped us market the properties effectively, and the final construction matched the renderings perfectly.",
-    },
-    {
-      id: 3,
-      name: "Sanjay Patel",
-      company: "City Infrastructure",
-      avatar: "/assets/cad.jpg?height=40&width=40",
-      rating: 5,
-      text: "The site inspection services provided by Shiva Consultant ensured our project met all quality standards and building codes. Their detailed reports and recommendations were invaluable throughout the construction process.",
-    },
-  ];
+  const testimonials = await getPublicTestimonialsAction()
 
   return (
     <>
@@ -97,6 +73,15 @@ export default async function Home() {
 
         <TrustedClientsSection />
       </section>
+
+      <ConsultationCtaCard
+        source="home"
+        pagePath="/"
+        displayMode="popup"
+        dismissible
+        className="max-w-md sm:max-w-xl"
+      />
+
       <ScrollToTop />
     </>
   )

@@ -7,7 +7,7 @@ import { Star } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface Testimonial {
-  id: number
+  id: number | string
   name: string
   company: string
   avatar: string
@@ -30,10 +30,12 @@ export default function TestimonialCarousel({
   const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   const nextSlide = () => {
+    if (testimonials.length === 0) return
     setActiveIndex((current) => (current + 1) % testimonials.length)
   }
 
   const prevSlide = () => {
+    if (testimonials.length === 0) return
     setActiveIndex((current) => (current - 1 + testimonials.length) % testimonials.length)
   }
 
@@ -42,22 +44,32 @@ export default function TestimonialCarousel({
   }
 
   useEffect(() => {
-    if (autoScroll) {
+    if (autoScroll && testimonials.length > 0) {
       timerRef.current = setInterval(nextSlide, interval)
       return () => {
         if (timerRef.current) clearInterval(timerRef.current)
       }
     }
-  }, [autoScroll, interval])
+  }, [autoScroll, interval, testimonials.length])
 
   const handleMouseEnter = () => {
     if (timerRef.current) clearInterval(timerRef.current)
   }
 
   const handleMouseLeave = () => {
-    if (autoScroll) {
+    if (autoScroll && testimonials.length > 0) {
       timerRef.current = setInterval(nextSlide, interval)
     }
+  }
+
+  if (testimonials.length === 0) {
+    return (
+      <Card className="w-full">
+        <CardContent className="p-6 text-center text-muted-foreground">
+          No testimonials available yet.
+        </CardContent>
+      </Card>
+    )
   }
 
   return (

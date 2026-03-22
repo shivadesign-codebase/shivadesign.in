@@ -11,19 +11,25 @@ export default function Navbar({ marqueeText }: { marqueeText?: string }) {
   const pathname = usePathname()
   const isAdminRoute = pathname.startsWith("/admin")
 
-  // Don't render navbar on admin routes
-  if (isAdminRoute) {
-    return null
-  }
-
   useEffect(() => {
+    if (isAdminRoute) {
+      setIsScrolled(false)
+      return
+    }
+
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10)
     }
 
+    handleScroll()
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [isAdminRoute])
+
+  // Don't render navbar on admin routes
+  if (isAdminRoute) {
+    return null
+  }
 
   const isNotHomePage = pathname !== "/"
 
