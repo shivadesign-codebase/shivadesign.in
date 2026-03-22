@@ -14,9 +14,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import EditDocumentDialog from "@/components/admin/edit-document-dialog"
 import { toast } from "sonner"
 
-import { FileText, File, FileImage, Search, Eye, Trash2, Copy, Loader2, MessageCircle } from "lucide-react"
+import { FileText, File, FileImage, Search, Eye, Trash2, Copy, Loader2, MessageCircle, Pencil } from "lucide-react"
 
 type SharedDocument = {
   _id: string
@@ -40,6 +41,7 @@ export default function DocumentsPage() {
   const [loadingDocuments, setLoadingDocuments] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
   const [documents, setDocuments] = useState<SharedDocument[]>([])
+  const [editingDocument, setEditingDocument] = useState<SharedDocument | null>(null)
 
   const [title, setTitle] = useState("")
   const [clientName, setClientName] = useState("")
@@ -456,6 +458,15 @@ export default function DocumentsPage() {
                                   <span className="sr-only">Open</span>
                                 </Button>
 
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => setEditingDocument(doc)}
+                                >
+                                  <Pencil className="h-4 w-4" />
+                                  <span className="sr-only">Edit</span>
+                                </Button>
+
                                 <DropdownMenu>
                                   <DropdownMenuTrigger asChild>
                                     <Button variant="ghost" size="sm">
@@ -530,6 +541,15 @@ export default function DocumentsPage() {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {editingDocument && (
+        <EditDocumentDialog
+          document={editingDocument}
+          isOpen={Boolean(editingDocument)}
+          onClose={() => setEditingDocument(null)}
+          onSaved={fetchDocuments}
+        />
+      )}
     </div>
   )
 }
