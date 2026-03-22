@@ -5,6 +5,7 @@ import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import Marquee from "react-fast-marquee"
+import Image from "next/image"
 
 export default function Navbar({ marqueeText }: { marqueeText?: string }) {
   const [isScrolled, setIsScrolled] = useState(false)
@@ -59,7 +60,10 @@ export default function Navbar({ marqueeText }: { marqueeText?: string }) {
               : "theme-text"
               }`}
           >
-            Shiva Design Associates
+            <div className="flex flex-row gap-1 items-center justify-start">
+              <Image src="/assets/logo-2.png" alt="Shiva Design Associates Logo" width={60} height={60} />
+              <h3 className="text-xl font-bold">Shiva Design Associates</h3>
+            </div>
           </span>
         </Link>
 

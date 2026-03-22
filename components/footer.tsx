@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react"
+import Image from "next/image"
 
 export default function Footer() {
   return (
@@ -7,7 +8,10 @@ export default function Footer() {
       <div className="container px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div>
-            <h3 className="text-lg font-semibold mb-4">Shiva Design Associates</h3>
+            <div className="flex flex-row gap-2 items-center justify-start">
+              <Image src="/assets/logo-2.png" alt="Shiva Design Associates Logo" width={60} height={60} />
+              <h3 className="text-xl font-semibold">Shiva Design Associates</h3>
+            </div>
             <p className="text-muted-foreground mb-4">
               Professional civil engineering solutions tailored to meet your project requirements.
             </p>

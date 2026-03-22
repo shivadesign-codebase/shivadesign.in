@@ -64,8 +64,14 @@ export default function HeroSection({ settings }: HeroSectionProps) {
           </div>
         </div>
 
+        {/* Background Image */}
+        <div
+          className="absolute inset-0 top-20 h-3/4 bg-no-repeat bg-center bg-contain opacity-10"
+          style={{ backgroundImage: 'url("/assets/logo-2.png")' }}
+        />
+
         {/* RIGHT SIDE – PHONE */}
-        <div className="flex justify-center">
+        <div className="flex justify-center lg:ml-30">
           <div className="relative border-black bg-black border-14 rounded-[2.5rem] h-150 w-75 shadow-2xl">
 
             {/* Side Buttons */}
