@@ -13,16 +13,18 @@ import HeroSection from "@/components/theme-based/theme-hero-section"
 import getSettingsAction from "./Actions/get-settings"
 import ConsultationCtaCard from "@/components/consultation-cta-card"
 import getPublicTestimonialsAction from "./Actions/get-public-testimonials"
+import { getActiveBanner } from "./services/getActiveBanner"
 
 export default async function Home() {
   const projects = await getProjectsAction({ limit: 3 })
   const parsedProjects: IProject[] = JSON.parse(projects)
   const settings = await getSettingsAction()
   const testimonials = await getPublicTestimonialsAction()
+  const activeBannerUrl = await getActiveBanner()
 
   return (
     <>
-      <HeroSection settings={settings} />
+      <HeroSection settings={settings} bannerImageUrl={activeBannerUrl} />
 
       <ServicesSection />
 

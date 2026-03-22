@@ -8,11 +8,12 @@ import { GetSettingsActionResponse } from "@/app/Actions/get-settings"
 
 interface HeroSectionProps {
   settings: GetSettingsActionResponse
+  bannerImageUrl?: string
 }
 
 const FALLBACK_VIDEO = "/videos/founder-message.mp4"
 
-export default function HeroSection({ settings }: HeroSectionProps) {
+export default function HeroSection({ settings, bannerImageUrl }: HeroSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoSrc, setVideoSrc] = useState(settings?.introVideoLink || FALLBACK_VIDEO)
   const [isPlaying, setIsPlaying] = useState(false)
@@ -32,8 +33,18 @@ export default function HeroSection({ settings }: HeroSectionProps) {
   return (
     <section className="relative w-full min-h-screen overflow-hidden theme-bg pt-8">
 
+      {bannerImageUrl && (
+        <>
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url(${bannerImageUrl})` }}
+          />
+          <div className="absolute inset-0 bg-black/45" />
+        </>
+      )}
+
       {/* Gradient Background */}
-      <div className="absolute inset-0 theme-hero-bg opacity-90" />
+      <div className="absolute inset-0 theme-hero-bg opacity-70" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 items-center gap-12">
 
