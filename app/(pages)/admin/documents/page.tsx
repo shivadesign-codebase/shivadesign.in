@@ -8,14 +8,21 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { toast } from "sonner"
 
-import { FileText, File, FileImage, Search, Eye, Trash2, Copy, Loader2 } from "lucide-react"
+import { FileText, File, FileImage, Search, Eye, Trash2, Copy, Loader2, MessageCircle } from "lucide-react"
 
 type SharedDocument = {
   _id: string
   title: string
   clientName: string
+  clientMobile: string
   fileName: string
   mimeType: string
   fileSize: number
@@ -23,6 +30,7 @@ type SharedDocument = {
   allowDownload: boolean
   isClientAccessRevoked: boolean
   accessKey: string
+  accessPassword: string
   createdAt: string
   isExpired: boolean
 }
@@ -35,6 +43,7 @@ export default function DocumentsPage() {
 
   const [title, setTitle] = useState("")
   const [clientName, setClientName] = useState("")
+  const [clientMobile, setClientMobile] = useState("")
   const [password, setPassword] = useState("")
   const [expiresAt, setExpiresAt] = useState("")
   const [allowDownload, setAllowDownload] = useState(false)
@@ -78,6 +87,7 @@ export default function DocumentsPage() {
       const formData = new FormData()
       formData.append("title", title)
       formData.append("clientName", clientName)
+      formData.append("clientMobile", clientMobile)
       formData.append("password", password)
       formData.append("allowDownload", String(allowDownload))
       formData.append("file", file)
@@ -102,6 +112,7 @@ export default function DocumentsPage() {
 
       setTitle("")
       setClientName("")
+      setClientMobile("")
       setPassword("")
       setExpiresAt("")
       setAllowDownload(false)
@@ -156,14 +167,52 @@ export default function DocumentsPage() {
     }
   }
 
-  const copyLink = async (accessKey: string) => {
-    const link = `${window.location.origin}/documents/${accessKey}`
+  const getShareTemplate = (doc: SharedDocument) => {
+    const link = `${window.location.origin}/documents/${doc.accessKey}`
+    return [
+      "Hello Sir/Mam, your design document is ready.",
+      "You can preview it using the secure link below:",
+      link,
+      "",
+      `Please enter this password to access your file: ${doc.accessPassword || "(password unavailable)"}`,
+    ].join("\n")
+  }
+
+  const copyTemplate = async (doc: SharedDocument) => {
+    const text = getShareTemplate(doc)
     try {
-      await navigator.clipboard.writeText(link)
-      toast("Link copied", { description: "Share link copied to clipboard." })
+      await navigator.clipboard.writeText(text)
+      toast("Template copied", { description: "Share template copied to clipboard." })
     } catch {
       toast("Error", { description: "Failed to copy link." })
     }
+  }
+
+  const copyPassword = async (doc: SharedDocument) => {
+    if (!doc.accessPassword) {
+      toast("Error", { description: "Password unavailable for this document." })
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(doc.accessPassword)
+      toast("Password copied", { description: "Document password copied." })
+    } catch {
+      toast("Error", { description: "Failed to copy password." })
+    }
+  }
+
+  const shareViaWhatsApp = (doc: SharedDocument) => {
+    const mobileRaw = String(doc.clientMobile || "")
+    const mobile = mobileRaw.replace(/[^\d]/g, "")
+
+    if (!mobile) {
+      toast("Missing mobile", { description: "Client mobile number is not available for this document." })
+      return
+    }
+
+    const message = encodeURIComponent(getShareTemplate(doc))
+    window.open(`https://wa.me/${mobile}?text=${message}`, "_blank")
   }
 
   const formatSize = (size: number) => {
@@ -267,6 +316,17 @@ export default function DocumentsPage() {
                     value={clientName}
                     onChange={(e) => setClientName(e.target.value)}
                     required
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="client-mobile">Client Mobile (optional, for WhatsApp)</Label>
+                  <Input
+                    id="client-mobile"
+                    name="clientMobile"
+                    placeholder="e.g. 919876543210"
+                    value={clientMobile}
+                    onChange={(e) => setClientMobile(e.target.value)}
                   />
                 </div>
 
@@ -396,9 +456,22 @@ export default function DocumentsPage() {
                                   <span className="sr-only">Open</span>
                                 </Button>
 
-                                <Button variant="ghost" size="sm" onClick={() => copyLink(doc.accessKey)}>
-                                  <Copy className="h-4 w-4" />
-                                  <span className="sr-only">Copy Link</span>
+                                <DropdownMenu>
+                                  <DropdownMenuTrigger asChild>
+                                    <Button variant="ghost" size="sm">
+                                      <Copy className="h-4 w-4" />
+                                      <span className="sr-only">Copy Options</span>
+                                    </Button>
+                                  </DropdownMenuTrigger>
+                                  <DropdownMenuContent align="start">
+                                    <DropdownMenuItem onClick={() => copyTemplate(doc)}>Copy Template</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => copyPassword(doc)}>Copy Password</DropdownMenuItem>
+                                  </DropdownMenuContent>
+                                </DropdownMenu>
+
+                                <Button variant="ghost" size="sm" onClick={() => shareViaWhatsApp(doc)}>
+                                  <MessageCircle className="h-4 w-4 text-green-600" />
+                                  <span className="sr-only">Share via WhatsApp</span>
                                 </Button>
 
                                 <Button

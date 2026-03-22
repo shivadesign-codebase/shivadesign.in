@@ -1,14 +1,26 @@
 import { NextResponse } from "next/server"
+import { cookies } from "next/headers"
 
 import connect_db from "@/config/db"
 import SharedDocument from "@/app/models/document"
 import cloudinary from "@/lib/cloudinary"
-import { createDocumentAccessKey, hashDocumentPassword } from "@/lib/document-security"
+import {
+  createDocumentAccessKey,
+  decryptDocumentPassword,
+  encryptDocumentPassword,
+  hashDocumentPassword,
+} from "@/lib/document-security"
 
 export const runtime = "nodejs"
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024
 const ALLOWED_MIME_TYPES = new Set(["application/pdf", "image/png", "image/jpeg", "image/jpg"])
+
+async function ensureAdminSession() {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("admin_token")?.value || ""
+  return token === "logged_in"
+}
 
 function parseExpiresAt(value: string | null) {
   if (!value) return null
@@ -52,6 +64,11 @@ async function uploadBufferToCloudinary(fileBuffer: Buffer, fileName: string, mi
 
 export async function GET() {
   try {
+    const hasSession = await ensureAdminSession()
+    if (!hasSession) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     await connect_db()
 
     const documents = await SharedDocument.find({}).sort({ createdAt: -1 }).lean()
@@ -61,6 +78,7 @@ export async function GET() {
       _id: String(item._id),
       title: item.title,
       clientName: item.clientName,
+      clientMobile: item.clientMobile || "",
       fileName: item.fileName,
       mimeType: item.mimeType,
       fileSize: item.fileSize,
@@ -68,6 +86,7 @@ export async function GET() {
       allowDownload: item.allowDownload,
       isClientAccessRevoked: item.isClientAccessRevoked,
       accessKey: item.accessKey,
+      accessPassword: decryptDocumentPassword(item.accessPasswordEncrypted || ""),
       createdAt: item.createdAt,
       isExpired: item.expiresAt ? new Date(item.expiresAt).getTime() < now : false,
     }))
@@ -81,11 +100,17 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    const hasSession = await ensureAdminSession()
+    if (!hasSession) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     await connect_db()
 
     const formData = await request.formData()
     const title = String(formData.get("title") || "").trim()
     const clientName = String(formData.get("clientName") || "").trim()
+    const clientMobile = String(formData.get("clientMobile") || "").trim()
     const password = String(formData.get("password") || "")
     const expiresAtInput = String(formData.get("expiresAt") || "")
     const allowDownload = String(formData.get("allowDownload") || "false") === "true"
@@ -121,6 +146,7 @@ export async function POST(request: Request) {
     const doc = await SharedDocument.create({
       title,
       clientName,
+      clientMobile: clientMobile || null,
       accessKey: createDocumentAccessKey(),
       fileName: file.name,
       mimeType: file.type,
@@ -128,6 +154,7 @@ export async function POST(request: Request) {
       cloudinaryPublicId: uploaded.public_id,
       cloudinaryResourceType: uploaded.resource_type || "raw",
       accessPasswordHash: hashDocumentPassword(password),
+      accessPasswordEncrypted: encryptDocumentPassword(password),
       expiresAt: parseExpiresAt(expiresAtInput),
       allowDownload,
       isClientAccessRevoked: false,

@@ -1,10 +1,40 @@
-import { createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto"
+import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, scryptSync, timingSafeEqual } from "node:crypto"
 
 const TOKEN_SEPARATOR = "."
 const HASH_SEPARATOR = ":"
 
 function getDocumentSecret() {
   return process.env.DOCUMENT_ACCESS_SECRET || process.env.ADMIN_PASSWORD || "change-this-secret"
+}
+
+function getEncryptionKey() {
+  return createHash("sha256").update(getDocumentSecret()).digest()
+}
+
+export function encryptDocumentPassword(plainPassword: string) {
+  const iv = randomBytes(12)
+  const cipher = createCipheriv("aes-256-gcm", getEncryptionKey(), iv)
+  const encrypted = Buffer.concat([cipher.update(plainPassword, "utf8"), cipher.final()])
+  const tag = cipher.getAuthTag()
+
+  return `${iv.toString("hex")}:${tag.toString("hex")}:${encrypted.toString("hex")}`
+}
+
+export function decryptDocumentPassword(encryptedPayload: string) {
+  const [ivHex, tagHex, encryptedHex] = String(encryptedPayload || "").split(":")
+  if (!ivHex || !tagHex || !encryptedHex) return ""
+
+  try {
+    const decipher = createDecipheriv("aes-256-gcm", getEncryptionKey(), Buffer.from(ivHex, "hex"))
+    decipher.setAuthTag(Buffer.from(tagHex, "hex"))
+    const decrypted = Buffer.concat([
+      decipher.update(Buffer.from(encryptedHex, "hex")),
+      decipher.final(),
+    ])
+    return decrypted.toString("utf8")
+  } catch {
+    return ""
+  }
 }
 
 export function hashDocumentPassword(password: string) {

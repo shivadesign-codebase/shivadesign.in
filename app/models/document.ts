@@ -3,6 +3,7 @@ import { Schema, Document, model, models } from "mongoose"
 export interface ISharedDocument extends Document {
   title: string
   clientName: string
+  clientMobile?: string | null
   accessKey: string
   fileName: string
   mimeType: string
@@ -10,6 +11,7 @@ export interface ISharedDocument extends Document {
   cloudinaryPublicId: string
   cloudinaryResourceType: "image" | "raw" | "video"
   accessPasswordHash: string
+  accessPasswordEncrypted?: string | null
   expiresAt: Date | null
   allowDownload: boolean
   isClientAccessRevoked: boolean
@@ -30,6 +32,12 @@ const sharedDocumentSchema = new Schema<ISharedDocument>(
       required: true,
       trim: true,
       maxlength: 180,
+    },
+    clientMobile: {
+      type: String,
+      default: null,
+      trim: true,
+      maxlength: 24,
     },
     accessKey: {
       type: String,
@@ -68,6 +76,10 @@ const sharedDocumentSchema = new Schema<ISharedDocument>(
     accessPasswordHash: {
       type: String,
       required: true,
+    },
+    accessPasswordEncrypted: {
+      type: String,
+      default: null,
     },
     expiresAt: {
       type: Date,

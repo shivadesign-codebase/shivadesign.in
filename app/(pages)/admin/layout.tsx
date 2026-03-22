@@ -43,7 +43,7 @@ export default function AdminLayout({ children, }: Readonly<{ children: React.Re
                 Documents
               </Button>
             </Link>
-            <Link href="/admin/banners">
+            <Link href="/admin/banners" className="cursor-none disabled:">
               <Button variant="ghost" className="w-full justify-start">
                 <ImageIcon className="mr-2 h-4 w-4" />
                 Banners
@@ -67,7 +67,7 @@ export default function AdminLayout({ children, }: Readonly<{ children: React.Re
                 Leads
               </Button>
             </Link>
-            <Link href="/admin/broadcast">
+            <Link href="/admin/broadcast" className="cursor-none">
               <Button variant="ghost" className="w-full justify-start">
                 <Mail className="mr-2 h-4 w-4" />
                 Broadcast Email

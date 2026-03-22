@@ -1,12 +1,19 @@
 import mongoose from "mongoose"
 import { NextRequest, NextResponse } from "next/server"
+import { cookies } from "next/headers"
 
 import connect_db from "@/config/db"
 import SharedDocument from "@/app/models/document"
 import cloudinary from "@/lib/cloudinary"
-import { hashDocumentPassword } from "@/lib/document-security"
+import { encryptDocumentPassword, hashDocumentPassword } from "@/lib/document-security"
 
 export const runtime = "nodejs"
+
+async function ensureAdminSession() {
+  const cookieStore = await cookies()
+  const token = cookieStore.get("admin_token")?.value || ""
+  return token === "logged_in"
+}
 
 function parseExpiresAt(value: string | null | undefined) {
   if (!value) return null
@@ -17,6 +24,11 @@ function parseExpiresAt(value: string | null | undefined) {
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const hasSession = await ensureAdminSession()
+    if (!hasSession) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const { id } = await params
     if (!mongoose.isValidObjectId(id)) {
       return NextResponse.json({ error: "Invalid document ID" }, { status: 400 })
@@ -36,6 +48,10 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
       updates.clientName = body.clientName.trim()
     }
 
+    if (typeof body.clientMobile === "string") {
+      updates.clientMobile = body.clientMobile.trim() || null
+    }
+
     if (typeof body.allowDownload === "boolean") {
       updates.allowDownload = body.allowDownload
     }
@@ -45,7 +61,9 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
     }
 
     if (typeof body.password === "string" && body.password.trim()) {
-      updates.accessPasswordHash = hashDocumentPassword(body.password.trim())
+      const trimmed = body.password.trim()
+      updates.accessPasswordHash = hashDocumentPassword(trimmed)
+      updates.accessPasswordEncrypted = encryptDocumentPassword(trimmed)
     }
 
     if (body.expiresAt === null || body.expiresAt === "") {
@@ -69,6 +87,11 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
 export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
+    const hasSession = await ensureAdminSession()
+    if (!hasSession) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    }
+
     const { id } = await params
     if (!mongoose.isValidObjectId(id)) {
       return NextResponse.json({ error: "Invalid document ID" }, { status: 400 })

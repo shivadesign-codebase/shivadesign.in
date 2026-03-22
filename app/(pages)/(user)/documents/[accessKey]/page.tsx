@@ -174,30 +174,30 @@ export default function SharedDocumentPage() {
             </form>
           ) : (
             <div className="space-y-4 select-none">
-              {meta.mimeType.startsWith("image/") ? (
+              {meta.mimeType.startsWith("image/") || meta.mimeType === "application/pdf" ? (
                 <div className="relative overflow-hidden rounded-md border bg-muted/20">
-                  <img src={fileUrl} alt={meta.fileName} className="max-h-[70vh] w-full object-contain opacity-90" />
+                  {meta.mimeType === "application/pdf" ? (
+                    <iframe src={fileUrl} className="h-[70vh] w-full opacity-90" title={meta.fileName} />
+                  ) : (
+                    <img src={fileUrl} alt={meta.fileName} className="max-h-[70vh] w-full object-contain opacity-90" />
+                  )}
 
-                  {!meta.allowDownload ? (
-                    <>
-                      <div
-                        className="pointer-events-none absolute inset-0"
-                        style={{
-                          backgroundImage: "url('/assets/logo-2.png')",
-                          backgroundRepeat: "repeat",
-                          backgroundSize: "220px auto",
-                          backgroundPosition: "center",
-                          opacity: 0.22,
-                          filter: "blur(0.4px)",
-                        }}
-                      />
-                      <div className="pointer-events-none absolute inset-0 bg-white/15 backdrop-blur-[1.5px]" />
-                    </>
-                  ) : null}
+                  <div
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      backgroundImage: "url('/assets/logo-2.png')",
+                      backgroundRepeat: "repeat",
+                      backgroundSize: "220px auto",
+                      backgroundPosition: "center",
+                      opacity: 0.22,
+                      filter: "blur(0.4px)",
+                    }}
+                  />
+                  <div className="pointer-events-none absolute inset-0 bg-white/15 backdrop-blur-[1.5px]" />
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground">
-                  Secure preview is shown as low-quality images only. PDF files are available through download when enabled.
+                  Preview is not available for this file type.
                 </p>
               )}
 
