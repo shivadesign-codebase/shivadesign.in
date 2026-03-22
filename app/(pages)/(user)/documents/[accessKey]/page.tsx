@@ -145,7 +145,7 @@ export default function SharedDocumentPage() {
   }
 
   return (
-    <div className="mx-auto max-w-5xl p-4 md:p-8 space-y-6" onContextMenu={(e) => authorized && e.preventDefault()}>
+    <div className="mx-auto max-w-5xl p-4 md:p-8 space-y-6 mt-16" onContextMenu={(e) => authorized && e.preventDefault()}>
       <Card>
         <CardHeader>
           <CardTitle>{meta.title}</CardTitle>

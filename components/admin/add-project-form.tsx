@@ -144,7 +144,7 @@ export default function AddProjectForm() {
                     alt="Project preview"
                     width={300}
                     height={200}
-                    className="mx-auto rounded-md object-cover h-[200px]"
+                    className="mx-auto rounded-md object-cover h-50"
                   />
                 </div>
               )}
