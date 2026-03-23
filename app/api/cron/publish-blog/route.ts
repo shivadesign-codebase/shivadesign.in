@@ -4,6 +4,9 @@ import BlogTopic from "@/app/models/blog-topic"
 import Blog from "@/app/models/blog"
 import { generateBlogContent } from "@/lib/openai"
 
+export const runtime = "nodejs"
+export const maxDuration = 60
+
 type TopicContentImage = {
   url: string
   alt: string
