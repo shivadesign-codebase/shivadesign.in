@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     openGraph: {
       title: blog.title,
       description: blog.description,
-      images: blog.image ? [{ url: optimizeCloudinaryImage(blog.image, { width: 1200 }) }] : [],
+      images: blog.image ? [{ url: optimizeCloudinaryImage(blog.image, { width: 600 }) }] : [],
     },
   }
 }
@@ -106,7 +106,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
           {blog.image && (
             <div className="relative w-full h-80 md:h-104 mt-8 rounded-2xl overflow-hidden border border-border/70">
               <Image
-                src={optimizeCloudinaryImage(blog.image, { width: 1200 })}
+                src={optimizeCloudinaryImage(blog.image, { width: 800 })}
                 alt={blog.title}
                 fill
                 className="object-fill"

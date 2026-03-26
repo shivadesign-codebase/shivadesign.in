@@ -79,7 +79,7 @@ export default async function BlogsPage() {
               {blog.image ? (
                 <div className="relative h-52 overflow-hidden">
                   <Image
-                    src={optimizeCloudinaryImage(blog.image, { width: 600 })}
+                    src={optimizeCloudinaryImage(blog.image, { width: 400 })}
                     alt={blog.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
