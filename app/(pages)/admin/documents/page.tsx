@@ -129,7 +129,12 @@ export default function DocumentsPage() {
     }
   }
 
-  const updateDocument = async (id: string, body: Record<string, unknown>, successMessage: string) => {
+  const updateDocument = async (
+    id: string,
+    body: Record<string, unknown>,
+    successMessage: string,
+    localUpdate?: (current: SharedDocument) => SharedDocument
+  ) => {
     try {
       const response = await fetch(`/api/admin/documents/${id}`, {
         method: "PATCH",
@@ -143,7 +148,11 @@ export default function DocumentsPage() {
       }
 
       toast("Updated", { description: successMessage })
-      await fetchDocuments()
+      if (localUpdate) {
+        setDocuments((prev) => prev.map((doc) => (doc._id === id ? localUpdate(doc) : doc)))
+      } else {
+        await fetchDocuments()
+      }
     } catch (error: any) {
       toast("Error", {
         description: error?.message || "Failed to update document.",
@@ -163,14 +172,16 @@ export default function DocumentsPage() {
       }
 
       toast("Deleted", { description: "Document deleted successfully." })
-      await fetchDocuments()
+      setDocuments((prev) => prev.filter((doc) => doc._id !== id))
     } catch (error: any) {
       toast("Error", { description: error?.message || "Failed to delete document." })
     }
   }
 
+  const getShareLink = (doc: SharedDocument) => `${window.location.origin}/documents/${doc.accessKey}`
+
   const getShareTemplate = (doc: SharedDocument) => {
-    const link = `${window.location.origin}/documents/${doc.accessKey}`
+    const link = getShareLink(doc)
     return [
       "Hello Sir/Mam, your design document is ready.",
       "You can preview it using the secure link below:",
@@ -201,6 +212,15 @@ export default function DocumentsPage() {
       toast("Password copied", { description: "Document password copied." })
     } catch {
       toast("Error", { description: "Failed to copy password." })
+    }
+  }
+
+  const copyShareableLink = async (doc: SharedDocument) => {
+    try {
+      await navigator.clipboard.writeText(getShareLink(doc))
+      toast("Link copied", { description: "Sharable link copied to clipboard." })
+    } catch {
+      toast("Error", { description: "Failed to copy sharable link." })
     }
   }
 
@@ -477,6 +497,7 @@ export default function DocumentsPage() {
                                   <DropdownMenuContent align="start">
                                     <DropdownMenuItem onClick={() => copyTemplate(doc)}>Copy Template</DropdownMenuItem>
                                     <DropdownMenuItem onClick={() => copyPassword(doc)}>Copy Password</DropdownMenuItem>
+                                    <DropdownMenuItem onClick={() => copyShareableLink(doc)}>Copy Sharable Link</DropdownMenuItem>
                                   </DropdownMenuContent>
                                 </DropdownMenu>
 
@@ -493,6 +514,7 @@ export default function DocumentsPage() {
                                       doc._id,
                                       { allowDownload: !doc.allowDownload },
                                       `Download ${!doc.allowDownload ? "enabled" : "disabled"}.`,
+                                      (current) => ({ ...current, allowDownload: !current.allowDownload })
                                     )
                                   }
                                 >
@@ -507,6 +529,7 @@ export default function DocumentsPage() {
                                       doc._id,
                                       { isClientAccessRevoked: !doc.isClientAccessRevoked },
                                       `Client access ${!doc.isClientAccessRevoked ? "removed" : "restored"}.`,
+                                      (current) => ({ ...current, isClientAccessRevoked: !current.isClientAccessRevoked })
                                     )
                                   }
                                 >

@@ -41,7 +41,7 @@ export default function InquiriesPage() {
 
   const fetchInquiries = async () => {
     try {
-      const res = await fetch("/api/admin/inquiries")
+      const res = await fetch("/api/admin/inquiries", { cache: "no-store" })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || "Failed to fetch inquiries")
       setInquiries(data.inquiries ?? [])

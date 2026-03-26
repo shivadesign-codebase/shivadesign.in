@@ -3,6 +3,50 @@ import mongoose from "mongoose"
 import connect_db from "@/config/db"
 import Project from "@/app/models/project"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
+export async function GET(request: NextRequest) {
+  try {
+    await connect_db()
+
+    const { searchParams } = new URL(request.url)
+    const page = Number(searchParams.get("page")) || 1
+    const limit = Number(searchParams.get("limit")) || 6
+    const search = (searchParams.get("search") || "").trim()
+
+    const skip = (page - 1) * limit
+
+    const query: any = {}
+    if (search) {
+      query.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } },
+        { category: { $regex: search, $options: "i" } },
+        { type: { $regex: search, $options: "i" } },
+      ]
+    }
+
+    const [projects, total] = await Promise.all([
+      Project.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
+      Project.countDocuments(query),
+    ])
+
+    return NextResponse.json(
+      {
+        projects,
+        total,
+        page,
+        totalPages: Math.ceil(total / limit),
+      },
+      { status: 200, headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } }
+    )
+  } catch (error) {
+    console.error("Error fetching admin projects:", error)
+    return NextResponse.json({ error: "Failed to fetch projects" }, { status: 500 })
+  }
+}
+
 // CREATE a new project
 export async function POST(request: NextRequest) {
   try {

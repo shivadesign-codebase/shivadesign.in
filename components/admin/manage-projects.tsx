@@ -51,7 +51,8 @@ export default function ManageProjects() {
     try {
 
       const res = await fetch(
-        `/api/projects?page=${currentPage}&limit=${LIMIT}&search=${debouncedSearch}`
+        `/api/admin/project?page=${currentPage}&limit=${LIMIT}&search=${debouncedSearch}`,
+        { cache: "no-store" }
       )
 
       const data = await res.json()
@@ -272,8 +273,8 @@ export default function ManageProjects() {
 
             {loading && (
               <>
-                <Skeleton className="h-[200px]" />
-                <Skeleton className="h-[200px]" />
+                <Skeleton className="h-50" />
+                <Skeleton className="h-50" />
               </>
             )}
 

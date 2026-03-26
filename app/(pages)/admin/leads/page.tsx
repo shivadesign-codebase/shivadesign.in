@@ -26,7 +26,7 @@ export default function AdminLeadsPage() {
 
   const fetchLeads = async () => {
     try {
-      const res = await fetch("/api/admin/leads")
+      const res = await fetch("/api/admin/leads", { cache: "no-store" })
       const data = await res.json()
       if (!res.ok) throw new Error(data?.error || "Failed to fetch leads")
       setLeads(data.leads ?? [])

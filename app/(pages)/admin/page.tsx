@@ -4,10 +4,11 @@ import SharedDocument from "@/app/models/document"
 import Project from "@/app/models/project"
 import Testimonial from "@/app/models/testimonial"
 import Lead from "@/app/models/lead"
+import Contact from "@/app/models/contact"
 import Blog from "@/app/models/blog"
 import BlogTopic from "@/app/models/blog-topic"
 import DashboardCharts from "@/components/admin/dashboard-charts"
-import { FileText, FolderKanban, Inbox, Users } from "lucide-react"
+import { FileText, FolderKanban, Inbox, MessageSquare, Users } from "lucide-react"
 
 export default async function AdminDashboard() {
   await connect_db()
@@ -24,6 +25,8 @@ export default async function AdminDashboard() {
     leadsCount,
     unreadLeadsCount,
     readLeadsCount,
+    inquiriesCount,
+    unreadInquiriesCount,
     totalBlogsCount,
     publishedBlogsCount,
     draftBlogsCount,
@@ -45,6 +48,8 @@ export default async function AdminDashboard() {
     Lead.countDocuments({}),
     Lead.countDocuments({ isRead: false }),
     Lead.countDocuments({ isRead: true }),
+    Contact.countDocuments({}),
+    Contact.countDocuments({ isRead: false }),
     Blog.countDocuments({}),
     Blog.countDocuments({ isPublished: true }),
     Blog.countDocuments({ isPublished: false }),
@@ -130,7 +135,7 @@ export default async function AdminDashboard() {
         <p className="text-muted-foreground">Welcome back, ER. Harsh Verma</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
             <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
@@ -157,6 +162,16 @@ export default async function AdminDashboard() {
           <CardContent>
             <div className="text-2xl font-bold">{leadsCount}</div>
             <p className="text-xs text-muted-foreground">Unread: {unreadLeadsCount}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <CardTitle className="text-sm font-medium">Inquiries (Total)</CardTitle>
+            <MessageSquare className="w-4 h-4 text-indigo-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{inquiriesCount}</div>
+            <p className="text-xs text-muted-foreground">Unread: {unreadInquiriesCount}</p>
           </CardContent>
         </Card>
         <Card>

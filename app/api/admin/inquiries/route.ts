@@ -3,11 +3,17 @@ import mongoose from "mongoose"
 import connect_db from "@/config/db"
 import Contact from "@/app/models/contact"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export async function GET() {
   try {
     await connect_db()
     const inquiries = await Contact.find({}).sort({ createdAt: -1 }).lean()
-    return NextResponse.json({ inquiries }, { status: 200 })
+    return NextResponse.json(
+      { inquiries },
+      { status: 200, headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } }
+    )
   } catch (error) {
     console.error("[Admin Inquiries] Failed to fetch inquiries:", error)
     return NextResponse.json({ error: "Failed to fetch inquiries" }, { status: 500 })
