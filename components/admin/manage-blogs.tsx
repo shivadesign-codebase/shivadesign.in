@@ -5,7 +5,7 @@ import Image from "next/image"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { Trash2, Globe, EyeOff, Loader2, Pencil } from "lucide-react"
+import { Trash2, Globe, EyeOff, Loader2, Pencil, Download } from "lucide-react"
 import EditBlogDialog from "@/components/admin/edit-blog-dialog"
 import { toast } from "sonner"
 
@@ -72,6 +72,10 @@ export default function ManageBlogs() {
     }
   }
 
+  const downloadPinterestCsv = () => {
+    window.location.href = "/api/admin/blog-pinterest-export?format=csv"
+  }
+
   if (loading) {
     return (
       <div className="flex justify-center py-20">
@@ -81,11 +85,28 @@ export default function ManageBlogs() {
   }
 
   if (blogs.length === 0) {
-    return <p className="text-muted-foreground text-sm py-10 text-center">No blog articles yet. Write your first one!</p>
+    return (
+      <div className="space-y-4">
+        <div className="flex justify-end">
+          <Button variant="outline" onClick={downloadPinterestCsv}>
+            <Download className="h-4 w-4 mr-2" />
+            Download Pinterest CSV
+          </Button>
+        </div>
+        <p className="text-muted-foreground text-sm py-10 text-center">No blog articles yet. Write your first one!</p>
+      </div>
+    )
   }
 
   return (
     <>
+      <div className="flex justify-end mb-4">
+        <Button variant="outline" onClick={downloadPinterestCsv}>
+          <Download className="h-4 w-4 mr-2" />
+          Download Pinterest CSV
+        </Button>
+      </div>
+
       <div className="space-y-4">
         {blogs.map((blog) => (
           <Card key={blog._id}>
