@@ -6,6 +6,7 @@ export interface IBlog extends Document {
   description: string
   content: string
   image?: string
+  sourceProjectId?: string
   tags: string[]
   isPublished: boolean
   createdAt: Date
@@ -34,6 +35,11 @@ const blogSchema = new Schema<IBlog>(
     image: {
       type: String,
       default: null,
+    },
+    sourceProjectId: {
+      type: String,
+      default: null,
+      index: true,
     },
     tags: {
       type: [String],

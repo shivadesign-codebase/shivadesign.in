@@ -2,7 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import connect_db from "@/config/db"
 import BlogTopic from "@/app/models/blog-topic"
 import Blog from "@/app/models/blog"
-import { generateBlogContent } from "@/lib/openai"
+import Project from "@/app/models/project"
+import { generateBlogContent, generateProjectBlogContent } from "@/lib/openai"
 
 export const runtime = "nodejs"
 export const maxDuration = 60
@@ -12,6 +13,27 @@ type TopicContentImage = {
   alt: string
   caption?: string
   order: number
+}
+
+function buildSlug(input: string) {
+  return input
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+}
+
+async function getUniqueSlug(baseTitle: string) {
+  const baseSlug = buildSlug(baseTitle)
+  let slug = baseSlug
+  let count = 1
+
+  while (await Blog.exists({ slug })) {
+    slug = `${baseSlug}-${count++}`
+  }
+
+  return slug
 }
 
 function applyImagePlaceholders(content: string, images: TopicContentImage[]) {
@@ -60,8 +82,57 @@ export async function GET(request: NextRequest) {
   const topic = await BlogTopic.findOne({ isUsed: false }).sort({ queueOrder: 1, createdAt: 1 })
 
   if (!topic) {
-    console.info("[Cron] No unused blog topics found. Skipping.")
-    return NextResponse.json({ message: "No topics available" })
+    console.info("[Cron] No queued topics found. Falling back to project-based generation.")
+
+    try {
+      const usedProjectIds = await Blog.distinct("sourceProjectId", {
+        sourceProjectId: { $ne: null },
+      })
+
+      const fallbackProject = await Project.findOne({
+        isActive: true,
+        _id: { $nin: usedProjectIds },
+      })
+        .sort({ createdAt: -1 })
+        .lean() as any
+
+      if (!fallbackProject) {
+        console.info("[Cron] No eligible projects available for fallback generation.")
+        return NextResponse.json({ message: "No topics or fallback projects available" })
+      }
+
+      const projectContent = await generateProjectBlogContent({
+        title: fallbackProject.title,
+        category: fallbackProject.category,
+        type: fallbackProject.type,
+        description: fallbackProject.description,
+      })
+
+      const slug = await getUniqueSlug(projectContent.title)
+
+      const blog = await Blog.create({
+        title: projectContent.title,
+        slug,
+        description: projectContent.description,
+        content: projectContent.content,
+        image: fallbackProject.image ?? null,
+        sourceProjectId: fallbackProject._id.toString(),
+        tags: projectContent.tags,
+        isPublished: true,
+      })
+
+      console.info(`[Cron] Published fallback project blog "${projectContent.title}" (id: ${blog._id})`)
+
+      return NextResponse.json({
+        message: "Fallback project blog published successfully",
+        blogId: blog._id.toString(),
+        title: projectContent.title,
+        source: "project-fallback",
+      })
+    } catch (error) {
+      console.error("[Cron] Error during project fallback generation:", error)
+      return NextResponse.json({ error: "Failed to generate fallback blog" }, { status: 500 })
+    }
   }
 
   console.info(`[Cron] Generating blog for topic: "${topic.title}"`)
@@ -78,18 +149,7 @@ export async function GET(request: NextRequest) {
     const contentWithImages = applyImagePlaceholders(content, topicImages)
 
     // ── Unique slug ────────────────────────────────────────────────────────────
-    const baseSlug = title
-      .toLowerCase()
-      .trim()
-      .replace(/[^a-z0-9\s-]/g, "")
-      .replace(/\s+/g, "-")
-      .replace(/-+/g, "-")
-
-    let slug = baseSlug
-    let count = 1
-    while (await Blog.exists({ slug })) {
-      slug = `${baseSlug}-${count++}`
-    }
+    const slug = await getUniqueSlug(title)
 
     // ── Save blog ──────────────────────────────────────────────────────────────
     const blog = await Blog.create({

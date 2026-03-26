@@ -157,3 +157,95 @@ Rules:
     }
   }
 }
+
+type ProjectBlogInput = {
+  title: string
+  category: string
+  type: string
+  description: string
+}
+
+export async function generateProjectBlogContent(
+  project: ProjectBlogInput
+): Promise<{ title: string; description: string; content: string; tags: string[] }> {
+  const systemPrompt = `
+You are a senior SEO content writer for Shiva Design Associates, an architecture and interior design firm based in Maharajganj, Uttar Pradesh, India.
+
+Your task is to convert project data into a high-quality blog article that is:
+- Fact-based (no fabricated numbers or fake claims)
+- Helpful for homeowners/builders
+- SEO-friendly for Maharajganj, Gorakhpur, Purvanchal, and Uttar Pradesh
+- Structured for readability and search visibility
+
+The tone should be professional, practical, and trustworthy.
+`
+
+  const userPrompt = `
+Create a complete SEO blog article from this real project dataset:
+
+Project title: "${project.title}"
+Project category: "${project.category}"
+Project type: "${project.type}"
+Project description: "${project.description}"
+
+Requirements:
+- Use only the provided project information and reasonable general guidance.
+- Do not invent exact dimensions, budgets, or timelines.
+- Naturally include keywords around architecture, interior design, home planning, and Uttar Pradesh locations.
+- Mention Shiva Design Associates as the expert team behind the work.
+
+Output structure in Markdown:
+- # SEO title
+- ## Introduction
+- ## Project Overview
+- ## Design Approach & Planning Insights
+- ## Key Takeaways for Homeowners
+- ## FAQs (3 to 5)
+- ## Conclusion
+- ## Call to Action
+
+FAQ section should include location-aware user intent (Maharajganj, Gorakhpur, Purvanchal, Uttar Pradesh) where natural.
+
+Return valid JSON only in this exact shape:
+{
+  "title": "SEO optimized title",
+  "description": "Meta description under 160 characters",
+  "tags": ["architecture", "interior design", "maharajganj"],
+  "content": "Full markdown blog content, at least 700 words"
+}
+
+Rules:
+- Return raw JSON only.
+- Do not wrap in markdown code fences.
+- Keep content factual to the provided project.
+`
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o-mini",
+    messages: [
+      { role: "system", content: systemPrompt },
+      { role: "user", content: userPrompt },
+    ],
+    temperature: 0.6,
+    max_tokens: 1900,
+  })
+
+  const raw = response.choices[0]?.message?.content ?? ""
+
+  try {
+    const parsed = JSON.parse(raw)
+    return {
+      title: parsed.title ?? `${project.title} | Shiva Design Associates`,
+      description: parsed.description ?? "",
+      content: parsed.content ?? "",
+      tags: Array.isArray(parsed.tags) ? parsed.tags : [],
+    }
+  } catch {
+    return {
+      title: `${project.title} | Shiva Design Associates`,
+      description: "",
+      content: raw,
+      tags: ["architecture", "interior design", "maharajganj"],
+    }
+  }
+}

@@ -9,6 +9,7 @@ import Blog from "@/app/models/blog"
 import BlogMarkdown from "@/components/blog-markdown"
 import type { Metadata } from "next"
 import ConsultationCtaCard from "@/components/consultation-cta-card"
+import { optimizeCloudinaryImage } from "@/lib/utils"
 
 type BlogPageProps = {
   params: Promise<{ id: string }>
@@ -40,7 +41,7 @@ export async function generateMetadata({ params }: BlogPageProps): Promise<Metad
     openGraph: {
       title: blog.title,
       description: blog.description,
-      images: blog.image ? [{ url: blog.image }] : [],
+      images: blog.image ? [{ url: optimizeCloudinaryImage(blog.image, { width: 1200 }) }] : [],
     },
   }
 }
@@ -105,7 +106,7 @@ export default async function BlogDetailPage({ params }: BlogPageProps) {
           {blog.image && (
             <div className="relative w-full h-80 md:h-104 mt-8 rounded-2xl overflow-hidden border border-border/70">
               <Image
-                src={blog.image}
+                src={optimizeCloudinaryImage(blog.image, { width: 1200 })}
                 alt={blog.title}
                 fill
                 className="object-fill"

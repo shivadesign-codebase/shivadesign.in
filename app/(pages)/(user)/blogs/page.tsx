@@ -6,6 +6,7 @@ import { ArrowUpRight, CalendarDays } from "lucide-react"
 import connect_db from "@/config/db"
 import Blog from "@/app/models/blog"
 import ConsultationCtaCard from "@/components/consultation-cta-card"
+import { optimizeCloudinaryImage } from "@/lib/utils"
 
 export const metadata: Metadata = {
   title: "Blog | Shiva Design Associates",
@@ -78,7 +79,7 @@ export default async function BlogsPage() {
               {blog.image ? (
                 <div className="relative h-52 overflow-hidden">
                   <Image
-                    src={blog.image}
+                    src={optimizeCloudinaryImage(blog.image, { width: 600 })}
                     alt={blog.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
