@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { CldUploadButton } from "next-cloudinary"
 import Image from "next/image"
@@ -11,24 +11,36 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { ImageIcon } from "lucide-react"
+import ClientSelector from "@/components/admin/client-selector"
 import type { IProject, ProjectFormValues } from "@/types/project"
+import type { Client } from "@/types/client"
 import { toast } from "sonner"
 
 interface EditProjectDialogProps {
   project: IProject
   isOpen: boolean
   onClose: () => void
+  onSaved?: () => Promise<void> | void
 }
 
-export default function EditProjectDialog({ project, isOpen, onClose }: EditProjectDialogProps) {
+export default function EditProjectDialog({ project, isOpen, onClose, onSaved }: EditProjectDialogProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(project.image || null)
+  const [selectedClient, setSelectedClient] = useState<Client | null>({
+    _id: project.clientId,
+    name: project.clientName,
+    mobile: project.clientMobile ?? null,
+    email: project.clientEmail ?? null,
+    createdAt: new Date(project.createdAt).toISOString(),
+    updatedAt: new Date(project.updatedAt).toISOString(),
+  })
 
   const {
     register,
     handleSubmit,
     control,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<ProjectFormValues>({
     defaultValues: {
@@ -37,9 +49,37 @@ export default function EditProjectDialog({ project, isOpen, onClose }: EditProj
       type: project.type,
       description: project.description,
       image: project.image,
+      clientId: project.clientId,
+      clientName: project.clientName,
+      clientMobile: project.clientMobile ?? "",
+      clientEmail: project.clientEmail ?? "",
       isActive: project.isActive,
     },
   })
+
+  useEffect(() => {
+    reset({
+      title: project.title,
+      category: project.category,
+      type: project.type,
+      description: project.description,
+      image: project.image,
+      clientId: project.clientId,
+      clientName: project.clientName,
+      clientMobile: project.clientMobile ?? "",
+      clientEmail: project.clientEmail ?? "",
+      isActive: project.isActive,
+    })
+    setImagePreview(project.image || null)
+    setSelectedClient({
+      _id: project.clientId,
+      name: project.clientName,
+      mobile: project.clientMobile ?? null,
+      email: project.clientEmail ?? null,
+      createdAt: new Date(project.createdAt).toISOString(),
+      updatedAt: new Date(project.updatedAt).toISOString(),
+    })
+  }, [project, reset])
 
   const handleImageUpload = (result: any) => {
     const uploadedImageUrl = result?.info?.secure_url
@@ -55,6 +95,11 @@ export default function EditProjectDialog({ project, isOpen, onClose }: EditProj
   }
 
   const onSubmit = async (data: ProjectFormValues) => {
+    if (!selectedClient) {
+      toast("Missing client", { description: "Please select a client for this project." })
+      return
+    }
+
     try {
       setIsSubmitting(true)
       const response = await fetch(`/api/admin/project?id=${project._id}`, {
@@ -62,7 +107,10 @@ export default function EditProjectDialog({ project, isOpen, onClose }: EditProj
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          clientId: selectedClient._id,
+        }),
       })
 
       if (!response.ok) {
@@ -72,6 +120,7 @@ export default function EditProjectDialog({ project, isOpen, onClose }: EditProj
       toast("Project updated", {
         description: "The project has been updated successfully.",
       })
+      await onSaved?.()
       onClose()
     } catch (error) {
       toast("Error", {
@@ -90,6 +139,19 @@ export default function EditProjectDialog({ project, isOpen, onClose }: EditProj
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 py-4">
+          <ClientSelector
+            value={selectedClient?._id || ""}
+            selectedClient={selectedClient}
+            onChange={(client) => {
+              setSelectedClient(client)
+              setValue("clientId", client._id)
+              setValue("clientName", client.name)
+              setValue("clientMobile", client.mobile ?? "")
+              setValue("clientEmail", client.email ?? "")
+            }}
+            description="Change the client linked to this project if needed."
+          />
+
           <div className="space-y-2">
             <Label htmlFor="edit-title">Project Title</Label>
             <Input

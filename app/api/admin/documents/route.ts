@@ -4,6 +4,7 @@ import { cookies } from "next/headers"
 import connect_db from "@/config/db"
 import SharedDocument from "@/app/models/document"
 import cloudinary from "@/lib/cloudinary"
+import { getClientSnapshot } from "@/lib/client-utils"
 import {
   createDocumentAccessKey,
   decryptDocumentPassword,
@@ -79,6 +80,8 @@ export async function GET() {
       title: item.title,
       clientName: item.clientName,
       clientMobile: item.clientMobile || "",
+      clientEmail: item.clientEmail || "",
+      clientId: item.clientId ? String(item.clientId) : "",
       fileName: item.fileName,
       mimeType: item.mimeType,
       fileSize: item.fileSize,
@@ -109,8 +112,7 @@ export async function POST(request: Request) {
 
     const formData = await request.formData()
     const title = String(formData.get("title") || "").trim()
-    const clientName = String(formData.get("clientName") || "").trim()
-    const clientMobile = String(formData.get("clientMobile") || "").trim()
+    const clientId = String(formData.get("clientId") || "").trim()
     const password = String(formData.get("password") || "")
     const expiresAtInput = String(formData.get("expiresAt") || "")
     const allowDownload = String(formData.get("allowDownload") || "false") === "true"
@@ -120,8 +122,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Title is required" }, { status: 400 })
     }
 
-    if (!clientName) {
-      return NextResponse.json({ error: "Client name is required" }, { status: 400 })
+    if (!clientId) {
+      return NextResponse.json({ error: "Client selection is required" }, { status: 400 })
     }
 
     if (!password || password.length < 4) {
@@ -142,11 +144,14 @@ export async function POST(request: Request) {
 
     const fileBuffer = Buffer.from(await file.arrayBuffer())
     const uploaded = await uploadBufferToCloudinary(fileBuffer, file.name, file.type)
+    const clientSnapshot = await getClientSnapshot(clientId)
 
     const doc = await SharedDocument.create({
       title,
-      clientName,
-      clientMobile: clientMobile || null,
+      clientId: clientSnapshot.clientId,
+      clientName: clientSnapshot.clientName,
+      clientMobile: clientSnapshot.clientMobile,
+      clientEmail: clientSnapshot.clientEmail,
       accessKey: createDocumentAccessKey(),
       fileName: file.name,
       mimeType: file.type,
@@ -167,6 +172,7 @@ export async function POST(request: Request) {
           _id: String(doc._id),
           title: doc.title,
           clientName: doc.clientName,
+          clientId: doc.clientId ? String(doc.clientId) : "",
           accessKey: doc.accessKey,
         },
       },

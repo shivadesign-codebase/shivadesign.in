@@ -7,6 +7,10 @@ export interface IProject {
   type: string
   description: string
   image?: string
+  clientId: string
+  clientName: string
+  clientMobile?: string | null
+  clientEmail?: string | null
   isActive?: boolean
   createdAt: Date
   updatedAt: Date

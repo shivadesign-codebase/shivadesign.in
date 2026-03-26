@@ -15,15 +15,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import EditDocumentDialog from "@/components/admin/edit-document-dialog"
+import ClientSelector from "@/components/admin/client-selector"
 import { toast } from "sonner"
+import type { Client } from "@/types/client"
 
 import { FileText, File, FileImage, Search, Eye, Trash2, Copy, Loader2, MessageCircle, Pencil } from "lucide-react"
 
 type SharedDocument = {
   _id: string
   title: string
+  clientId: string
   clientName: string
   clientMobile: string
+  clientEmail: string
   fileName: string
   mimeType: string
   fileSize: number
@@ -42,10 +46,9 @@ export default function DocumentsPage() {
   const [searchTerm, setSearchTerm] = useState("")
   const [documents, setDocuments] = useState<SharedDocument[]>([])
   const [editingDocument, setEditingDocument] = useState<SharedDocument | null>(null)
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null)
 
   const [title, setTitle] = useState("")
-  const [clientName, setClientName] = useState("")
-  const [clientMobile, setClientMobile] = useState("")
   const [password, setPassword] = useState("")
   const [expiresAt, setExpiresAt] = useState("")
   const [allowDownload, setAllowDownload] = useState(false)
@@ -83,13 +86,17 @@ export default function DocumentsPage() {
       return
     }
 
+    if (!selectedClient) {
+      toast("Error", { description: "Please select or create a client." })
+      return
+    }
+
     try {
       setIsSubmitting(true)
 
       const formData = new FormData()
       formData.append("title", title)
-      formData.append("clientName", clientName)
-      formData.append("clientMobile", clientMobile)
+      formData.append("clientId", selectedClient._id)
       formData.append("password", password)
       formData.append("allowDownload", String(allowDownload))
       formData.append("file", file)
@@ -113,8 +120,7 @@ export default function DocumentsPage() {
       })
 
       setTitle("")
-      setClientName("")
-      setClientMobile("")
+      setSelectedClient(null)
       setPassword("")
       setExpiresAt("")
       setAllowDownload(false)
@@ -256,6 +262,8 @@ export default function DocumentsPage() {
         (doc) =>
           doc.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           doc.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          doc.clientMobile.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          doc.clientEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
           doc.fileName.toLowerCase().includes(searchTerm.toLowerCase()),
       ),
     [documents, searchTerm],
@@ -329,28 +337,12 @@ export default function DocumentsPage() {
                   />
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="client-name">Client Name</Label>
-                  <Input
-                    id="client-name"
-                    name="clientName"
-                    placeholder="Enter client name"
-                    value={clientName}
-                    onChange={(e) => setClientName(e.target.value)}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="client-mobile">Client Mobile (optional, for WhatsApp)</Label>
-                  <Input
-                    id="client-mobile"
-                    name="clientMobile"
-                    placeholder="e.g. 919876543210"
-                    value={clientMobile}
-                    onChange={(e) => setClientMobile(e.target.value)}
-                  />
-                </div>
+                <ClientSelector
+                  value={selectedClient?._id || ""}
+                  selectedClient={selectedClient}
+                  onChange={setSelectedClient}
+                  description="Use the same searchable client dropdown here. Search by name, mobile, email, or linked project/document."
+                />
 
                 <div className="space-y-2">
                   <Label htmlFor="file">Upload File</Label>
@@ -424,7 +416,7 @@ export default function DocumentsPage() {
                   <div className="relative w-full max-w-sm">
                     <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
                     <Input
-                      placeholder="Search documents..."
+                      placeholder="Search documents, client, mobile, email..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-8"
@@ -461,7 +453,12 @@ export default function DocumentsPage() {
                               </div>
                               <span className="text-xs text-muted-foreground">{formatSize(doc.fileSize)}</span>
                             </td>
-                            <td className="py-2 px-4 text-sm">{doc.clientName}</td>
+                            <td className="py-2 px-4 text-sm">
+                              <div>{doc.clientName}</div>
+                              <div className="text-xs text-muted-foreground">
+                                {[doc.clientMobile, doc.clientEmail].filter(Boolean).join(" • ") || "No extra details"}
+                              </div>
+                            </td>
                             <td className="py-2 px-4 text-sm">
                               {doc.expiresAt ? new Date(doc.expiresAt).toLocaleDateString("en-IN") : "No expiry"}
                             </td>
@@ -576,4 +573,3 @@ export default function DocumentsPage() {
     </div>
   )
 }
-

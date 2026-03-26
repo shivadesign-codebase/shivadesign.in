@@ -11,12 +11,15 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { ImageIcon } from "lucide-react"
+import ClientSelector from "@/components/admin/client-selector"
 import { toast } from "sonner"
+import type { Client } from "@/types/client"
 import type { ProjectFormValues } from "@/types/project"
 
 export default function AddProjectForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null)
 
   const {
     register,
@@ -32,6 +35,10 @@ export default function AddProjectForm() {
       type: "",
       description: "",
       image: "",
+      clientId: "",
+      clientName: "",
+      clientMobile: "",
+      clientEmail: "",
       isActive: true,
     },
   })
@@ -50,6 +57,11 @@ export default function AddProjectForm() {
   }
 
   const onSubmit = async (data: ProjectFormValues) => {
+    if (!selectedClient) {
+      toast("Missing client", { description: "Please select or create a client for this project." })
+      return
+    }
+
     try {
       setIsSubmitting(true)
       const response = await fetch("/api/admin/project", {
@@ -57,7 +69,10 @@ export default function AddProjectForm() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          clientId: selectedClient._id,
+        }),
       })
 
       if (!response.ok) {
@@ -69,6 +84,7 @@ export default function AddProjectForm() {
       })
       reset()
       setImagePreview(null)
+      setSelectedClient(null)
     } catch (error) {
       toast("Error", {
         description: "There was a problem saving the project. Please try again.",
@@ -94,6 +110,19 @@ export default function AddProjectForm() {
             />
             {errors.title && <p className="text-sm text-red-500">{errors.title.message}</p>}
           </div>
+
+          <ClientSelector
+            value={selectedClient?._id || ""}
+            selectedClient={selectedClient}
+            onChange={(client) => {
+              setSelectedClient(client)
+              setValue("clientId", client._id)
+              setValue("clientName", client.name)
+              setValue("clientMobile", client.mobile ?? "")
+              setValue("clientEmail", client.email ?? "")
+            }}
+            description="Link this project to a client. Search by name, mobile, email, or even an existing project/document."
+          />
 
           <div className="space-y-2">
             <Label htmlFor="category">Project Category</Label>

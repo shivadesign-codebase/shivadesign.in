@@ -7,13 +7,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
+import ClientSelector from "@/components/admin/client-selector"
 import { toast } from "sonner"
+import type { Client } from "@/types/client"
 
 type SharedDocument = {
   _id: string
   title: string
+  clientId: string
   clientName: string
   clientMobile: string
+  clientEmail: string
   fileName: string
   mimeType: string
   fileSize: number
@@ -28,8 +32,7 @@ type SharedDocument = {
 
 type EditDocumentFormValues = {
   title: string
-  clientName: string
-  clientMobile: string
+  clientId: string
   password: string
   expiresAt: string
   allowDownload: boolean
@@ -51,12 +54,19 @@ function toDateInputValue(value: string | null) {
 
 export default function EditDocumentDialog({ document, isOpen, onClose, onSaved }: EditDocumentDialogProps) {
   const [isSaving, setIsSaving] = useState(false)
+  const [selectedClient, setSelectedClient] = useState<Client | null>({
+    _id: document.clientId,
+    name: document.clientName,
+    mobile: document.clientMobile || null,
+    email: document.clientEmail || null,
+    createdAt: document.createdAt,
+    updatedAt: document.createdAt,
+  })
 
   const { register, handleSubmit, setValue, reset, watch } = useForm<EditDocumentFormValues>({
     defaultValues: {
       title: document.title,
-      clientName: document.clientName,
-      clientMobile: document.clientMobile || "",
+      clientId: document.clientId,
       password: "",
       expiresAt: toDateInputValue(document.expiresAt),
       allowDownload: document.allowDownload,
@@ -66,11 +76,18 @@ export default function EditDocumentDialog({ document, isOpen, onClose, onSaved 
   useEffect(() => {
     reset({
       title: document.title,
-      clientName: document.clientName,
-      clientMobile: document.clientMobile || "",
+      clientId: document.clientId,
       password: "",
       expiresAt: toDateInputValue(document.expiresAt),
       allowDownload: document.allowDownload,
+    })
+    setSelectedClient({
+      _id: document.clientId,
+      name: document.clientName,
+      mobile: document.clientMobile || null,
+      email: document.clientEmail || null,
+      createdAt: document.createdAt,
+      updatedAt: document.createdAt,
     })
   }, [document, reset])
 
@@ -82,10 +99,14 @@ export default function EditDocumentDialog({ document, isOpen, onClose, onSaved 
 
       const payload: Record<string, unknown> = {
         title: values.title,
-        clientName: values.clientName,
-        clientMobile: values.clientMobile,
+        clientId: selectedClient?._id,
         allowDownload: values.allowDownload,
         expiresAt: values.expiresAt || null,
+      }
+
+      if (!selectedClient?._id) {
+        toast("Error", { description: "Please select a client." })
+        return
       }
 
       if (values.password.trim()) {
@@ -130,19 +151,15 @@ export default function EditDocumentDialog({ document, isOpen, onClose, onSaved 
             <Input id="edit-doc-title" {...register("title", { required: true })} placeholder="Enter document title" />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="edit-client-name">Client Name</Label>
-            <Input id="edit-client-name" {...register("clientName", { required: true })} placeholder="Enter client name" />
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="edit-client-mobile">Client Mobile</Label>
-            <Input
-              id="edit-client-mobile"
-              {...register("clientMobile")}
-              placeholder="e.g. 919876543210"
-            />
-          </div>
+          <ClientSelector
+            value={selectedClient?._id || ""}
+            selectedClient={selectedClient}
+            onChange={(client) => {
+              setSelectedClient(client)
+              setValue("clientId", client._id)
+            }}
+            description="Reassign this document to another client if needed."
+          />
 
           <div className="space-y-2">
             <Label htmlFor="edit-doc-password">New Access Password (optional)</Label>

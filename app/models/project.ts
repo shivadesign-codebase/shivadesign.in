@@ -6,6 +6,10 @@ export interface IProject extends Document {
   type: string;
   description: string;
   image?: string;
+  clientId: Schema.Types.ObjectId;
+  clientName: string;
+  clientMobile?: string | null;
+  clientEmail?: string | null;
   isActive: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -33,6 +37,34 @@ const projectSchema = new Schema<IProject>(
     image: {
       type: String,
       default: null,
+    },
+    clientId: {
+      type: Schema.Types.ObjectId,
+      ref: "Client",
+      required: true,
+      index: true,
+    },
+    clientName: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 180,
+      index: true,
+    },
+    clientMobile: {
+      type: String,
+      default: null,
+      trim: true,
+      maxlength: 24,
+      index: true,
+    },
+    clientEmail: {
+      type: String,
+      default: null,
+      trim: true,
+      lowercase: true,
+      maxlength: 180,
+      index: true,
     },
     isActive: {
       type: Boolean,

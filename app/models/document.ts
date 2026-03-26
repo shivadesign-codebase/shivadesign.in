@@ -2,8 +2,10 @@ import { Schema, Document, model, models } from "mongoose"
 
 export interface ISharedDocument extends Document {
   title: string
+  clientId?: Schema.Types.ObjectId | null
   clientName: string
   clientMobile?: string | null
+  clientEmail?: string | null
   accessKey: string
   fileName: string
   mimeType: string
@@ -27,6 +29,12 @@ const sharedDocumentSchema = new Schema<ISharedDocument>(
       trim: true,
       maxlength: 180,
     },
+    clientId: {
+      type: Schema.Types.ObjectId,
+      ref: "Client",
+      default: null,
+      index: true,
+    },
     clientName: {
       type: String,
       required: true,
@@ -38,6 +46,14 @@ const sharedDocumentSchema = new Schema<ISharedDocument>(
       default: null,
       trim: true,
       maxlength: 24,
+    },
+    clientEmail: {
+      type: String,
+      default: null,
+      trim: true,
+      lowercase: true,
+      maxlength: 180,
+      index: true,
     },
     accessKey: {
       type: String,

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import mongoose from "mongoose"
 import connect_db from "@/config/db"
 import Project from "@/app/models/project"
+import { getClientSnapshot } from "@/lib/client-utils"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
@@ -24,6 +25,9 @@ export async function GET(request: NextRequest) {
         { description: { $regex: search, $options: "i" } },
         { category: { $regex: search, $options: "i" } },
         { type: { $regex: search, $options: "i" } },
+        { clientName: { $regex: search, $options: "i" } },
+        { clientMobile: { $regex: search, $options: "i" } },
+        { clientEmail: { $regex: search, $options: "i" } },
       ]
     }
 
@@ -52,6 +56,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     await connect_db()
+    const clientSnapshot = await getClientSnapshot(body.clientId)
 
     const newProject = new Project({
       title: body.title,
@@ -59,6 +64,10 @@ export async function POST(request: NextRequest) {
       type: body.type,
       description: body.description,
       image: body.image || null,
+      clientId: clientSnapshot.clientId,
+      clientName: clientSnapshot.clientName,
+      clientMobile: clientSnapshot.clientMobile,
+      clientEmail: clientSnapshot.clientEmail,
       isActive: body.isActive !== undefined ? body.isActive : true,
     })
 
@@ -108,12 +117,22 @@ export async function PATCH(request: NextRequest) {
 
     await connect_db()
 
+    const updates: Record<string, unknown> = {
+      ...body,
+      updatedAt: new Date(),
+    }
+
+    if (typeof body.clientId === "string") {
+      const clientSnapshot = await getClientSnapshot(body.clientId)
+      updates.clientId = clientSnapshot.clientId
+      updates.clientName = clientSnapshot.clientName
+      updates.clientMobile = clientSnapshot.clientMobile
+      updates.clientEmail = clientSnapshot.clientEmail
+    }
+
     const updatedProject = await Project.findByIdAndUpdate(
       id,
-      {
-        ...body,
-        updatedAt: new Date(), // ensure updatedAt is refreshed if not handled by Mongoose
-      },
+      updates,
       { new: true }
     )
 

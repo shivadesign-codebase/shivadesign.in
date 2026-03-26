@@ -6,6 +6,7 @@ import connect_db from "@/config/db"
 import SharedDocument from "@/app/models/document"
 import cloudinary from "@/lib/cloudinary"
 import { encryptDocumentPassword, hashDocumentPassword } from "@/lib/document-security"
+import { getClientSnapshot } from "@/lib/client-utils"
 
 export const runtime = "nodejs"
 
@@ -40,16 +41,16 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
     const updates: Record<string, unknown> = {}
 
+    if (typeof body.clientId === "string") {
+      const clientSnapshot = await getClientSnapshot(body.clientId)
+      updates.clientId = clientSnapshot.clientId
+      updates.clientName = clientSnapshot.clientName
+      updates.clientMobile = clientSnapshot.clientMobile
+      updates.clientEmail = clientSnapshot.clientEmail
+    }
+
     if (typeof body.title === "string") {
       updates.title = body.title.trim()
-    }
-
-    if (typeof body.clientName === "string") {
-      updates.clientName = body.clientName.trim()
-    }
-
-    if (typeof body.clientMobile === "string") {
-      updates.clientMobile = body.clientMobile.trim() || null
     }
 
     if (typeof body.allowDownload === "boolean") {

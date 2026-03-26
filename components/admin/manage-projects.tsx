@@ -155,7 +155,7 @@ export default function ManageProjects() {
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
 
             <Input
-              placeholder="Search projects..."
+              placeholder="Search by project, client, email, mobile..."
               className="pl-9"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -200,6 +200,11 @@ export default function ManageProjects() {
 
                       <div>
                         <h3 className="font-semibold">{project.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          For {project.clientName}
+                          {project.clientMobile ? ` • ${project.clientMobile}` : ""}
+                          {project.clientEmail ? ` • ${project.clientEmail}` : ""}
+                        </p>
 
                         <div className="flex gap-2 mt-1">
                           <span className="px-2 py-1 text-xs rounded-full bg-primary/10 text-primary">
@@ -302,6 +307,7 @@ export default function ManageProjects() {
         <EditProjectDialog
           project={selectedProject}
           isOpen={isEditDialogOpen}
+          onSaved={() => fetchProjects(1)}
           onClose={() => {
             setIsEditDialogOpen(false)
             setSelectedProject(null)
