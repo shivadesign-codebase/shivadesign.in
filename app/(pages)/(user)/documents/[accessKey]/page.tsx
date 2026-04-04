@@ -1,7 +1,9 @@
 "use client"
 
 import { FormEvent, useEffect, useState } from "react"
+import Link from "next/link"
 import { useParams } from "next/navigation"
+import { FileLock2, FileQuestion, Loader2, Mail, ShieldAlert } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -30,6 +32,7 @@ export default function SharedDocumentPage() {
   const [accessError, setAccessError] = useState("")
   const [downloading, setDownloading] = useState(false)
   const [meta, setMeta] = useState<DocumentMeta | null>(null)
+  const [accessState, setAccessState] = useState<"available" | "missing" | "revoked" | "expired" | "error">("available")
   const fileUrl = `/api/documents/${accessKey}/file`
 
   const handleDownload = async () => {
@@ -71,10 +74,20 @@ export default function SharedDocumentPage() {
       const data = await res.json()
 
       if (!res.ok) {
+        if (res.status === 404) {
+          setAccessState("missing")
+        } else if (res.status === 403) {
+          setAccessState("revoked")
+        } else if (res.status === 410) {
+          setAccessState("expired")
+        } else {
+          setAccessState("error")
+        }
         throw new Error(data?.error || "Could not load document")
       }
 
       setMeta(data.document)
+      setAccessState("available")
     } catch (error: any) {
       toast("Error", { description: error?.message || "Could not load document" })
     } finally {
@@ -129,11 +142,62 @@ export default function SharedDocumentPage() {
   }
 
   if (loading) {
-    return <p className="p-6 text-sm text-muted-foreground">Loading document...</p>
+    return (
+      <div className="mx-auto flex min-h-[60vh] max-w-3xl items-center justify-center px-4 py-16">
+        <div className="flex items-center gap-3 rounded-full border border-stone-200 bg-white px-5 py-3 text-sm text-stone-600 shadow-sm">
+          <Loader2 className="h-4 w-4 animate-spin text-stone-500" />
+          Loading document...
+        </div>
+      </div>
+    )
   }
 
-  if (!meta) {
-    return <p className="p-6 text-sm text-muted-foreground">Document not found.</p>
+  if (!meta || accessState !== "available") {
+    const title =
+      accessState === "revoked"
+        ? "Access revoked"
+        : accessState === "expired"
+          ? "Link expired"
+          : accessState === "missing"
+            ? "Document not found"
+            : "Access unavailable"
+
+    const message =
+      accessState === "revoked"
+        ? "This document link has been disabled by the owner. Please contact us if you need a new secure link."
+        : accessState === "expired"
+          ? "This document link has expired. Please contact us and we will share an updated access link."
+          : accessState === "missing"
+            ? "You do not have access to this document. Please contact us and we will help you with the right link."
+            : "We could not load this document right now. Please try again or contact us for help."
+
+    return (
+      <div className="mx-auto flex min-h-[70vh] max-w-3xl items-center px-4 py-16">
+        <Card className="w-full border-stone-200 shadow-sm">
+          <CardHeader className="space-y-4 text-center">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-200 bg-amber-50 text-amber-700">
+              <ShieldAlert className="h-7 w-7" />
+            </div>
+            <CardTitle className="text-2xl text-stone-900 sm:text-3xl">{title}</CardTitle>
+            <p className="mx-auto max-w-xl text-sm leading-7 text-stone-600 sm:text-base">{message}</p>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+            <Button asChild className="rounded-full px-6">
+              <Link href="/contact">
+                <Mail className="mr-2 h-4 w-4" />
+                Contact us
+              </Link>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full px-6">
+              <Link href="/">
+                <FileQuestion className="mr-2 h-4 w-4" />
+                Back to home
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
   }
 
   if (meta.isClientAccessRevoked) {
@@ -148,7 +212,10 @@ export default function SharedDocumentPage() {
     <div className="mx-auto max-w-5xl p-4 md:p-8 space-y-6 mt-16" onContextMenu={(e) => authorized && e.preventDefault()}>
       <Card>
         <CardHeader>
-          <CardTitle>{meta.title}</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <FileLock2 className="h-5 w-5 text-stone-500" />
+            {meta.title}
+          </CardTitle>
           <p className="text-sm text-muted-foreground">Shared for: {meta.clientName}</p>
           {meta.expiresAt && (
             <p className="text-xs text-muted-foreground">Expires on: {new Date(meta.expiresAt).toLocaleDateString("en-IN")}</p>

@@ -6,21 +6,12 @@ export interface GetSettingsActionResponse {
   introVideoLink: string
   marqueeText: string
   theme: string
+  showPricing: boolean
+  enablePricingPage: boolean
 }
 
 const getSettingsAction = async (): Promise<GetSettingsActionResponse> => {
-  try {
-    const settings = await getSettings();
-
-    return settings;
-  } catch (error) {
-    console.error("Error in getSettingsAction:", error);
-    return {
-      introVideoLink: "",
-      marqueeText: "",
-      theme: "default",
-    };
-  }
+  return getSettings();
 };
 
 export default getSettingsAction;

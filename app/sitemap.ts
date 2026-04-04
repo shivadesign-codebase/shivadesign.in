@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next';
 import getProjectsAction from './Actions/get-paginated-projects';
 import connect_db from '@/config/db';
 import Blog from '@/app/models/blog';
+import getSettingsAction from './Actions/get-settings';
 
 export const dynamic = "force-dynamic";
 
@@ -9,6 +10,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   if (!process.env.NEXT_PUBLIC_SITE_URL) {
     throw new Error("Environment variable NEXT_PUBLIC_SITE_URL is not set.");
   }
+
+  const settings = await getSettingsAction();
 
   const allProjects = [];
   let page = 1;
@@ -47,7 +50,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "contact",
     "projects",
     "blogs",
-    "pricing",
     // service pages
     "services",
     "services/autocad-drafting",
@@ -62,6 +64,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "yearly" as const,
     priority: 0.8,
   }));
+
+  if (settings.showPricing && settings.enablePricingPage) {
+    staticPages.push({
+      url: `${process.env.NEXT_PUBLIC_SITE_URL}/pricing`,
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 0.8,
+    });
+  }
 
   // Fetch all published blog posts for dynamic sitemap entries
   let blogEntries: MetadataRoute.Sitemap = [];

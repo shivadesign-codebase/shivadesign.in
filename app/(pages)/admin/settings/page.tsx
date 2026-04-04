@@ -7,6 +7,8 @@ import { CldUploadButton } from "next-cloudinary"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 export default function ThemeSettingsPage() {
 
@@ -14,6 +16,8 @@ export default function ThemeSettingsPage() {
 
   const [introVideoLink, setIntroVideoLink] = useState("")
   const [marqueeText, setMarqueeText] = useState("")
+  const [showPricing, setShowPricing] = useState(false)
+  const [enablePricingPage, setEnablePricingPage] = useState(false)
 
   const handleVideoUpload = (result: any) => {
     const uploadedVideoUrl = result?.info?.secure_url
@@ -41,6 +45,8 @@ export default function ThemeSettingsPage() {
         setIntroVideoLink(data.introVideoLink || "")
         setMarqueeText(data.marqueeText || "")
         setTheme(data.theme || "default")
+        setShowPricing(Boolean(data.showPricing))
+        setEnablePricingPage(Boolean(data.enablePricingPage))
       })
   }, [])
 
@@ -53,7 +59,9 @@ export default function ThemeSettingsPage() {
       body: JSON.stringify({
         introVideoLink,
         marqueeText,
-        theme
+        theme,
+        showPricing,
+        enablePricingPage,
       })
     })
 
@@ -124,6 +132,41 @@ export default function ThemeSettingsPage() {
                 </Button>
               ))}
             </div>
+          </div>
+
+          <div className="space-y-4 rounded-xl border p-4">
+            <h3 className="text-sm font-medium text-muted-foreground">
+              Pricing Visibility Settings
+            </h3>
+
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-1">
+                <Label htmlFor="show-pricing">Show pricing values on UI</Label>
+                <p className="text-xs text-muted-foreground">
+                  When off, visitors see Contact us for pricing details instead of prices.
+                </p>
+              </div>
+              <Switch
+                id="show-pricing"
+                checked={showPricing}
+                onCheckedChange={setShowPricing}
+              />
+            </div>
+
+            <div className="flex items-center justify-between gap-4">
+              <div className="space-y-1">
+                <Label htmlFor="enable-pricing-page">Enable pricing page links and access</Label>
+                <p className="text-xs text-muted-foreground">
+                  When off, pricing page links are disabled and direct access is redirected to contact.
+                </p>
+              </div>
+              <Switch
+                id="enable-pricing-page"
+                checked={enablePricingPage}
+                onCheckedChange={setEnablePricingPage}
+              />
+            </div>
+
           </div>
 
           {/* SAVE BUTTON */}

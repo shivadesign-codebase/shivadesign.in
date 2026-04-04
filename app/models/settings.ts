@@ -5,6 +5,8 @@ export interface ISettings extends Document {
   introVideoLink: string
   marqueeText: string
   theme: string
+  showPricing: boolean
+  enablePricingPage: boolean
 }
 
 const SettingsSchema: Schema = new Schema({
@@ -20,6 +22,14 @@ const SettingsSchema: Schema = new Schema({
     type: String,
     enum: Object.values(Theme),
     default: Theme.DEFAULT,
+  },
+  showPricing: {
+    type: Boolean,
+    default: false,
+  },
+  enablePricingPage: {
+    type: Boolean,
+    default: false,
   },
 });
 

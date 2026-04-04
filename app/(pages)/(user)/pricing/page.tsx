@@ -1,5 +1,11 @@
 import Link from "next/link"
 import { Metadata } from "next"
+import { redirect } from "next/navigation"
+import getSettingsAction from "@/app/Actions/get-settings"
+import {
+  canAccessPricingPageForVisitor,
+  canShowPricingForVisitor,
+} from "@/lib/pricing-visibility"
 import { dynamicPageServices, serviceBundle } from "../services/data/data"
 
 export const metadata: Metadata = {
@@ -8,7 +14,15 @@ export const metadata: Metadata = {
     "Explore package pricing for AutoCAD drafting, 3D elevation, interiors, approvals, estimation, and Vastu consultation.",
 }
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const settings = await getSettingsAction()
+  const showPricing = canShowPricingForVisitor(settings)
+  const canAccessPricingPage = canAccessPricingPageForVisitor(settings)
+
+  if (!canAccessPricingPage) {
+    redirect("/contact?topic=pricing")
+  }
+
   const serviceEntries = Object.values(dynamicPageServices)
 
   return (
@@ -44,9 +58,22 @@ export default function PricingPage() {
         <p className="mt-2 text-stone-700">{serviceBundle.subtitle}</p>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <p className="text-sm text-stone-500 line-through">{serviceBundle.originalPrice}</p>
-          <p className="text-3xl font-semibold text-stone-900">{serviceBundle.discountedPrice}</p>
-          <p className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-orange-900">{serviceBundle.savings}</p>
+          {showPricing ? (
+            <>
+              <p className="text-sm text-stone-500 line-through">{serviceBundle.originalPrice}</p>
+              <p className="text-3xl font-semibold text-stone-900">{serviceBundle.discountedPrice}</p>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-stone-500 blur-[2px] select-none">{serviceBundle.originalPrice}</p>
+              <p className="text-3xl font-semibold text-stone-900">Contact us for pricing details</p>
+            </>
+          )}
+          {showPricing ? (
+            <p className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-orange-900">{serviceBundle.savings}</p>
+          ) : (
+            <p className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-orange-900 blur-[2px] select-none">{serviceBundle.savings}</p>
+          )}
           <p className="text-sm text-stone-600">Timeline: {serviceBundle.timeline}</p>
         </div>
 
@@ -84,7 +111,11 @@ export default function PricingPage() {
               {service.pricing.map((plan) => (
                 <div key={plan.name} className="rounded-2xl border border-stone-200 bg-stone-50/70 p-5">
                   <p className="text-xs font-semibold uppercase tracking-[0.14em] text-stone-500">{plan.name}</p>
-                  <p className="mt-2 text-2xl font-semibold text-stone-900">{plan.price}</p>
+                  {showPricing ? (
+                    <p className="mt-2 text-2xl font-semibold text-stone-900">{plan.price}</p>
+                  ) : (
+                    <p className="mt-2 text-2xl font-semibold text-stone-900">Contact us for pricing details</p>
+                  )}
                   <p className="mt-1 text-sm text-stone-600">{plan.timeline}</p>
                   <p className="mt-3 text-sm text-stone-700">Best for: {plan.bestFor}</p>
 

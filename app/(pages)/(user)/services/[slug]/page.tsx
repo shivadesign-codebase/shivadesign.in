@@ -3,6 +3,11 @@ import Link from "next/link"
 import ProjectCard from "@/components/project-card"
 import type { IProject } from "@/types/project"
 import getProjectsAction from "@/app/Actions/get-paginated-projects"
+import getSettingsAction from "@/app/Actions/get-settings"
+import {
+  canAccessPricingPageForVisitor,
+  canShowPricingForVisitor,
+} from "@/lib/pricing-visibility"
 import { dynamicPageServices, serviceBundle } from "../data/data"
 
 type ServicePageProps = {
@@ -71,6 +76,10 @@ export default async function ServicePage({
     }, [])
     .slice(0, 4)
 
+  const settings = await getSettingsAction()
+  const showPricing = canShowPricingForVisitor(settings)
+  const canAccessPricingPage = canAccessPricingPageForVisitor(settings)
+
   return (
     <section className="max-w-7xl mx-auto px-6 py-20 md:py-24">
 
@@ -100,12 +109,18 @@ export default async function ServicePage({
               >
                 {service.ctaButtonLabel}
               </Link>
-              <Link
-                href="/pricing"
-                className="inline-flex items-center rounded-full border border-stone-300 bg-white/80 px-7 py-3 text-sm font-semibold text-stone-900 transition hover:bg-white"
-              >
-                View All Pricing
-              </Link>
+              {canAccessPricingPage ? (
+                <Link
+                  href="/pricing"
+                  className="inline-flex items-center rounded-full border border-stone-300 bg-white/80 px-7 py-3 text-sm font-semibold text-stone-900 transition hover:bg-white"
+                >
+                  View All Pricing
+                </Link>
+              ) : (
+                <span className="inline-flex cursor-not-allowed items-center rounded-full border border-stone-200 bg-white/60 px-7 py-3 text-sm font-semibold text-stone-500">
+                  View All Pricing
+                </span>
+              )}
             </div>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-3">
@@ -164,7 +179,11 @@ export default async function ServicePage({
           {service.pricing.map((plan) => (
             <div key={plan.name} className="rounded-2xl border border-stone-200 bg-stone-50/70 p-5">
               <p className="text-sm font-semibold uppercase tracking-[0.14em] text-stone-500">{plan.name}</p>
-              <p className="mt-2 text-2xl font-semibold text-stone-900">{plan.price}</p>
+              {showPricing ? (
+                <p className="mt-2 text-2xl font-semibold text-stone-900">{plan.price}</p>
+              ) : (
+                <p className="mt-2 text-2xl font-semibold text-stone-900">Contact us for pricing details</p>
+              )}
               <p className="mt-1 text-sm text-stone-600">{plan.timeline}</p>
               <p className="mt-3 text-sm font-medium text-stone-700">Best for: {plan.bestFor}</p>
 
@@ -191,9 +210,22 @@ export default async function ServicePage({
         <p className="mt-2 text-sm text-stone-700">{serviceBundle.subtitle}</p>
 
         <div className="mt-5 flex flex-wrap items-baseline gap-4">
-          <p className="text-sm text-stone-500 line-through">{serviceBundle.originalPrice}</p>
-          <p className="text-3xl font-semibold text-stone-900">{serviceBundle.discountedPrice}</p>
-          <p className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-orange-900">{serviceBundle.savings}</p>
+          {showPricing ? (
+            <>
+              <p className="text-sm text-stone-500 line-through">{serviceBundle.originalPrice}</p>
+              <p className="text-3xl font-semibold text-stone-900">{serviceBundle.discountedPrice}</p>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-stone-500 blur-[2px] select-none">{serviceBundle.originalPrice}</p>
+              <p className="text-3xl font-semibold text-stone-900">Contact us for pricing details</p>
+            </>
+          )}
+          {showPricing ? (
+            <p className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-orange-900">{serviceBundle.savings}</p>
+          ) : (
+            <p className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-orange-900 blur-[2px] select-none">{serviceBundle.savings}</p>
+          )}
           <p className="text-sm text-stone-600">Timeline: {serviceBundle.timeline}</p>
         </div>
 
@@ -210,12 +242,18 @@ export default async function ServicePage({
           >
             {serviceBundle.ctaButtonLabel}
           </Link>
-          <Link
-            href="/pricing"
-            className="inline-flex items-center rounded-full border border-orange-300 bg-white/80 px-7 py-3 text-sm font-semibold text-stone-900 transition hover:bg-white"
-          >
-            Compare Individual Plans
-          </Link>
+          {canAccessPricingPage ? (
+            <Link
+              href="/pricing"
+              className="inline-flex items-center rounded-full border border-orange-300 bg-white/80 px-7 py-3 text-sm font-semibold text-stone-900 transition hover:bg-white"
+            >
+              Compare Individual Plans
+            </Link>
+          ) : (
+            <span className="inline-flex cursor-not-allowed items-center rounded-full border border-orange-200 bg-white/60 px-7 py-3 text-sm font-semibold text-stone-500">
+              Compare Individual Plans
+            </span>
+          )}
         </div>
       </div>
 

@@ -2,6 +2,11 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Sparkles } from "lucide-react"
 import { Metadata } from "next"
+import getSettingsAction from "@/app/Actions/get-settings"
+import {
+  canAccessPricingPageForVisitor,
+  canShowPricingForVisitor,
+} from "@/lib/pricing-visibility"
 import { serviceBundle, services } from "./data/data"
 
 export const metadata: Metadata = {
@@ -17,7 +22,10 @@ export const metadata: Metadata = {
   ],
 }
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const settings = await getSettingsAction()
+  const showPricing = canShowPricingForVisitor(settings)
+  const canAccessPricingPage = canAccessPricingPageForVisitor(settings)
   return (
     <section className="max-w-7xl mx-auto px-6 py-20 md:py-24">
 
@@ -36,12 +44,18 @@ export default function ServicesPage() {
           </p>
 
           <div className="mt-7 flex flex-wrap gap-3">
-            <Link
-              href="/pricing"
-              className="inline-flex items-center rounded-full bg-stone-900 px-7 py-3 text-sm font-semibold text-white transition hover:bg-stone-700"
-            >
-              Compare Pricing
-            </Link>
+            {canAccessPricingPage ? (
+              <Link
+                href="/pricing"
+                className="inline-flex items-center rounded-full bg-stone-900 px-7 py-3 text-sm font-semibold text-white transition hover:bg-stone-700"
+              >
+                Compare Pricing
+              </Link>
+            ) : (
+              <span className="inline-flex cursor-not-allowed items-center rounded-full bg-stone-300 px-7 py-3 text-sm font-semibold text-stone-600">
+                Compare Pricing
+              </span>
+            )}
             <Link
               href="/contact"
               className="inline-flex items-center rounded-full border border-stone-300 bg-white/85 px-7 py-3 text-sm font-semibold text-stone-900 transition hover:bg-white"
@@ -83,9 +97,15 @@ export default function ServicesPage() {
                   {service.salesTagline}
                 </p>
 
-                <p className="mt-3 inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-stone-900">
-                  Starting at {service.startingPrice}
-                </p>
+                {showPricing ? (
+                  <p className="mt-3 inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-stone-900">
+                    Starting at {service.startingPrice}
+                  </p>
+                ) : (
+                  <p className="mt-3 inline-flex rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-stone-900">
+                    Contact us for pricing details
+                  </p>
+                )}
 
                 <div className="flex items-center mt-4 text-sm font-medium">
                   Open sales page
@@ -111,9 +131,22 @@ export default function ServicesPage() {
         <p className="mt-2 text-stone-700">{serviceBundle.subtitle}</p>
 
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <p className="text-sm text-stone-500 line-through">{serviceBundle.originalPrice}</p>
-          <p className="text-3xl font-semibold text-stone-900">{serviceBundle.discountedPrice}</p>
-          <p className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-orange-900">{serviceBundle.savings}</p>
+          {showPricing ? (
+            <>
+              <p className="text-sm text-stone-500 line-through">{serviceBundle.originalPrice}</p>
+              <p className="text-3xl font-semibold text-stone-900">{serviceBundle.discountedPrice}</p>
+            </>
+          ) : (
+            <>
+              <p className="text-sm text-stone-500 blur-[2px] select-none">{serviceBundle.originalPrice}</p>
+              <p className="text-3xl font-semibold text-stone-900">Contact us for pricing details</p>
+            </>
+          )}
+          {showPricing ? (
+            <p className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-orange-900">{serviceBundle.savings}</p>
+          ) : (
+            <p className="rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-orange-900 blur-[2px] select-none">{serviceBundle.savings}</p>
+          )}
         </div>
 
         <div className="mt-6 flex flex-wrap gap-3">
@@ -124,12 +157,18 @@ export default function ServicesPage() {
             Get Your Design Now
           </Link>
 
-          <Link
-            href="/pricing"
-            className="inline-flex items-center rounded-full border border-orange-300 bg-white/85 px-7 py-3 text-sm font-semibold text-stone-900 transition hover:bg-white"
-          >
-            See Full Pricing
-          </Link>
+          {canAccessPricingPage ? (
+            <Link
+              href="/pricing"
+              className="inline-flex items-center rounded-full border border-orange-300 bg-white/85 px-7 py-3 text-sm font-semibold text-stone-900 transition hover:bg-white"
+            >
+              See Full Pricing
+            </Link>
+          ) : (
+            <span className="inline-flex cursor-not-allowed items-center rounded-full border border-orange-200 bg-white/60 px-7 py-3 text-sm font-semibold text-stone-500">
+              See Full Pricing
+            </span>
+          )}
         </div>
       </div>
 

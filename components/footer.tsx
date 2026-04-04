@@ -1,8 +1,15 @@
 import Link from "next/link"
 import { Facebook, Twitter, Instagram, Linkedin, Youtube } from "lucide-react"
 import Image from "next/image"
+import getSettingsAction from "@/app/Actions/get-settings"
+import {
+  canAccessPricingPageForVisitor,
+} from "@/lib/pricing-visibility"
 
-export default function Footer() {
+export default async function Footer() {
+  const settings = await getSettingsAction()
+  const canAccessPricingPage = canAccessPricingPageForVisitor(settings)
+
   return (
     <footer className="bg-card text-card-foreground py-12">
       <div className="container px-4 md:px-6">
@@ -56,11 +63,13 @@ export default function Footer() {
                   Projects
                 </Link>
               </li>
-              <li>
-                <Link href="/pricing" className="text-muted-foreground hover:text-primary">
-                  Pricing
-                </Link>
-              </li>
+              {canAccessPricingPage && (
+                <li>
+                  <Link href="/pricing" className="text-muted-foreground hover:text-primary">
+                    Pricing
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link href="/contact" className="text-muted-foreground hover:text-primary">
                   Contact
