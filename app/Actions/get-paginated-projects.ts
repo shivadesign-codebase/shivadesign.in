@@ -5,14 +5,18 @@ import { getProjects } from "../services/getProjects";
 
 interface GetProjectsActionProps {
   primary_tag?: string;
+  category?: string;
+  sampleServiceSlug?: string;
   limit?: number;
   page?: number;
 }
 
-const getProjectsAction = async ({ primary_tag, limit = 10, page = 1 }: GetProjectsActionProps): Promise<string> => {
+const getProjectsAction = async ({ primary_tag, category, sampleServiceSlug, limit = 10, page = 1 }: GetProjectsActionProps): Promise<string> => {
   try {
     const projects: IProject[] = await getProjects({
       primary_tag,
+      category,
+      sampleServiceSlug,
       limit,
       page,
     });

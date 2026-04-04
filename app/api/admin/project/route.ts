@@ -7,6 +7,22 @@ import { getClientSnapshot } from "@/lib/client-utils"
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
+const normalizeSampleServiceSlugs = (value: unknown): string[] => {
+  if (!Array.isArray(value)) return []
+
+  const cleaned = value
+    .filter((item): item is string => typeof item === "string")
+    .map((item) =>
+      item
+        .trim()
+        .toLowerCase()
+        .replace(/[\s_]+/g, "-")
+    )
+    .filter(Boolean)
+
+  return [...new Set(cleaned)]
+}
+
 export async function GET(request: NextRequest) {
   try {
     await connect_db()
@@ -64,6 +80,7 @@ export async function POST(request: NextRequest) {
       type: body.type,
       description: body.description,
       image: body.image || null,
+      sampleServiceSlugs: normalizeSampleServiceSlugs(body.sampleServiceSlugs),
       clientId: clientSnapshot.clientId,
       clientName: clientSnapshot.clientName,
       clientMobile: clientSnapshot.clientMobile,
@@ -120,6 +137,10 @@ export async function PATCH(request: NextRequest) {
     const updates: Record<string, unknown> = {
       ...body,
       updatedAt: new Date(),
+    }
+
+    if ("sampleServiceSlugs" in body) {
+      updates.sampleServiceSlugs = normalizeSampleServiceSlugs(body.sampleServiceSlugs)
     }
 
     if (typeof body.clientId === "string") {

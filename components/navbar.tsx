@@ -73,7 +73,7 @@ export default function Navbar({ marqueeText }: { marqueeText?: string }) {
           className="hidden theme-bg md:flex rounded-full px-6 py-5 text-sm font-medium text-white hover:opacity-90 transition shadow-md"
         >
           <Link href="/contact">
-            Book Consultation
+            Get Your Design Now
           </Link>
         </Button>
       </div>

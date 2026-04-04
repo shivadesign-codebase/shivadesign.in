@@ -15,6 +15,23 @@ import ClientSelector from "@/components/admin/client-selector"
 import { toast } from "sonner"
 import type { Client } from "@/types/client"
 import type { ProjectFormValues } from "@/types/project"
+import { services } from "@/app/(pages)/(user)/services/data/data"
+
+const SERVICE_SAMPLE_OPTIONS = services.map((service) => ({
+  slug: service.slug,
+  title: service.title,
+}))
+
+const normalizeSampleServiceSlugs = (values?: string[]) => {
+  if (!values?.length) return []
+
+  return [...new Set(
+    values
+      .filter((item): item is string => typeof item === "string")
+      .map((item) => item.trim().toLowerCase().replace(/[\s_]+/g, "-"))
+      .filter(Boolean)
+  )]
+}
 
 export default function AddProjectForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -35,6 +52,7 @@ export default function AddProjectForm() {
       type: "",
       description: "",
       image: "",
+      sampleServiceSlugs: [],
       clientId: "",
       clientName: "",
       clientMobile: "",
@@ -142,6 +160,45 @@ export default function AddProjectForm() {
               placeholder="e.g. Residential, Commercial, etc."
             />
             {errors.type && <p className="text-sm text-red-500">{errors.type.message}</p>}
+          </div>
+
+          <div className="space-y-2">
+            <Label>Show As Sample On Service Pages</Label>
+            <p className="text-xs text-muted-foreground">
+              Select one or more services where this project should appear in the samples section.
+            </p>
+            <Controller
+              name="sampleServiceSlugs"
+              control={control}
+              render={({ field }) => {
+                const selected = normalizeSampleServiceSlugs(field.value)
+
+                return (
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {SERVICE_SAMPLE_OPTIONS.map((option) => (
+                      <label
+                        key={option.slug}
+                        className="flex cursor-pointer items-center gap-2 rounded-md border p-2"
+                      >
+                        <input
+                          type="checkbox"
+                          className="h-4 w-4"
+                          checked={selected.includes(option.slug)}
+                          onChange={() => {
+                            const nextValues = selected.includes(option.slug)
+                              ? selected.filter((item) => item !== option.slug)
+                              : [...selected, option.slug]
+
+                            field.onChange(normalizeSampleServiceSlugs(nextValues))
+                          }}
+                        />
+                        <span className="text-sm">{option.title}</span>
+                      </label>
+                    ))}
+                  </div>
+                )
+              }}
+            />
           </div>
 
           <div className="space-y-2">

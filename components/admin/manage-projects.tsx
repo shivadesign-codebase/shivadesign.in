@@ -12,8 +12,14 @@ import EditProjectDialog from "./edit-project-dialog"
 import { IProject } from "@/types/project"
 import { Skeleton } from "../ui/skeleton"
 import { Input } from "../ui/input"
+import { services } from "@/app/(pages)/(user)/services/data/data"
 
 const LIMIT = 6
+
+const serviceTitleBySlug = services.reduce<Record<string, string>>((acc, service) => {
+  acc[service.slug] = service.title
+  return acc
+}, {})
 
 const optimizeImage = (url: string) => {
   if (!url.includes("cloudinary")) return url
@@ -237,6 +243,16 @@ export default function ManageProjects() {
                     <p className="text-sm text-muted-foreground my-2">
                       {project.description}
                     </p>
+
+                    {!!project.sampleServiceSlugs?.length && (
+                      <div className="mb-2 flex flex-wrap gap-2">
+                        {project.sampleServiceSlugs.map((slug) => (
+                          <span key={slug} className="rounded-full bg-amber-100 px-2 py-1 text-xs text-amber-900">
+                            Sample for {serviceTitleBySlug[slug] || slug}
+                          </span>
+                        ))}
+                      </div>
+                    )}
 
                     <div className="flex justify-between items-center mt-2">
 

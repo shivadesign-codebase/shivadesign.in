@@ -6,6 +6,7 @@ export interface IProject extends Document {
   type: string;
   description: string;
   image?: string;
+  sampleServiceSlugs: string[];
   clientId: Schema.Types.ObjectId;
   clientName: string;
   clientMobile?: string | null;
@@ -37,6 +38,11 @@ const projectSchema = new Schema<IProject>(
     image: {
       type: String,
       default: null,
+    },
+    sampleServiceSlugs: {
+      type: [String],
+      default: [],
+      index: true,
     },
     clientId: {
       type: Schema.Types.ObjectId,

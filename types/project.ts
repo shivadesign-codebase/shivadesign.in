@@ -7,6 +7,7 @@ export interface IProject {
   type: string
   description: string
   image?: string
+  sampleServiceSlugs?: string[]
   clientId: string
   clientName: string
   clientMobile?: string | null

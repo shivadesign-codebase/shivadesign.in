@@ -47,6 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "contact",
     "projects",
     "blogs",
+    "pricing",
     // service pages
     "services",
     "services/autocad-drafting",

@@ -15,6 +15,23 @@ import ClientSelector from "@/components/admin/client-selector"
 import type { IProject, ProjectFormValues } from "@/types/project"
 import type { Client } from "@/types/client"
 import { toast } from "sonner"
+import { services } from "@/app/(pages)/(user)/services/data/data"
+
+const SERVICE_SAMPLE_OPTIONS = services.map((service) => ({
+  slug: service.slug,
+  title: service.title,
+}))
+
+const normalizeSampleServiceSlugs = (values?: string[]) => {
+  if (!values?.length) return []
+
+  return [...new Set(
+    values
+      .filter((item): item is string => typeof item === "string")
+      .map((item) => item.trim().toLowerCase().replace(/[\s_]+/g, "-"))
+      .filter(Boolean)
+  )]
+}
 
 interface EditProjectDialogProps {
   project: IProject
@@ -49,6 +66,7 @@ export default function EditProjectDialog({ project, isOpen, onClose, onSaved }:
       type: project.type,
       description: project.description,
       image: project.image,
+      sampleServiceSlugs: normalizeSampleServiceSlugs(project.sampleServiceSlugs),
       clientId: project.clientId,
       clientName: project.clientName,
       clientMobile: project.clientMobile ?? "",
@@ -64,6 +82,7 @@ export default function EditProjectDialog({ project, isOpen, onClose, onSaved }:
       type: project.type,
       description: project.description,
       image: project.image,
+      sampleServiceSlugs: normalizeSampleServiceSlugs(project.sampleServiceSlugs),
       clientId: project.clientId,
       clientName: project.clientName,
       clientMobile: project.clientMobile ?? "",
@@ -133,7 +152,7 @@ export default function EditProjectDialog({ project, isOpen, onClose, onSaved }:
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-150 max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Edit Project</DialogTitle>
         </DialogHeader>
@@ -183,6 +202,45 @@ export default function EditProjectDialog({ project, isOpen, onClose, onSaved }:
           </div>
 
           <div className="space-y-2">
+            <Label>Show As Sample On Service Pages</Label>
+            <p className="text-xs text-muted-foreground">
+              Select one or more services where this project should appear in the samples section.
+            </p>
+            <Controller
+              name="sampleServiceSlugs"
+              control={control}
+              render={({ field }) => {
+                const selected = normalizeSampleServiceSlugs(field.value)
+
+                return (
+                  <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                    {SERVICE_SAMPLE_OPTIONS.map((option) => (
+                      <label
+                        key={option.slug}
+                        className="flex cursor-pointer items-center gap-2 rounded-md border p-2"
+                      >
+                        <input
+                          type="checkbox"
+                          className="h-4 w-4"
+                          checked={selected.includes(option.slug)}
+                          onChange={() => {
+                            const nextValues = selected.includes(option.slug)
+                              ? selected.filter((item) => item !== option.slug)
+                              : [...selected, option.slug]
+
+                            field.onChange(normalizeSampleServiceSlugs(nextValues))
+                          }}
+                        />
+                        <span className="text-sm">{option.title}</span>
+                      </label>
+                    ))}
+                  </div>
+                )
+              }}
+            />
+          </div>
+
+          <div className="space-y-2">
             <Label htmlFor="edit-description">Project Description</Label>
             <Textarea
               id="edit-description"
@@ -211,7 +269,7 @@ export default function EditProjectDialog({ project, isOpen, onClose, onSaved }:
                     alt="Project preview"
                     width={300}
                     height={200}
-                    className="mx-auto rounded-md object-cover h-[200px]"
+                    className="mx-auto rounded-md object-cover h-50"
                   />
                 </div>
               )}
