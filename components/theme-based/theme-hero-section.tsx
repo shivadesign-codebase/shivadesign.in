@@ -100,6 +100,7 @@ export default function HeroSection({ settings, bannerImageUrl }: HeroSectionPro
                 className="w-full h-full object-cover"
                 playsInline
                 preload="metadata"
+                suppressHydrationWarning
                 onError={() => {
                   if (videoSrc !== FALLBACK_VIDEO) {
                     setVideoSrc(FALLBACK_VIDEO)

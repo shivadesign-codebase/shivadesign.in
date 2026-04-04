@@ -50,6 +50,7 @@ export default function FounderProfile() {
                 sizes="(max-width: 768px) 100vw, 50vw"
                 className="object-cover"
                 quality={80}
+                suppressHydrationWarning
               />
             </div>
           </motion.div>
