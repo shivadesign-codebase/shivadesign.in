@@ -268,9 +268,17 @@ export default function SharedDocumentPage() {
               {meta.mimeType.startsWith("image/") || meta.mimeType === "application/pdf" ? (
                 <div className="relative overflow-hidden rounded-md border bg-muted/20">
                   {meta.mimeType === "application/pdf" ? (
-                    <iframe src={fileUrl} className="h-[70vh] w-full opacity-90" title={meta.fileName} />
+                    <iframe
+                      src={fileUrl}
+                      className={`h-[70vh] w-full opacity-90 ${!meta.allowDownload ? "pointer-events-none" : ""}`}
+                      title={meta.fileName}
+                    />
                   ) : (
-                    <img src={fileUrl} alt={meta.fileName} className="max-h-[70vh] w-full object-contain opacity-90" />
+                    <img
+                      src={fileUrl}
+                      alt={meta.fileName}
+                      className={`max-h-[70vh] w-full object-contain opacity-90 ${!meta.allowDownload ? "pointer-events-none" : ""}`}
+                    />
                   )}
 
                   <div
@@ -285,6 +293,7 @@ export default function SharedDocumentPage() {
                     }}
                   />
                   <div className="pointer-events-none absolute inset-0 bg-white/15 backdrop-blur-[1.5px]" />
+                  {!meta.allowDownload ? <div className="absolute inset-0 z-10 cursor-not-allowed" aria-hidden="true" /> : null}
                 </div>
               ) : (
                 <p className="text-sm text-muted-foreground">
