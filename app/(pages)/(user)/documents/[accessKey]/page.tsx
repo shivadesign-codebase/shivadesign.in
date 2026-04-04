@@ -3,7 +3,7 @@
 import { FormEvent, useEffect, useState } from "react"
 import Link from "next/link"
 import { useParams } from "next/navigation"
-import { FileLock2, FileQuestion, Loader2, Mail, ShieldAlert } from "lucide-react"
+import { FileLock2, FileQuestion, Loader2, Mail, MapPin, PhoneCall, ShieldAlert } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -152,60 +152,84 @@ export default function SharedDocumentPage() {
     )
   }
 
-  if (!meta || accessState !== "available") {
+  if (!meta || accessState !== "available" || meta.isClientAccessRevoked || meta.isExpired) {
     const title =
       accessState === "revoked"
-        ? "Access revoked"
+        ? "Access not provided"
         : accessState === "expired"
           ? "Link expired"
           : accessState === "missing"
-            ? "Document not found"
+            ? "Access not provided"
             : "Access unavailable"
 
     const message =
       accessState === "revoked"
-        ? "This document link has been disabled by the owner. Please contact us if you need a new secure link."
+        ? "You do not have access to this document. Please visit our office or contact us and we will help you with the right secure link."
         : accessState === "expired"
           ? "This document link has expired. Please contact us and we will share an updated access link."
           : accessState === "missing"
-            ? "You do not have access to this document. Please contact us and we will help you with the right link."
+            ? "You do not have access to this document. Please visit our office or contact us and we will help you with the right secure link."
             : "We could not load this document right now. Please try again or contact us for help."
 
     return (
-      <div className="mx-auto flex min-h-[70vh] max-w-3xl items-center px-4 py-16">
-        <Card className="w-full border-stone-200 shadow-sm">
-          <CardHeader className="space-y-4 text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-200 bg-amber-50 text-amber-700">
+      <div className="mx-auto flex min-h-[70vh] max-w-4xl items-center px-4 py-16 mt-16">
+        <Card className="w-full overflow-hidden border-stone-200 shadow-[0_20px_60px_-40px_rgba(0,0,0,0.35)]">
+          <div className="bg-[linear-gradient(135deg,rgba(251,191,36,0.16),rgba(255,255,255,1))] px-6 py-6 sm:px-8">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-amber-200 bg-white text-amber-700 shadow-sm">
               <ShieldAlert className="h-7 w-7" />
             </div>
+          </div>
+          <CardHeader className="space-y-4 text-center px-6 pb-0 pt-8 sm:px-10">
             <CardTitle className="text-2xl text-stone-900 sm:text-3xl">{title}</CardTitle>
-            <p className="mx-auto max-w-xl text-sm leading-7 text-stone-600 sm:text-base">{message}</p>
+            <p className="mx-auto max-w-2xl text-sm leading-7 text-stone-600 sm:text-base">{message}</p>
           </CardHeader>
-          <CardContent className="flex flex-col gap-3 sm:flex-row sm:justify-center">
-            <Button asChild className="rounded-full px-6">
-              <Link href="/contact">
-                <Mail className="mr-2 h-4 w-4" />
-                Contact us
-              </Link>
-            </Button>
-            <Button asChild variant="outline" className="rounded-full px-6">
-              <Link href="/">
-                <FileQuestion className="mr-2 h-4 w-4" />
-                Back to home
-              </Link>
-            </Button>
+          <CardContent className="space-y-6 px-6 py-8 sm:px-10">
+            <div className="grid gap-4 md:grid-cols-3">
+              <div className="rounded-2xl border border-stone-200 bg-stone-50 p-4">
+                <MapPin className="h-5 w-5 text-stone-500" />
+                <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">Office</p>
+                <p className="mt-2 text-sm leading-6 text-stone-700">
+                  Ward No. 7 Shiv Nagar
+                  <br />
+                  Maharajganj, Uttar Pradesh
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-stone-200 bg-stone-50 p-4">
+                <PhoneCall className="h-5 w-5 text-stone-500" />
+                <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">Call office</p>
+                <a href="tel:+919794086149" className="mt-2 block text-sm font-medium text-stone-700 hover:underline">
+                  +91 979 408 6149
+                </a>
+              </div>
+
+              <div className="rounded-2xl border border-stone-200 bg-stone-50 p-4">
+                <Mail className="h-5 w-5 text-stone-500" />
+                <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">Email us</p>
+                <a href="mailto:shivaconsultant97@gmail.com" className="mt-2 block break-all text-sm font-medium text-stone-700 hover:underline">
+                  shivaconsultant97@gmail.com
+                </a>
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
+              <Button asChild className="rounded-full px-6">
+                <Link href="/contact">
+                  <Mail className="mr-2 h-4 w-4" />
+                  Contact us
+                </Link>
+              </Button>
+              <Button asChild variant="outline" className="rounded-full px-6">
+                <Link href="/">
+                  <FileQuestion className="mr-2 h-4 w-4" />
+                  Back to home
+                </Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
     )
-  }
-
-  if (meta.isClientAccessRevoked) {
-    return <p className="p-6 text-sm text-red-600">Access has been removed by the admin.</p>
-  }
-
-  if (meta.isExpired) {
-    return <p className="p-6 text-sm text-yellow-700">This document link has expired.</p>
   }
 
   return (
